@@ -5,19 +5,27 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import com.proton.citybuzz.data.model.Event
+import com.proton.citybuzz.data.model.EventPrivacy
 import com.proton.citybuzz.data.repository.EventRepository
+import java.time.LocalDate
+import java.time.LocalTime
 
 class EventViewModel(private val eventRepo: EventRepository) : ViewModel() {
+
     val events = MutableLiveData<List<Event>>()
-    val attendees = MutableLiveData<List<Long>>() // lista userId-a
+    val attendees = MutableLiveData<List<Long>>()
 
     fun loadEvents() = viewModelScope.launch {
         events.value = eventRepo.getAllEvents()
     }
 
-    fun addEvent(title: String, description: String, location: String) = viewModelScope.launch {
-        val id = (eventRepo.getAllEvents().maxOfOrNull { it.id } ?: 0) + 1
-        eventRepo.addEvent(Event(id, title, description, location))
+    fun addEvent(title: String, description: String, location: String, date: LocalDate,
+        time: LocalTime, privacy: EventPrivacy, idUser: Long
+    ) = viewModelScope.launch {
+        val event = Event(title = title, date = date, time = time, description = description,
+            location = location, privacy = privacy, idUser = idUser
+        )
+        eventRepo.addEvent(event)
         loadEvents()
     }
 
@@ -25,4 +33,25 @@ class EventViewModel(private val eventRepo: EventRepository) : ViewModel() {
         eventRepo.addAttendee(eventId, userId)
         attendees.value = eventRepo.getAttendees(eventId)
     }
+
+    fun getTitle(eventId: Long): String? =
+        events.value?.firstOrNull { it.id == eventId }?.title
+
+    fun getDate(eventId: Long): LocalDate? =
+        events.value?.firstOrNull { it.id == eventId }?.date
+
+    fun getTime(eventId: Long): LocalTime? =
+        events.value?.firstOrNull { it.id == eventId }?.time
+
+    fun getDescription(eventId: Long): String? =
+        events.value?.firstOrNull { it.id == eventId }?.description
+
+    fun getLocation(eventId: Long): String? =
+        events.value?.firstOrNull { it.id == eventId }?.location
+
+    fun getPrivacy(eventId: Long): EventPrivacy? =
+        events.value?.firstOrNull { it.id == eventId }?.privacy
+
+    fun getIdUser(eventId: Long): Long? =
+        events.value?.firstOrNull { it.id == eventId }?.idUser
 }
