@@ -13,6 +13,7 @@ import com.proton.citybuzz.data.model.EventAttendee
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
+    abstract fun friendRequestDao(): FriendRequestDao
     abstract fun eventDao(): EventDao
 }
 

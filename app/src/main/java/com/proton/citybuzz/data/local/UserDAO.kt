@@ -17,9 +17,16 @@ interface UserDao {
     @Query("SELECT * FROM users")
     suspend fun getAllUsers(): List<User>
 
+    @Query("SELECT * FROM users WHERE id IN (:ids)")
+    suspend fun getUsersByIds(ids: List<Long>): List<User>
+
     @Query("SELECT * FROM users WHERE email = :email")
     suspend fun getUserByEmail(email: String): User?
 
-    @Query("SELECT friendId FROM user_friends WHERE userId = :userId")
+    @Query(
+        "SELECT friendId FROM user_friends WHERE userId = :userId " +
+                "UNION " +
+                "SELECT userId FROM user_friends WHERE friendId = :userId"
+    )
     suspend fun getFriends(userId: Long): List<Long>
 }
