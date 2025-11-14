@@ -1,7 +1,5 @@
 package com.proton.citybuzz
 
-import android.content.ClipData
-import android.media.RouteListingPreference
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -71,7 +69,7 @@ class ExploreActivity: Fragment(R.layout.activity_explore) {
     }
 
     fun showEventDetails(event_id: Int){
-        
+
     }
 
 }
