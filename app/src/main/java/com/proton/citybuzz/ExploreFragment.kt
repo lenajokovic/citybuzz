@@ -18,8 +18,8 @@ import kotlinx.coroutines.async
 
 
 class ExploreFragment: Fragment(R.layout.activity_explore) {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         populateView()
     }
 
