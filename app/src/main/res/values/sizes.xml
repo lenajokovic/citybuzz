@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="action_bar_size">56dp</dimen>
+    <dimen name="header_font_size">24sp</dimen>
+    <dimen name="title_font_size">20sp</dimen>
+    <dimen name="subtitle_font_size">16sp</dimen>
+</resources>
