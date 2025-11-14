@@ -16,6 +16,7 @@ import com.proton.citybuzz.data.model.EventConverters
 @TypeConverters(EventConverters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
+    abstract fun friendRequestDao(): FriendRequestDao
     abstract fun eventDao(): EventDao
 }
 

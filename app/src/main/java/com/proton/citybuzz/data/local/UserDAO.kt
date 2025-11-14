@@ -11,12 +11,29 @@ interface UserDao {
     @Insert
     suspend fun insertUser(user: User)
 
-    @Insert
-    suspend fun insertFriend(friend: UserFriend)
-
     @Query("SELECT * FROM users")
     suspend fun getAllUsers(): List<User>
 
-    @Query("SELECT friendId FROM user_friends WHERE userId = :userId")
+    @Query("SELECT * FROM users WHERE id IN (:ids)")
+    suspend fun getUsersByIds(ids: List<Long>): List<User>
+
+    @Query("SELECT * FROM users WHERE email = :email")
+    suspend fun getUserByEmail(email: String): User?
+
+    @Insert
+    suspend fun insertFriend(friend: UserFriend)
+
+    @Query(
+        "DELETE FROM user_friends " +
+                "WHERE (userId = :userId AND friendId = :friendId) " +
+                "   OR (userId = :friendId AND friendId = :userId)"
+    )
+    suspend fun deleteFriend(userId: Long, friendId: Long)
+
+    @Query(
+        "SELECT friendId FROM user_friends WHERE userId = :userId " +
+                "UNION " +
+                "SELECT userId FROM user_friends WHERE friendId = :userId"
+    )
     suspend fun getFriends(userId: Long): List<Long>
 }
