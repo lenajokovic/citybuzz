@@ -13,8 +13,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.fragment.app.Fragment
 import com.proton.citybuzz.data.model.Event
+import com.proton.citybuzz.data.model.EventPrivacy
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import java.time.LocalDate
+import java.time.LocalTime
 
 
 class ExploreFragment: Fragment(R.layout.activity_explore) {
@@ -39,9 +42,22 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
     suspend fun setUpListView(listView: ListView){
 
         val eventDAO = CityBuzzApp.db.eventDao()
-        val event1 = Event(0, "First Event", "Description", "Location")
-        val event2 = Event(2, "Second Event", "Description", "Location")
-        var events = listOf(event1, event2)//eventDAO.getAllEvents()
+        val event1 = Event(0, "First Event",
+            LocalDate.of(2023, 10, 10),
+            LocalTime.now(),
+            "Description",
+            "Location",
+            EventPrivacy.PUBLIC,
+            0)
+        val event2 = Event(0, "Second Event",
+            LocalDate.of(2023, 3, 3),
+            LocalTime.NOON,
+            "Description",
+            "Location",
+            EventPrivacy.PUBLIC,
+            69)
+
+        val events = listOf(event1, event2)//eventDAO.getAllEvents()
         
         val adapter = object : ArrayAdapter<Event>(context!!, 0, events) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -55,7 +71,7 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
 
                 profile_pic.setImageResource(R.drawable.ic_explore)
                 event_name.text = item?.title
-                user_name.text = item?.location
+                user_name.text = item?.idUser.toString()
 
                 return view
             }
