@@ -9,8 +9,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
-import androidx.activity.ComponentActivity
-import androidx.activity.enableEdgeToEdge
 import androidx.fragment.app.Fragment
 import com.proton.citybuzz.data.model.Event
 import com.proton.citybuzz.data.model.EventPrivacy
@@ -65,9 +63,9 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
 
                 val item = getItem(position)
 
-                val profile_pic = view.findViewById<ImageView>(R.id.profile_pic)
-                val event_name = view.findViewById<TextView>(R.id.event_name)
-                val user_name = view.findViewById<TextView>(R.id.user_name)
+                val profilePic = view.findViewById<ImageView>(R.id.profile_pic)
+                val eventName = view.findViewById<TextView>(R.id.event_name)
+                val userName = view.findViewById<TextView>(R.id.user_name)
 
                 profile_pic.setImageResource(R.drawable.ic_explore)
                 event_name.text = item?.title
