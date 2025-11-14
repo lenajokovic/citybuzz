@@ -3,4 +3,9 @@
     <string name="title_activity_explore">Explore</string>
     <string name="all_events">All Events</string>
     <string name="today">Today</string>
+    <string-array name="publicity_levels">
+        <item>Public</item>
+        <item>Network</item>
+        <item>Friends</item>
+    </string-array>
 </resources>
