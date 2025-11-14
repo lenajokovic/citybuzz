@@ -3,23 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_marginHorizontal="20dp">
+    android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/action_bar_size"
-        app:title="@string/title_activity_explore"
+        app:title="@string/all_events"
         app:titleTextAppearance="@style/ToolbarTitleText"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/title_font_size"
-        android:text="@string/all_events"
-        android:layout_marginVertical="10dp"
-        android:textStyle="bold"/>
 
     <LinearLayout
         android:id="@+id/explore_event_container"

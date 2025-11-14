@@ -54,9 +54,17 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
             EventPrivacy.PUBLIC,
             69)
 
-        var events = CityBuzzApp.eventViewModel.events.value
-        events += event1//listOf(event1, event2)//eventDAO.getAllEvents()
-        
+        CityBuzzApp.eventViewModel.loadEvents()
+        CityBuzzApp.eventViewModel.addEvent("First",
+            "Blahblah",
+            "Beograd",
+            LocalDate.of(2025, 10, 15),
+            LocalTime.of(12, 30),
+            0,
+            0)
+
+        val events = listOf(event1, event2) //CityBuzzApp.eventViewModel.events.value
+
         val adapter = object : ArrayAdapter<Event>(context!!, 0, events) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.event_list_item, parent, false)
@@ -80,7 +88,7 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
         listView.adapter = adapter
 
         listView.setOnItemClickListener { parent, view, position, id ->
-            showEventDetails(events[position].id)
+            showEventDetails(events[position].userId)
         }
     }
 
