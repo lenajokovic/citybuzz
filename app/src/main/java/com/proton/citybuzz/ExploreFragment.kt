@@ -39,10 +39,10 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
     suspend fun setUpListView(listView: ListView){
 
         val eventDAO = CityBuzzApp.db.eventDao()
-        var events = eventDAO.getAllEvents()
-        events += Event(0, "First Event", "Description", "Location")
-        events += Event(2, "Second Event", "Description", "Location")
-
+        val event1 = Event(0, "First Event", "Description", "Location")
+        val event2 = Event(2, "Second Event", "Description", "Location")
+        var events = listOf(event1, event2)//eventDAO.getAllEvents()
+        
         val adapter = object : ArrayAdapter<Event>(context!!, 0, events) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.event_list_item, parent, false)

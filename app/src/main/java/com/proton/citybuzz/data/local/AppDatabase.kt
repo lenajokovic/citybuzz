@@ -6,9 +6,10 @@ import com.proton.citybuzz.data.model.User
 import com.proton.citybuzz.data.model.Event
 import com.proton.citybuzz.data.model.UserFriend
 import com.proton.citybuzz.data.model.EventAttendee
+import com.proton.citybuzz.data.model.FriendRequest
 
 @Database(
-    entities = [User::class, Event::class, UserFriend::class, EventAttendee::class],
+    entities = [User::class, Event::class, UserFriend::class, EventAttendee::class, FriendRequest::class],
     version = 1
 )
 abstract class AppDatabase : RoomDatabase() {
