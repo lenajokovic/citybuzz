@@ -12,6 +12,9 @@ import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.fragment.app.Fragment
+import com.proton.citybuzz.data.model.Event
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 
 
 class ExploreFragment: Fragment(R.layout.activity_explore) {
@@ -26,22 +29,21 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
         val inflater = LayoutInflater.from(context!!)
         val eventList = inflater.inflate(R.layout.day_event_list, eventListContainer, false)
 
-        setUpListView(eventList.findViewById<ListView>(R.id.list_view))
+        GlobalScope.async {
+            setUpListView(eventList.findViewById(R.id.list_view))
+        }
 
         eventListContainer?.addView(eventList)
     }
 
-    fun setUpListView(listView: ListView){
+    suspend fun setUpListView(listView: ListView){
 
-        data class Item(val event_id: Int, val event_name: String, val profile_pic: Int, val user_name: String)
+        val eventDAO = CityBuzzApp.db.eventDao()
+        var events = eventDAO.getAllEvents()
+        events += Event(0, "First Event", "Description", "Location")
+        events += Event(2, "Second Event", "Description", "Location")
 
-        val items = listOf(
-            Item(1, "Apple", R.drawable.ic_launcher_background, "Mia"),
-            Item(2, "Orange", R.drawable.ic_launcher_background, "Mia"),
-            Item(3, "Banana", R.drawable.ic_launcher_background,  "Mia")
-        )
-
-        val adapter = object : ArrayAdapter<Item>(context!!, 0, items) {
+        val adapter = object : ArrayAdapter<Event>(context!!, 0, events) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.event_list_item, parent, false)
 
@@ -51,9 +53,9 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
                 val event_name = view.findViewById<TextView>(R.id.event_name)
                 val user_name = view.findViewById<TextView>(R.id.user_name)
 
-                profile_pic.setImageResource(item?.profile_pic ?: 0)
-                event_name.text = item?.event_name
-                user_name.text = item?.user_name
+                profile_pic.setImageResource(R.drawable.ic_explore)
+                event_name.text = item?.title
+                user_name.text = item?.location
 
                 return view
             }
@@ -62,11 +64,11 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
         listView.adapter = adapter
 
         listView.setOnItemClickListener { parent, view, position, id ->
-            showEventDetails(items[position].event_id)
+            showEventDetails(events[position].id)
         }
     }
 
-    fun showEventDetails(event_id: Int){
+    fun showEventDetails(event_id: Long){
 
     }
 
