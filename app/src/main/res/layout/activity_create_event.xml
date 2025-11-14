@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/action_bar_size"
+            app:title="@string/title_create_event"
+            app:titleTextAppearance="@style/ToolbarTitleText">
+
+            <ImageButton
+                android:id="@+id/cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_cancel"
+                android:layout_gravity="end"
+                android:background="@color/transparent"/>
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <!-- Event Name -->
+        <EditText
+            android:id="@+id/event_name"
+            android:layout_width="match_parent"
+            android:layout_height="57dp"
+            android:layout_marginBottom="12dp"
+            android:hint="Event Name"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Date"
+            android:textSize="@dimen/subtitle_font_size"
+            android:layout_marginVertical="5dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
+
+            <NumberPicker
+                android:id="@+id/start_day"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/action_bar_size"
+                android:layout_marginHorizontal="5dp"
+                />
+
+            <NumberPicker
+                android:id="@+id/start_month"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/action_bar_size"
+                android:layout_marginHorizontal="5dp"
+                />
+
+            <NumberPicker
+                android:id="@+id/start_year"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/action_bar_size"
+                android:layout_marginHorizontal="5dp"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Time"
+            android:textSize="@dimen/subtitle_font_size"
+            android:layout_marginVertical="5dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
+
+            <NumberPicker
+                android:id="@+id/start_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/action_bar_size"
+                android:layout_marginHorizontal="5dp"
+                />
+
+            <NumberPicker
+                android:id="@+id/start_minute"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/action_bar_size"
+                android:layout_marginHorizontal="5dp"
+                />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/duration"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginBottom="12dp"
+            android:hint="Duration (hours/minutes)"
+            android:inputType="text" />
+
+
+        <EditText
+            android:id="@+id/location"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:layout_marginBottom="12dp"
+            android:hint="Location"
+            android:inputType="text" />
+
+
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:layout_marginBottom="12dp"/>
+
+
+        <Spinner
+            android:id="@+id/category_picker"
+            android:layout_width="match_parent"
+            android:layout_height="69dp"
+            android:layout_marginBottom="24dp"
+            android:spinnerMode="dropdown"/>
+
+
+        <Button
+            android:id="@+id/save_event_button"
+            android:layout_width="match_parent"
+            android:layout_height="59dp"
+            android:text="Create Event" />
+
+    </LinearLayout>
+</LinearLayout>

@@ -46,6 +46,10 @@ class SocialViewModel(
         loadFriends(userId)
     }
 
+    suspend fun getUser(userId: Long?): User {
+        return userRepo.getUser(userId)
+    }
+
     // FriendRequest funkcije
     fun loadPendingRequests(userId: Long) = viewModelScope.launch {
         pendingRequests.value = requestRepo.getPendingRequests(userId)

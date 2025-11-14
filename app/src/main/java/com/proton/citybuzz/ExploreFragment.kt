@@ -39,7 +39,6 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
 
     suspend fun setUpListView(listView: ListView){
 
-        val eventDAO = CityBuzzApp.db.eventDao()
         val event1 = Event(0, "First Event",
             LocalDate.of(2023, 10, 10),
             LocalTime.now(),
@@ -55,7 +54,8 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
             EventPrivacy.PUBLIC,
             69)
 
-        val events = listOf(event1, event2)//eventDAO.getAllEvents()
+        var events = CityBuzzApp.eventViewModel.events.value
+        events += event1//listOf(event1, event2)//eventDAO.getAllEvents()
         
         val adapter = object : ArrayAdapter<Event>(context!!, 0, events) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -69,7 +69,9 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
 
                 profilePic.setImageResource(R.drawable.ic_explore)
                 eventName.text = item?.title
-                userName.text = item?.idUser.toString()
+                GlobalScope.async {
+                    userName.text = CityBuzzApp.socialViewModel.getUser(item?.creatorId).name
+                }
 
                 return view
             }
