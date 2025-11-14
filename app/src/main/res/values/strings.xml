@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">CityBuzz</string>
-    <string name="title_activity_explore">ExploreActivity</string>
+    <string name="title_activity_explore">Explore</string>
+    <string name="all_events">All Events</string>
+    <string name="today">Today</string>
 </resources>
