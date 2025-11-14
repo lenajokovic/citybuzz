@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CityBuzz</string>
+    <string name="title_activity_explore">ExploreActivity</string>
 </resources>
