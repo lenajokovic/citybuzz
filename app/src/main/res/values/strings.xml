@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">CityBuzz</string>
     <string name="title_activity_explore">Explore</string>
+    <string name="title_activity_network">Network</string>
     <string name="title_activity_my_events">My Events</string>
     <string name="all_events">All Events</string>
     <string name="my_events">My Events</string>
     <string name="today">Today</string>
+    <string name="title_activity_navigation_bar">NavigationBarActivity</string>
     <string name="tomorrow">Tomorrow</string>
 </resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/explore"
+        android:title="@string/title_activity_explore"
+        android:icon="@drawable/explore_24"/>
+    <item
+        android:id="@+id/network"
+        android:title="@string/title_activity_network"
+        android:icon="@drawable/network_24"/>
+    <item
+        android:id="@+id/my_events"
+        android:title="@string/title_activity_my_events"
+        android:icon="@drawable/my_events_24"/>
+</menu>

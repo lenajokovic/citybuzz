@@ -13,25 +13,26 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
+import androidx.fragment.app.Fragment
 
 
-class ExploreActivity: ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_explore)
-        populateView()
+class ExploreActivity: Fragment(R.layout.activity_explore) {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.activity_explore, container, false)
     }
 
     fun populateView(){
-
-        val eventListContainer = findViewById<LinearLayout>(R.id.explore_event_container)
-        val inflater = LayoutInflater.from(this)
+        val eventListContainer = view?.findViewById<LinearLayout>(R.id.explore_event_container)
+        val inflater = LayoutInflater.from(context)
         val eventList = inflater.inflate(R.layout.day_event_list, eventListContainer, false)
 
         setUpListView(eventList.findViewById<ListView>(R.id.list_view))
 
-        eventListContainer.addView(eventList)
+        eventListContainer?.addView(eventList)
     }
 
     fun setUpListView(listView: ListView){
