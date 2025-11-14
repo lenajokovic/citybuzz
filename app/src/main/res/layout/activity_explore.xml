@@ -10,7 +10,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/action_bar_size"
-        app:title="@string/title_activity_explore"/>
+        app:title="@string/title_activity_explore"
+        app:titleTextAppearance="@style/ToolbarTitleText"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,19 +21,10 @@
         android:layout_marginVertical="10dp"
         android:textStyle="bold"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/subtitle_font_size"
-        android:text="@string/today"
-        android:layout_marginVertical="5dp"
-        android:textStyle="bold"/>
-
-    <ListView
-        android:id="@+id/list_view"
+    <LinearLayout
+        android:id="@+id/explore_event_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
 
 </LinearLayout>

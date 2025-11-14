@@ -2,4 +2,7 @@
 <resources>
 
     <style name="Theme.CityBuzz" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="ToolbarTitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">32sp</item> <!-- Set your desired font size -->
+    </style>
 </resources>
