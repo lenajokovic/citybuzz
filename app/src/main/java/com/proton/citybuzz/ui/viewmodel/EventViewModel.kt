@@ -14,6 +14,8 @@ class EventViewModel(private val eventRepo: EventRepository) : ViewModel() {
 
     val events = MutableLiveData<List<Event>>()
     val attendees = MutableLiveData<List<Long>>()
+    val myEvents = MutableLiveData<List<Event>>()
+    val suggestedEvents = MutableLiveData<List<Event>>()
 
     fun loadEvents() = viewModelScope.launch {
         events.value = eventRepo.getAllEvents()
@@ -23,15 +25,33 @@ class EventViewModel(private val eventRepo: EventRepository) : ViewModel() {
         time: LocalTime, privacy: EventPrivacy, idUser: Long
     ) = viewModelScope.launch {
         val event = Event(title = title, date = date, time = time, description = description,
-            location = location, privacy = privacy, idUser = idUser
+            location = location, privacy = privacy, creatorId = idUser
         )
         eventRepo.addEvent(event)
+        loadEvents()
+    }
+
+    fun removeEvent(eventId: Long) = viewModelScope.launch {
+        eventRepo.removeEvent(eventId)
         loadEvents()
     }
 
     fun addAttendee(eventId: Long, userId: Long) = viewModelScope.launch {
         eventRepo.addAttendee(eventId, userId)
         attendees.value = eventRepo.getAttendees(eventId)
+    }
+
+    fun removeAtendee(eventId: Long, userId: Long) = viewModelScope.launch {
+        eventRepo.removeAttendee(eventId, userId)
+        attendees.value = eventRepo.getAttendees(eventId)
+    }
+
+    fun loadMyEvents(userId: Long) = viewModelScope.launch {
+        myEvents.value = eventRepo.getMyEvents(userId)
+    }
+
+    fun loadSuggestedEvents(userId: Long) = viewModelScope.launch {
+        suggestedEvents.value = eventRepo.getSuggestedEvents(userId)
     }
 
     fun getTitle(eventId: Long): String? =
@@ -52,6 +72,6 @@ class EventViewModel(private val eventRepo: EventRepository) : ViewModel() {
     fun getPrivacy(eventId: Long): EventPrivacy? =
         events.value?.firstOrNull { it.id == eventId }?.privacy
 
-    fun getIdUser(eventId: Long): Long? =
-        events.value?.firstOrNull { it.id == eventId }?.idUser
+    fun getCreatorId(eventId: Long): Long? =
+        events.value?.firstOrNull { it.id == eventId }?.creatorId
 }

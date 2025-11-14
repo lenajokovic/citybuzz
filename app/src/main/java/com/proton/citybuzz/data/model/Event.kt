@@ -21,5 +21,5 @@ data class Event(
     val description: String,
     val location: String,
     val privacy: EventPrivacy,
-    val idUser: Long
+    val creatorId: Long
 )
