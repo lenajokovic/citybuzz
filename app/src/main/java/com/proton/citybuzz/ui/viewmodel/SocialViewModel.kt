@@ -41,6 +41,11 @@ class SocialViewModel(
         friends.value = userRepo.getFriends(userId)
     }
 
+    fun removeFriend(userId: Long, friendId : Long) = viewModelScope.launch {
+        userRepo.removeFriend(userId, friendId)
+        loadFriends(userId)
+    }
+
     // FriendRequest funkcije
     fun loadPendingRequests(userId: Long) = viewModelScope.launch {
         pendingRequests.value = requestRepo.getPendingRequests(userId)

@@ -18,6 +18,9 @@ class UserRepository(private val dao: UserDao) {
     suspend fun addFriend(userId: Long, friendId: Long) =
         dao.insertFriend(UserFriend(userId, friendId))
 
+    suspend fun removeFriend(userId: Long, friendId: Long) =
+        dao.deleteFriend(userId, friendId)
+
     suspend fun getFriends(userId: Long) = dao.getFriends(userId)
 
     suspend fun getFriendsOfFriends(userId: Long): List<User> {
