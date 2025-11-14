@@ -9,6 +9,13 @@ class UserRepository(private val dao: UserDao) {
     suspend fun addUser(user: User) = dao.insertUser(user)
     suspend fun addFriend(userId: Long, friendId: Long) =
         dao.insertFriend(UserFriend(userId, friendId))
+
+    suspend fun getUserByEmail(email: String): User? = dao.getUserByEmail(email)
     suspend fun getFriends(userId: Long) = dao.getFriends(userId)
     suspend fun getAllUsers() = dao.getAllUsers()
+
+    suspend fun login(email: String, password: String): User? {
+        val user = dao.getUserByEmail(email)
+        return if (user?.password == password) user else null
+    }
 }
