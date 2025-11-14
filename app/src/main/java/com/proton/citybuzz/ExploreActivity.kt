@@ -11,6 +11,9 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
+import com.proton.citybuzz.data.model.Event
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 
 
 class ExploreActivity: ComponentActivity() {
@@ -22,27 +25,25 @@ class ExploreActivity: ComponentActivity() {
     }
 
     fun populateView(){
-
         val eventListContainer = findViewById<LinearLayout>(R.id.explore_event_container)
         val inflater = LayoutInflater.from(this)
         val eventList = inflater.inflate(R.layout.day_event_list, eventListContainer, false)
 
-        setUpListView(eventList.findViewById<ListView>(R.id.list_view))
+        GlobalScope.async {
+            setUpListView(eventList.findViewById(R.id.list_view))
+        }
 
         eventListContainer.addView(eventList)
     }
 
-    fun setUpListView(listView: ListView){
+    suspend fun setUpListView(listView: ListView){
 
-        data class Item(val event_id: Int, val event_name: String, val profile_pic: Int, val user_name: String)
-
-        val items = listOf(
-            Item(1, "Apple", R.drawable.ic_launcher_background, "Mia"),
-            Item(2, "Orange", R.drawable.ic_launcher_background, "Mia"),
-            Item(3, "Banana", R.drawable.ic_launcher_background,  "Mia")
-        )
-
-        val adapter = object : ArrayAdapter<Item>(this, 0, items) {
+        val eventDAO = CityBuzzApp.db.eventDao()
+        var events = eventDAO.getAllEvents()
+        events += Event(0, "First Event", "Description", "Location")
+        events += Event(2, "Second Event", "Description", "Location")
+        
+        val adapter = object : ArrayAdapter<Event>(this, 0, events) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.event_list_item, parent, false)
 
@@ -52,9 +53,9 @@ class ExploreActivity: ComponentActivity() {
                 val event_name = view.findViewById<TextView>(R.id.event_name)
                 val user_name = view.findViewById<TextView>(R.id.user_name)
 
-                profile_pic.setImageResource(item?.profile_pic ?: 0)
-                event_name.text = item?.event_name
-                user_name.text = item?.user_name
+                //profile_pic.setImageResource(item?.pic ?: 0)
+                event_name.text = item?.title
+                //user_name.text = item?.location
 
                 return view
             }
@@ -63,11 +64,11 @@ class ExploreActivity: ComponentActivity() {
         listView.adapter = adapter
 
         listView.setOnItemClickListener { parent, view, position, id ->
-            showEventDetails(items[position].event_id)
+            showEventDetails(events[position].id)
         }
     }
 
-    fun showEventDetails(event_id: Int){
+    fun showEventDetails(event_id: Long?){
 
     }
 
