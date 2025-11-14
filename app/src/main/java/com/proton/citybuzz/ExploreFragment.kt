@@ -67,9 +67,9 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
                 val eventName = view.findViewById<TextView>(R.id.event_name)
                 val userName = view.findViewById<TextView>(R.id.user_name)
 
-                profile_pic.setImageResource(R.drawable.ic_explore)
-                event_name.text = item?.title
-                user_name.text = item?.idUser.toString()
+                profilePic.setImageResource(R.drawable.ic_explore)
+                eventName.text = item?.title
+                userName.text = item?.idUser.toString()
 
                 return view
             }
