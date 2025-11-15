@@ -58,6 +58,7 @@ class LoginActivity : AppCompatActivity() {
             }
         } else {
             setupUI()
+            SnowflakeCaller.getInstance().createConnection()
         }
     }
 

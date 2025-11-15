@@ -60,10 +60,18 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
 
                 eventName.text = item?.title
                 startTime.text = String.format("%02d:%02d", item?.date?.hour, item?.date?.minute)
+
+                val eventLocation = view.findViewById<TextView>(R.id.event_location)
+                eventLocation.text = item?.location
+
+                val eventDescription = view.findViewById<TextView>(R.id.event_description)
+                eventDescription.text = item?.description
+
                 val joinEventButton = view?.findViewById<Button>(R.id.join_event_button)
                 joinEventButton?.setOnClickListener {
                     joinToEvent(item?.id!!)
                 }
+
                 lifecycleScope.launch {
                     val eventCreator = CityBuzzApp.getInstance().socialViewModel.getUserById(item?.creatorId)?.name
                     userName.text = eventCreator
