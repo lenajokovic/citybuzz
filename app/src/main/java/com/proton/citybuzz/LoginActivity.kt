@@ -7,7 +7,6 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.proton.citybuzz.ui.viewmodel.SocialViewModel
 
 class LoginActivity : AppCompatActivity() {
 
@@ -22,10 +21,10 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_page)
 
-        email = findViewById(R.id.etEmail)
-        password = findViewById(R.id.etPassword)
-        btn_login = findViewById(R.id.btnLogin)
-        create_account = findViewById(R.id.tvCreateAccount)
+        email = findViewById(R.id.email)
+        password = findViewById(R.id.password)
+        btn_login = findViewById(R.id.btn_login)
+        create_account = findViewById(R.id.create_account)
 
         btn_login.setOnClickListener { loginUser() }
 

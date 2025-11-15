@@ -12,7 +12,7 @@
 
         <!-- Invitations -->
         <TextView
-            android:id="@+id/tvRequestsTitle"
+            android:id="@+id/requests_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Invitations"
@@ -22,7 +22,7 @@
             android:layout_marginBottom="8dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvFriendRequests"
+            android:id="@+id/friend_requests"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"/>
@@ -36,7 +36,7 @@
 
         <!-- People You May Know -->
         <TextView
-            android:id="@+id/tvSuggestionsTitle"
+            android:id="@+id/suggestions_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="People You May Know"
@@ -45,7 +45,7 @@
             android:layout_marginBottom="8dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvSuggestions"
+            android:id="@+id/suggestions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"/>
