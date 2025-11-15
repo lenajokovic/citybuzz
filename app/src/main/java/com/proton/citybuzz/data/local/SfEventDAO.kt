@@ -12,10 +12,11 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
     // INSERT EVENT
     suspend fun insertEvent(event: Event) {
         val query = """
-            INSERT INTO EVENTS (TITLE, DATE, DESCRIPTION, LOC, PRIVACY, USER_ID)
-            VALUES (
+            INSERT INTO EVENTS (EVENT_ID, TITLE, DATE, DESCRIPTION, LOC, PRIVACY, USER_ID)
+            VALUES ( 
+                '${event.id}',
                 '${event.title}',
-                '${event.date}', 
+                '${event.date}',
                 '${event.description}',
                 '${event.location}',
                 ${event.privacy.ordinal},
@@ -144,5 +145,14 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
             )
         }
         return list
+    }
+
+    suspend fun getMaxEventId(): Int {
+        val rs = sf.executeQuery("SELECT MAX(EVENT_ID) AS maxId FROM EVENTS")
+        var maxId = 0
+        if (rs.next()) {
+            maxId = rs.getInt("maxId")
+        }
+        return maxId
     }
 }
