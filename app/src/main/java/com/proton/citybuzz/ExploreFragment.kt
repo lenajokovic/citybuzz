@@ -38,11 +38,12 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
     }
     fun setUpListView(listView: ListView){
         val eventViewModel = CityBuzzApp.getInstance().eventViewModel
-        eventViewModel.loadEvents()
+        val userId = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value?.id ?: 0
+        eventViewModel.loadSuggestedEvents(userId)
 
-        eventViewModel.events.observe(viewLifecycleOwner, { events ->
+        eventViewModel.suggestedEvents.observe(viewLifecycleOwner) { events ->
             updateListView(listView, events)
-        })
+        }
     }
 
     fun updateListView(listView: ListView, events: List<Event>) {
