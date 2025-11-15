@@ -6,10 +6,18 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import com.proton.citybuzz.data.model.Event
 import com.proton.citybuzz.data.model.EventPrivacy
+import com.proton.citybuzz.data.model.Notification
+import com.proton.citybuzz.data.model.NotificationType
 import com.proton.citybuzz.data.repository.EventRepository
+import com.proton.citybuzz.data.repository.NotificationRepository
+import com.proton.citybuzz.data.repository.UserRepository
 import java.time.LocalDateTime
 
-class EventViewModel(private val eventRepo: EventRepository) : ViewModel() {
+class EventViewModel(
+    private val eventRepo: EventRepository,
+    private val notifRepo: NotificationRepository,
+    private val userRepo: UserRepository
+) : ViewModel() {
 
     val events = MutableLiveData<List<Event>>()
     val attendees = MutableLiveData<List<Int>>()
@@ -37,13 +45,34 @@ class EventViewModel(private val eventRepo: EventRepository) : ViewModel() {
 
     fun addAttendee(eventId: Int, userId: Int) = viewModelScope.launch {
         eventRepo.addAttendee(eventId, userId)
-        val list = eventRepo.getAttendees(eventId)
-        attendees.value = list
+        attendees.value = eventRepo.getAttendees(eventId)
+
+        val event = eventRepo.getEventById(eventId)
+        val user = userRepo.getUserById(userId)
+
+        event?.let { e ->
+            notifRepo.addNotification(
+                userId = e.creatorId,
+                type = NotificationType.EVENT_JOIN,
+                message = "${user?.name ?: "A user"} joined your event '${e.title}'"
+            )
+        }
     }
 
     fun removeAttendee(eventId: Int, userId: Int) = viewModelScope.launch {
         eventRepo.removeAttendee(eventId, userId)
         attendees.value = eventRepo.getAttendees(eventId)
+
+        val event = eventRepo.getEventById(eventId)
+        val user = userRepo.getUserById(userId)
+
+        event?.let { e ->
+            notifRepo.addNotification(
+                userId = e.creatorId,
+                type = NotificationType.EVENT_LEAVE,
+                message = "${user?.name ?: "A user"} left your event '${e.title}'"
+            )
+        }
     }
 
     fun loadMyEvents(userId: Int) = viewModelScope.launch {

@@ -7,7 +7,7 @@ import com.proton.citybuzz.data.model.NotificationType
 
 class NotificationRepository(private val dao: SfNotificationDao) {
 
-    suspend fun add(userId: Int, type: NotificationType, message: String) =
+    suspend fun addNotification(userId: Int, type: NotificationType, message: String) =
         dao.addNotification(userId, type, message)
 
     suspend fun getForUser(userId: Int) =

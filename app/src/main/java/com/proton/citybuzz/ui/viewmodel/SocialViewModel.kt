@@ -51,7 +51,7 @@ class SocialViewModel(
     }
 
     suspend fun getUser(userId: Int?): User? {
-        return userRepo.getUser(userId)
+        return userRepo.getUserById(userId)
     }
 
     // FriendRequest funkcije
@@ -62,8 +62,8 @@ class SocialViewModel(
     fun sendRequest(fromUserId: Int, toUserId: Int) = viewModelScope.launch {
         requestRepo.sendRequest(fromUserId, toUserId)
 
-        val sender = userRepo.getUser(fromUserId)
-        notifRepo.add(
+        val sender = userRepo.getUserById(fromUserId)
+        notifRepo.addNotification(
             userId = toUserId,
             type = NotificationType.FRIEND_REQUEST,
             message = "You received a friend request from ${sender?.name ?: "Unknown"}"
@@ -76,8 +76,8 @@ class SocialViewModel(
         requestRepo.deleteRequest(request.fromUserId, request.toUserId)
         userRepo.addFriend(request.fromUserId, request.toUserId)
 
-        val sender = userRepo.getUser(request.fromUserId)
-        notifRepo.add(
+        val sender = userRepo.getUserById(request.fromUserId)
+        notifRepo.addNotification(
             userId = request.toUserId,
             type = NotificationType.FRIEND_ACCEPTED,
             message = "You accepted a friend request from ${sender?.name ?: "Unknown"}"

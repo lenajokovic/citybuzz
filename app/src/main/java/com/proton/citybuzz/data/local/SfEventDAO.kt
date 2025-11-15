@@ -8,6 +8,7 @@ import com.proton.citybuzz.snowflaketest.SnowflakeCaller
 import com.proton.citybuzz.data.model.Event
 import com.proton.citybuzz.data.model.EventAttendee
 import com.proton.citybuzz.data.model.EventPrivacy
+import com.proton.citybuzz.data.model.User
 
 class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()) {
 
@@ -32,22 +33,17 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
         sf.executeUpdate("DELETE FROM EVENTS WHERE EVENT_ID = $eventId")
     }
 
-    /*
-    @Insert
-    suspend fun insertAttendee(attendee: EventAttendee)
-
-    @Query("""
-        DELETE FROM event_attendees
-        WHERE eventId = :eventId AND userId = :userId
-    """)
-    suspend fun deleteAttendee(eventId: Long, userId: Long)
-
-     */
-
     //GET ALL EVENTS
     suspend fun getAllEvents(): List<Event> {
         val rs = sf.executeQuery("SELECT * FROM EVENTS")
-        return parseEventList(rs)
+        return parseEvents(rs)
+    }
+
+    // GET EVENT BY ID
+    suspend fun getEventById(eventId: Int?): Event? {
+        if (eventId == null) return null
+        val rs = sf.executeQuery("SELECT * FROM EVENTS WHERE EVENT_ID = $eventId")
+        return if (rs.next()) parseEvent(rs) else null
     }
 
     // INSERT ATTENDEE
@@ -91,7 +87,7 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
                     WHERE USER_ID = $userId
                )
         """
-        return parseEventList(sf.executeQuery(query))
+        return parseEvents(sf.executeQuery(query))
     }
 
     // GET SUGGESTED EVENTS
@@ -125,28 +121,25 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
                     )
                 )
         """
-        return parseEventList(sf.executeQuery(query))
+        return parseEvents(sf.executeQuery(query))
     }
 
-    // PARSE EVENT LIST FROM RESULTSET
-    private fun parseEventList(rs: ResultSet): List<Event> {
+    // ---------- PARSER FUNKCIJE ----------
+    private fun parseEvents(rs: ResultSet): List<Event> {
         val list = mutableListOf<Event>()
-
-        while (rs.next()) {
-            val privacyInt = rs.getInt("PRIVACY")
-
-            list.add(
-                Event(
-                    id = rs.getInt("EVENT_ID"),
-                    title = rs.getString("TITLE"),
-                    date = LocalDateTime.parse(rs.getString("DATE")),
-                    description = rs.getString("DESCRIPTION"),
-                    location = rs.getString("LOC"),
-                    privacy = EventPrivacy.entries[privacyInt],
-                    creatorId = rs.getInt("USER_ID")
-                )
-            )
-        }
+        while (rs.next()) list.add(parseEvent(rs))
         return list
+    }
+
+    private fun parseEvent(rs: ResultSet): Event {
+        return Event(
+            id = rs.getInt("EVENT_ID"),
+            title = rs.getString("TITLE"),
+            date = LocalDateTime.parse(rs.getString("DATE")),
+            description = rs.getString("DESCRIPTION"),
+            location = rs.getString("LOC"),
+            privacy = EventPrivacy.entries[rs.getInt("PRIVACY")],
+            creatorId = rs.getInt("USER_ID")
+        )
     }
 }

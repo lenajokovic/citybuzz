@@ -8,6 +8,7 @@ import com.proton.citybuzz.data.model.EventAttendee
 class EventRepository(private val dao: SfEventDao) {
     suspend fun addEvent(event: Event) = dao.insertEvent(event)
     suspend fun removeEvent(eventId: Int) = dao.deleteEvent(eventId)
+    suspend fun getEventById(eventId: Int) = dao.getEventById(eventId)
     suspend fun getAllEvents() = dao.getAllEvents()
     suspend fun addAttendee(eventId: Int, userId: Int) =
         dao.insertAttendee(eventId, userId)

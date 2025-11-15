@@ -30,7 +30,7 @@ class SfUserDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()
     }
 
     // GET USER BY ID
-    suspend fun getUser(userId: Int?): User? {
+    suspend fun getUserById(userId: Int?): User? {
         if (userId == null) return null
         val rs = sf.executeQuery("SELECT * FROM USERS WHERE USER_ID = $userId")
         return if (rs.next()) parseUser(rs) else null
@@ -103,7 +103,7 @@ class SfUserDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()
         while (userRs.next()) {
             users.add(
                 User(
-                    id = userRs.getInt("USER_ID").toInt(),
+                    id = userRs.getInt("USER_ID"),
                     name = userRs.getString("NAME"),
                     email = userRs.getString("EMAIL"),
                     password = userRs.getString("PASSWORD"),
