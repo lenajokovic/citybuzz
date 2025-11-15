@@ -88,7 +88,7 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
         listView.adapter = adapter
 
         listView.setOnItemClickListener { parent, view, position, id ->
-            showEventDetails(events[position].userId)
+            showEventDetails(events[position].id)
         }
     }
 

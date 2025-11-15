@@ -2,6 +2,7 @@
     <string name="app_name">CityBuzz</string>
 
     <string name="title_activity_explore">Explore</string>
+    <string name="title_activity_network">Network</string>
     <string name="title_activity_my_events">My Events</string>
     <string name="title_create_event">Create Event</string>
 
@@ -14,4 +15,6 @@
         <item>Friends</item>
     </string-array>
     <string name="tomorrow">Tomorrow</string>
+    <string name="friend_requests">Friend Requests</string>
+    <string name="suggested">Suggested</string>
 </resources>

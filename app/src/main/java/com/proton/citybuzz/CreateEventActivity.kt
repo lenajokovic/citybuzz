@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.NumberPicker
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -40,12 +41,15 @@ class CreateEventActivity : AppCompatActivity() {
         val startDay = findViewById<NumberPicker>(R.id.start_day)
         startDay.minValue = 1
         startDay.maxValue = 31
+        startDay.value = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
         val startMonth = findViewById<NumberPicker>(R.id.start_month)
         startMonth.minValue = 1
         startMonth.maxValue = 12
+        startMonth.value = Calendar.getInstance().get(Calendar.MONTH)
         val startYear = findViewById<NumberPicker>(R.id.start_year)
         startYear.minValue = Calendar.getInstance().get(Calendar.YEAR)
         startYear.maxValue = startYear.minValue + 10
+        startYear.value = Calendar.getInstance().get(Calendar.YEAR)
 
         val startHour = findViewById<NumberPicker>(R.id.start_hour)
         startHour.minValue = 0
@@ -88,5 +92,15 @@ class CreateEventActivity : AppCompatActivity() {
             selectedCategory,
             CityBuzzApp.socialViewModel.loggedInUser.value?.id ?: 0
         )
+
+        CityBuzzApp.eventViewModel.addEvent("Second",
+            "Blahblah",
+            "Beograd",
+            LocalDate.of(2025, 10, 15),
+            LocalTime.of(12, 30),
+            0,
+            0)
+
+        Toast.makeText(this, "Event created!", Toast.LENGTH_SHORT).show()
     }
 }
