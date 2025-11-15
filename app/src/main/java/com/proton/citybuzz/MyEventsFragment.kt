@@ -10,6 +10,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.proton.citybuzz.data.model.Event
@@ -28,7 +29,7 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
 
     fun populateView(){
 
-        val eventListContainer = view?.findViewById<LinearLayout>(R.id.explore_event_container)
+        val eventListContainer = view?.findViewById<ScrollView>(R.id.my_events_container)
         val inflater = LayoutInflater.from(context!!)
         val eventList = inflater.inflate(R.layout.day_event_list, eventListContainer, false)
 
