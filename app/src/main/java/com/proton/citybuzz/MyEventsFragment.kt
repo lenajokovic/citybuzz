@@ -2,6 +2,7 @@ package com.proton.citybuzz
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +26,7 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
     }
 
     fun populateView() {
-        val eventListContainer = view?.findViewById<LinearLayout>(R.id.explore_event_container)
+        val eventListContainer = view?.findViewById<LinearLayout>(R.id.my_events_container)
         val inflater = LayoutInflater.from(requireContext())
         val eventList = inflater.inflate(R.layout.day_event_list, eventListContainer, false)
 
@@ -59,7 +60,8 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
     fun updateListView(listView: ListView, events: List<Event>) {
         val adapter = object : ArrayAdapter<Event>(requireContext(), 0, events) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.event_list_item, parent, false)
+                val view = convertView ?: LayoutInflater.from(context)
+                    .inflate(R.layout.event_list_item, parent, false)
 
                 val item = getItem(position)
 
@@ -70,7 +72,8 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
                 profilePic.setImageResource(R.drawable.ic_explore)
                 eventName.text = item?.title
                 lifecycleScope.launch {
-                    //userName.text = CityBuzzApp.socialViewModel.getUser(item?.creatorId).name
+                    val eventCreator = CityBuzzApp.getInstance().socialViewModel.getUser(item?.creatorId)?.name
+                    userName.text = eventCreator
                 }
                 return view
             }

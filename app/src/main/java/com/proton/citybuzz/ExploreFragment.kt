@@ -76,9 +76,4 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
                 eventDetailsContainer.visibility = View.VISIBLE
         }
     }
-
-    fun showEventDetails(event_id: Long){
-
-    }
-
 }
