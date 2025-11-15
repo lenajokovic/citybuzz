@@ -23,7 +23,7 @@ class MainActivity: AppCompatActivity() {
         val closeButton = findViewById<ImageButton>(R.id.close_button)
 
         val exploreFragment = ExploreFragment()
-        //val networkFragment = NetworkFragment()
+        val networkFragment = NetworkFragment()
         val accountFragment = AccountFragment()
         val myEventsFragment = MyEventsFragment()
         replaceFragment(exploreFragment, accountButton, closeButton)
@@ -36,7 +36,7 @@ class MainActivity: AppCompatActivity() {
                 }
 
                 R.id.nav_network -> {
-                    //replaceFragment(networkFragment)
+                    replaceFragment(networkFragment, accountButton, closeButton)
                     true
                 }
 

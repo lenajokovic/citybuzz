@@ -1,0 +1,44 @@
+package com.proton.citybuzz
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.proton.citybuzz.data.model.User
+
+class SuggestionAdapter(
+    private var items: List<User>,
+    private val onSendRequest: (User) -> Unit
+) : RecyclerView.Adapter<SuggestionAdapter.ViewHolder>() {
+
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val ivProfile: ImageView = view.findViewById(R.id.ivProfile)
+        val tvName: TextView = view.findViewById(R.id.tvName)
+        val tvHeadline: TextView = view.findViewById(R.id.tvHeadline)
+        val btnAdd: Button = view.findViewById(R.id.btnConnect)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_suggestion, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val user = items[position]
+
+        holder.tvName.text = user.name
+        holder.btnAdd.setOnClickListener { onSendRequest(user) }
+    }
+
+    override fun getItemCount() = items.size
+
+    fun update(newItems: List<User>) {
+        items = newItems
+        notifyDataSetChanged()
+    }
+}
+
