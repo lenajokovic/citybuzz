@@ -16,6 +16,9 @@ import java.util.Properties
 /*
 EVENTS (EVENT_ID int, TITLE varchar, DATE date, DESCRIPTION varchar, LOC varchar, PRIVACY INT(0-2), USER_ID int
 USERS (USER_ID int, NAME varchar, EMAIL varchar, PASSWORD varchar, PROFILEIMAGE varchar)
+FRIEND_REQUEST (USER_ID int, FRIEND_ID int)
+USER_FRIEND (USER_ID int, FRIEND_ID int)
+EVENT_ATTENDEE (EVENT_ID int, USER_ID int)
  */
 
 class SnowflakeCaller {
