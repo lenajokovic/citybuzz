@@ -6,7 +6,9 @@ import com.proton.citybuzz.data.model.FriendRequest
 class FriendRequestRepository(private val dao: SfFriendRequestDao = SfFriendRequestDao()) {
 
     suspend fun sendRequest(fromUserId: Int, toUserId: Int) {
-        dao.insertRequest(FriendRequest(fromUserId = fromUserId, toUserId = toUserId))
+        if(fromUserId != toUserId) {
+            dao.insertRequest(FriendRequest(fromUserId = fromUserId, toUserId = toUserId))
+        }
     }
 
     suspend fun getPendingRequests(toUserId: Int): List<FriendRequest> =
