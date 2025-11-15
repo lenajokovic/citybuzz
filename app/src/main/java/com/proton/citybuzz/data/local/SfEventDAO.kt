@@ -96,7 +96,15 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
             SELECT DISTINCT e.*
             FROM EVENTS e
             WHERE
-                -- PUBLIC
+                AND e.EVENT_ID NOT IN (
+                    SELECT EVENT_ID FROM EVENT_ATTENDEES WHERE USER_ID = ${'$'}userId
+                )
+                
+               
+                AND e.USER_ID != ${'$'}userId
+                
+                AND
+                (
                 e.PRIVACY = 0
                 OR
                 (
@@ -119,6 +127,7 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
                             SELECT USER_ID FROM USER_FRIENDS WHERE FRIEND_ID = $userId
                         )
                     )
+                )
                 )
         """
         return parseEvents(sf.executeQuery(query))

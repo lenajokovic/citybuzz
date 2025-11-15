@@ -91,7 +91,7 @@ class EventViewModel(
         notifRepo.addNotification(
             userId = toUserId,
             type = NotificationType.EVENT_INVITE,
-            message = "${sender.name} invited you to the event '${event.title}'"
+            message = "${sender.name} invited you to the event ${event.title}"
         )
     }
 
