@@ -3,13 +3,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp">
-
-    <ImageView
-        android:id="@+id/profile_pic"
-        android:layout_width="@dimen/list_profile_pic_size"
-        android:layout_height="@dimen/list_profile_pic_size"
-        android:src="@drawable/ic_launcher_background"/>
+    android:layout_marginVertical="10dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -22,7 +16,7 @@
             android:id="@+id/event_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size"
+            android:textSize="@dimen/title_font_size"
             android:textStyle="bold"
             android:text="Event Name" />
 
@@ -35,14 +29,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size"
+                android:textSize="@dimen/subtitle_font_size"
                 android:text="by: "/>
 
             <TextView
                 android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size"
+                android:textSize="@dimen/subtitle_font_size"
                 android:text="Name Surname"/>
 
         </LinearLayout>
@@ -99,10 +93,12 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/event_start_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="18h"
         android:textSize="@dimen/list_profile_pic_size"
-        android:gravity="end"/>
+        android:gravity="end"
+        android:textColor="@color/design_default_color_primary"/>
 
 </LinearLayout>

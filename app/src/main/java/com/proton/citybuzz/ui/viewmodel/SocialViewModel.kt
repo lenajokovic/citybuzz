@@ -24,7 +24,6 @@ class SocialViewModel(
     val pendingRequests = MutableLiveData<List<FriendRequest>>()
     val suggestions = MutableLiveData<List<User>>()
 
-    // User funkcije
     fun loadUsers() = viewModelScope.launch { users.value = userRepo.getAllUsers() }
 
     fun addUser(name: String, email: String, password: String, profileImage: String?) = viewModelScope.launch {

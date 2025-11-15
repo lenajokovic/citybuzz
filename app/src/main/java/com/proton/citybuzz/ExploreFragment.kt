@@ -1,5 +1,6 @@
 package com.proton.citybuzz
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.proton.citybuzz.data.model.Event
 import kotlinx.coroutines.launch
+import androidx.core.view.isVisible
+import org.w3c.dom.Text
 
 
 class ExploreFragment: Fragment(R.layout.activity_explore) {
@@ -44,18 +47,19 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
 
     fun updateListView(listView: ListView, events: List<Event>) {
         val adapter = object : ArrayAdapter<Event>(requireContext(), 0, events) {
+            @SuppressLint("DefaultLocale")
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater.from(context)
                     .inflate(R.layout.event_list_item, parent, false)
 
                 val item = getItem(position)
 
-                val profilePic = view.findViewById<ImageView>(R.id.profile_pic)
                 val eventName = view.findViewById<TextView>(R.id.event_name)
                 val userName = view.findViewById<TextView>(R.id.user_name)
+                val startTime = view.findViewById<TextView>(R.id.event_start_time)
 
-                profilePic.setImageResource(R.drawable.ic_explore)
                 eventName.text = item?.title
+                startTime.text = String.format("%02d:%02d", item?.date?.hour, item?.date?.minute)
                 val joinEventButton = view?.findViewById<Button>(R.id.join_event_button)
                 joinEventButton?.setOnClickListener {
                     joinToEvent(item?.id!!)
@@ -74,7 +78,7 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
             val eventDetailsContainer = view.findViewById<LinearLayout>(R.id.event_details_container)
             val joinEventButton = view.findViewById<Button>(R.id.join_event_button)
 
-            if (eventDetailsContainer.visibility == View.VISIBLE) {
+            if (eventDetailsContainer.isVisible) {
                 eventDetailsContainer.visibility = View.GONE
                 joinEventButton.visibility = View.GONE
             }
