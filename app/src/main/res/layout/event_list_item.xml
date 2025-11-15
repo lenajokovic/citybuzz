@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            >
 
             <TextView
                 android:id="@+id/event_location"
@@ -74,23 +74,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="JOIN"
-                android:layout_gravity="end"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/event_invite_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+                android:layout_gravity="end"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/invite_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="invite"
-                android:layout_gravity="end"/>
+                android:text="INVITE"
+                android:layout_gravity="end"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/friends_list_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="8dp"/>
+
 
         </LinearLayout>
 
