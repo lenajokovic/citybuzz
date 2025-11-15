@@ -29,7 +29,7 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
 
     fun populateView(){
 
-        val eventListContainer = view?.findViewById<ScrollView>(R.id.my_events_container)
+        val eventListContainer = view?.findViewById<LinearLayout>(R.id.my_events_container)
         val inflater = LayoutInflater.from(context!!)
         val eventList = inflater.inflate(R.layout.day_event_list, eventListContainer, false)
 
@@ -91,11 +91,12 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
         listView.adapter = adapter
 
         listView.setOnItemClickListener { parent, view, position, id ->
-            showEventDetails(events[position].id)
+            val eventDetailsContainer = view.findViewById<LinearLayout>(R.id.event_details_container)
+
+            if(eventDetailsContainer.visibility == View.VISIBLE)
+                eventDetailsContainer.visibility = View.GONE
+            else
+                eventDetailsContainer.visibility = View.VISIBLE
         }
-    }
-
-    fun showEventDetails(event_id: Long){
-
     }
 }
