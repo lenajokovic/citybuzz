@@ -88,13 +88,12 @@ class SocialViewModel(
             type = NotificationType.FRIEND_REQUEST,
             message = "You received a friend request from ${sender?.name ?: "Unknown"}"
         )
-
-        loadPendingRequests(toUserId)
     }
 
     fun acceptRequest(request: FriendRequest) = viewModelScope.launch {
         requestRepo.deleteRequest(request.fromUserId, request.toUserId)
         userRepo.addFriend(request.fromUserId, request.toUserId)
+        loadFriends(request.toUserId)
 
         val sender = userRepo.getUserById(request.fromUserId)
         notifRepo.addNotification(

@@ -55,6 +55,10 @@ class AccountFragment : Fragment(R.layout.account_page) {
 
         rvFriends?.adapter = friendsAdapter
 
+        loggedInUser?.id?.let { userId ->
+            socialVM.loadFriends(userId)
+        }
+
         val logoutButton = view?.findViewById<Button>(R.id.logout_button)
         logoutButton?.setOnClickListener {
             logOut()
