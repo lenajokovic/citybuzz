@@ -3,7 +3,9 @@ package com.proton.citybuzz.data.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.LocalDate
-import java.time.LocalTime
+import java.time.LocalDateTime
+
+// EVENTS (EVENT_ID int, TITLE varchar, DATETIME date, DESCRIPTION varchar, LOC varchar, PRIVACY INT(0-2), USER_ID int
 
 enum class EventPrivacy {
     PUBLIC,
@@ -14,11 +16,10 @@ enum class EventPrivacy {
 @Entity(tableName = "events")
 data class Event(
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
-    val creatorId: Long = 0,
+    val id: Int = 0,
+    val creatorId: Int = 0,
     val title: String = "",
-    val date: LocalDate = LocalDate.now(),
-    val time: LocalTime = LocalTime.now(),
+    val date: LocalDateTime = LocalDateTime.now(),
     val description: String = "",
     val location: String = "",
     val privacy: EventPrivacy = EventPrivacy.PUBLIC,
