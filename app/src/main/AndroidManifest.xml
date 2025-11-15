@@ -15,14 +15,15 @@
         <activity
             android:name=".CreateAccountActivity"
             android:exported="false">
-
-
         </activity>
         <activity
             android:name=".CreateEventActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.CityBuzz">
 
