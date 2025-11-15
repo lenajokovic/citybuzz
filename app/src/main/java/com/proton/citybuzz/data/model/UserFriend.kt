@@ -1,12 +1,7 @@
 package com.proton.citybuzz.data.model
 
-import androidx.room.Entity
-
-@Entity(
-    tableName = "user_friends",
-    primaryKeys = ["userId", "friendId"]
-)
-data class UserFriend(
-    val userId: Long,
-    val friendId: Long
+//USER_FRIEND (USER_ID int, FRIEND_ID int)
+class UserFriend(
+    val userId: Int,
+    val friendId: Int
 )

@@ -20,7 +20,7 @@ class SfUserDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()
             )
         """.trimIndent()
 
-        sf.executeQuery(query)
+        sf.executeUpdate(query)
     }
 
     // GET ALL USERS
@@ -30,14 +30,14 @@ class SfUserDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()
     }
 
     // GET USER BY ID
-    suspend fun getUser(userId: Long?): User? {
+    suspend fun getUser(userId: Int?): User? {
         if (userId == null) return null
         val rs = sf.executeQuery("SELECT * FROM USERS WHERE USER_ID = $userId")
         return if (rs.next()) parseUser(rs) else null
     }
 
     // GET USERS BY IDS
-    suspend fun getUsersByIds(ids: List<Long>): List<User> {
+    suspend fun getUsersByIds(ids: List<Int>): List<User> {
         if (ids.isEmpty()) return emptyList()
 
         val idList = ids.joinToString(",")
@@ -58,11 +58,11 @@ class SfUserDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()
             VALUES (${friend.userId}, ${friend.friendId})
         """.trimIndent()
 
-        sf.executeQuery(query)
+        sf.executeUpdate(query)
     }
 
     // DELETE FRIEND RELATION
-    suspend fun deleteFriend(userId: Long, friendId: Long) {
+    suspend fun deleteFriend(userId: Int, friendId: Int) {
         val query = """
             DELETE FROM USER_FRIENDS
             WHERE (USER_ID = $userId AND FRIEND_ID = $friendId)
@@ -73,7 +73,7 @@ class SfUserDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()
     }
 
     // GET FRIENDS
-    suspend fun getFriends(userId: Long): List<Long> {
+    suspend fun getFriends(userId: Int): List<Int> {
         val query = """
             SELECT FRIEND_ID AS ID FROM USER_FRIENDS WHERE USER_ID = $userId
             UNION
@@ -81,10 +81,10 @@ class SfUserDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()
         """.trimIndent()
 
         val rs = sf.executeQuery(query)
-        val list = mutableListOf<Long>()
+        val list = mutableListOf<Int>()
 
         while (rs.next()) {
-            list.add(rs.getLong("ID"))
+            list.add(rs.getInt("ID"))
         }
         return list
     }
@@ -99,7 +99,7 @@ class SfUserDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()
 
     private fun parseUser(rs: ResultSet): User {
         return User(
-            id = rs.getLong("USER_ID"),
+            id = rs.getInt("USER_ID"),
             name = rs.getString("NAME"),
             email = rs.getString("EMAIL"),
             password = rs.getString("PASSWORD"),

@@ -16,7 +16,7 @@ class SocialViewModel(
 
     val users = MutableLiveData<List<User>>()
     val loggedInUser = MutableLiveData<User?>()
-    val friends = MutableLiveData<List<Long>>()
+    val friends = MutableLiveData<List<Int>>()
     val pendingRequests = MutableLiveData<List<FriendRequest>>()
     val suggestions = MutableLiveData<List<User>>()
 
@@ -37,41 +37,41 @@ class SocialViewModel(
         }
     }
 
-    fun loadFriends(userId: Long) = viewModelScope.launch {
+    fun loadFriends(userId: Int) = viewModelScope.launch {
         friends.value = userRepo.getFriends(userId)
     }
 
-    fun removeFriend(userId: Long, friendId : Long) = viewModelScope.launch {
+    fun removeFriend(userId: Int, friendId : Int) = viewModelScope.launch {
         userRepo.removeFriend(userId, friendId)
         loadFriends(userId)
     }
 
-    suspend fun getUser(userId: Long?): User {
+    suspend fun getUser(userId: Int?): User? {
         return userRepo.getUser(userId)
     }
 
     // FriendRequest funkcije
-    fun loadPendingRequests(userId: Long) = viewModelScope.launch {
+    fun loadPendingRequests(userId: Int) = viewModelScope.launch {
         pendingRequests.value = requestRepo.getPendingRequests(userId)
     }
 
-    fun sendRequest(fromUserId: Long, toUserId: Long) = viewModelScope.launch {
+    fun sendRequest(fromUserId: Int, toUserId: Int) = viewModelScope.launch {
         requestRepo.sendRequest(fromUserId, toUserId)
         loadPendingRequests(toUserId)
     }
 
     fun acceptRequest(request: FriendRequest) = viewModelScope.launch {
-        requestRepo.acceptRequest(request)
-        userRepo.addFriend(request.fromUserId, request.toUserId)
-        loadPendingRequests(request.toUserId)
+        requestRepo.deleteRequest(request.userId, request.friendId)
+        userRepo.addFriend(request.userId, request.friendId)
+        loadPendingRequests(request.userId)
     }
 
     fun rejectRequest(request: FriendRequest) = viewModelScope.launch {
-        requestRepo.rejectRequest(request)
-        loadPendingRequests(request.toUserId)
+        requestRepo.deleteRequest(request.userId, request.friendId)
+        loadPendingRequests(request.userId)
     }
 
-    fun loadFriendSuggestions(userId: Long) = viewModelScope.launch {
+    fun loadFriendSuggestions(userId: Int) = viewModelScope.launch {
         suggestions.value = userRepo.getFriendsOfFriends(userId)
     }
 }

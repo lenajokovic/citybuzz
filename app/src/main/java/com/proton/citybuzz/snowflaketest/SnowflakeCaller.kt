@@ -61,6 +61,24 @@ class SnowflakeCaller {
         }
     }
 
+    suspend fun executeUpdate(query: String): Int {
+        return withContext(Dispatchers.IO) {
+            try {
+                if (connection == null || connection!!.isClosed) {
+                    Log.e("SnowflakeCaller", "Connection is closed.")
+                }
+                val statement = connection!!.createStatement()
+                Log.d("SnowflakeCaller", "Executing update: $query")
+                val result = statement.executeUpdate(query.trimIndent())
+                Log.d("SnowflakeCaller", "Update OK.")
+                result
+            } catch (e: SQLException) {
+                Log.e("SnowflakeCaller", "Error executing update", e)
+                0
+            }
+        }
+    }
+
     suspend fun getEvents() : List<Event> {
         val resultSet = executeQuery("""select * from EVENTS""")
         var events = mutableListOf<Event>()

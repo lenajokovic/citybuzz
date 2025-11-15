@@ -9,25 +9,25 @@ class UserRepository(private val dao: SfUserDao) {
     suspend fun addUser(user: User) = dao.insertUser(user)
 
     suspend fun getUserByEmail(email: String): User? = dao.getUserByEmail(email)
-    suspend fun getUser(userId: Long?): User? = dao.getUser(userId)
+    suspend fun getUser(userId: Int?): User? = dao.getUser(userId)
     suspend fun login(email: String, password: String): User? {
         val user = dao.getUserByEmail(email)
         return if (user?.password == password) user else null
     }
 
     suspend fun getAllUsers() = dao.getAllUsers()
-    suspend fun addFriend(userId: Long, friendId: Long) =
+    suspend fun addFriend(userId: Int, friendId: Int) =
         dao.insertFriend(UserFriend(userId, friendId))
 
-    suspend fun removeFriend(userId: Long, friendId: Long) =
+    suspend fun removeFriend(userId: Int, friendId: Int) =
         dao.deleteFriend(userId, friendId)
 
-    suspend fun getFriends(userId: Long) = dao.getFriends(userId)
+    suspend fun getFriends(userId: Int) = dao.getFriends(userId)
 
-    suspend fun getFriendsOfFriends(userId: Long): List<User> {
+    suspend fun getFriendsOfFriends(userId: Int): List<User> {
         val myFriends = dao.getFriends(userId).toSet()
 
-        val suggestions = mutableSetOf<Long>()
+        val suggestions = mutableSetOf<Int>()
 
         for (friendId in myFriends) {
             val friendsOfFriend = dao.getFriends(friendId)
