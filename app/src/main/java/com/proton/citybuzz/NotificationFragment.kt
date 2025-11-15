@@ -2,6 +2,7 @@ package com.proton.citybuzz.ui.fragment
 
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +29,7 @@ class NotificationFragment : Fragment(R.layout.fragment_notification) {
         rv.layoutManager = LinearLayoutManager(requireContext())
         rv.adapter = adapter
 
-        val noNotificationsText = view.findViewById<TextView>(R.id.no_notifications_container)
+        val noNotificationsText = view.findViewById<LinearLayout>(R.id.no_notifications_container)
 
         // Observe ViewModel notifications
         notificationVM.notifications.observe(viewLifecycleOwner) { list ->
@@ -43,7 +44,7 @@ class NotificationFragment : Fragment(R.layout.fragment_notification) {
         val userId = socialVM.loggedInUser.value?.id ?: 0L
         notificationVM.loadNotifications(userId.toInt())
 
-        if(notificationVM.notifications.value.isEmpty()){
+        if(notificationVM.notifications.value == null || notificationVM.notifications.value!!.isEmpty()){
             noNotificationsText.visibility = View.VISIBLE
         }
 
@@ -60,7 +61,8 @@ class NotificationFragment : Fragment(R.layout.fragment_notification) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 val removed = adapter.removeAt(position)
-                notificationVM.markRead(removed.id)
+                //notificationVM.markRead(removed.id)
+                notificationVM.removeNotification(removed.id)
             }
         })
 
