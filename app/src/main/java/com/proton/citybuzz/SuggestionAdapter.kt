@@ -1,5 +1,6 @@
 package com.proton.citybuzz
 
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ class SuggestionAdapter(
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvName: TextView = view.findViewById(R.id.tvName)
+        val ivProfile = view.findViewById<ImageView>(R.id.ivProfile)
         val btnAdd: Button = view.findViewById(R.id.btnConnect)
     }
 
@@ -29,6 +31,12 @@ class SuggestionAdapter(
         val user = items[position]
 
         holder.tvName.text = user.name
+        if (user.profileImage == null) {
+            holder.ivProfile.setImageResource(R.drawable.ic_account)
+        } else {
+            holder.ivProfile.setImageBitmap(BitmapFactory.decodeByteArray(user.profileImage, 0,
+                user.profileImage.size))
+        }
         holder.btnAdd.setOnClickListener { onSendRequest(user) }
     }
 

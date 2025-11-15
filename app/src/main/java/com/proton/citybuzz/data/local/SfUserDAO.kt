@@ -9,6 +9,7 @@ import com.proton.citybuzz.data.model.UserFriend
 class SfUserDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()) {
     // INSERT USER
     suspend fun insertUser(user: User) {
+        fun ByteArray.toHex(): String = joinToString(separator = "") { eachByte -> "%02x".format(eachByte) }
         val query = """
             INSERT INTO USERS (USER_ID, NAME, EMAIL, PASSWORD, PROFILEIMAGE)
             VALUES (
@@ -16,7 +17,7 @@ class SfUserDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()
                 '${user.name}',
                 '${user.email}',
                 '${user.password}',
-                ${if (user.profileImage == null) "NULL" else "'${user.profileImage}'"}
+                ${if (user.profileImage == null) "NULL" else "'${user.profileImage.toHex()}'"}
             )
         """.trimIndent()
 
@@ -107,7 +108,7 @@ class SfUserDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()
                     name = userRs.getString("NAME"),
                     email = userRs.getString("EMAIL"),
                     password = userRs.getString("PASSWORD"),
-                    profileImage = userRs.getString("PROFILEIMAGE")
+                    profileImage = userRs.getBytes("PROFILEIMAGE")
                 )
             )
         }
@@ -176,7 +177,7 @@ class SfUserDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()
             name = rs.getString("NAME"),
             email = rs.getString("EMAIL"),
             password = rs.getString("PASSWORD"),
-            profileImage = rs.getString("PROFILEIMAGE")
+            profileImage = rs.getBytes("PROFILEIMAGE")
         )
     }
 
@@ -199,7 +200,7 @@ class SfUserDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()
                     name = rs.getString("NAME"),
                     email = rs.getString("EMAIL"),
                     password = rs.getString("PASSWORD"),
-                    profileImage = rs.getString("PROFILEIMAGE")
+                    profileImage = rs.getBytes("PROFILEIMAGE")
                 )
             )
         }

@@ -11,8 +11,10 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.io.InputStream
+
 
 class CreateAccountActivity : AppCompatActivity() {
 
@@ -79,12 +81,24 @@ class CreateAccountActivity : AppCompatActivity() {
             return
         }
 
-        // Convert selected image URI to string (optional, can store null)
-        val profileImageString = selected_image_uri?.toString()
-
-        CityBuzzApp.getInstance().socialViewModel.addUser(name, email, password, profileImageString)
+        val byteArray = getBytes(contentResolver.openInputStream(selected_image_uri!!)!!)
+        CityBuzzApp.getInstance().socialViewModel.addUser(name, email, password, byteArray)
 
         Toast.makeText(this, "Account created!", Toast.LENGTH_SHORT).show()
         finish()
     }
+
+    @Throws(IOException::class)
+    fun getBytes(inputStream: InputStream): ByteArray {
+        val byteBuffer: ByteArrayOutputStream = ByteArrayOutputStream()
+        val bufferSize = 1024
+        val buffer = ByteArray(bufferSize)
+
+        var len = 0
+        while ((inputStream.read(buffer).also { len = it }) != -1) {
+            byteBuffer.write(buffer, 0, len)
+        }
+        return byteBuffer.toByteArray()
+    }
+
 }
