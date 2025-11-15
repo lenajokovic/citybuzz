@@ -34,7 +34,7 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
 
     //GET ALL EVENTS
     suspend fun getAllEvents(): List<Event> {
-        val rs = sf.executeQuery("SELECT * FROM EVENTS")
+        val rs = sf.executeQuery("SELECT * FROM EVENTS ORDER BY DATE")
         return parseEvents(rs)
     }
 
@@ -85,6 +85,7 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
                     FROM EVENT_ATTENDEES 
                     WHERE USER_ID = $userId
                )
+            ORDER BY DATE
         """
         return parseEvents(sf.executeQuery(query))
     }
