@@ -37,16 +37,16 @@ class SnowflakeCaller {
             try {
                 if (connection == null || connection!!.isClosed) {
                     createConnection()
-                    //Log.e("SnowflakeCaller", "Connection is null or closed. Cannot execute query.")
                 }
+
                 val statement = connection!!.createStatement()
                 Log.d("SnowflakeCaller", "Executing query: $query")
                 val resultSet = statement.executeQuery(query.trimIndent())
-                Log.d("SnowflakeCaller", "Query successful. ")
+                Log.d("SnowflakeCaller", "Query successful.")
                 resultSet
             } catch (e: SQLException) {
                 Log.e("SnowflakeCaller", "Error executing query", e)
-                null // Return null on failure instead of re-throwing
+                null
             } as ResultSet
         }
     }
