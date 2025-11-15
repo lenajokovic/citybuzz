@@ -29,7 +29,9 @@ class SuggestionAdapter(
         val user = items[position]
 
         holder.tvName.text = user.name
-        holder.btnAdd.setOnClickListener { onSendRequest(user) }
+        holder.btnAdd.setOnClickListener {
+            onSendRequest(user)
+        }
     }
 
     override fun getItemCount() = items.size
