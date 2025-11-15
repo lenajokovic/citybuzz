@@ -8,8 +8,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 
 class CreateAccountActivity : AppCompatActivity() {
 
@@ -35,9 +38,9 @@ class CreateAccountActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.create_account_page)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_create_account)
 
-        // Link views
         profile_pic = findViewById(R.id.profile_pic)
         btn_select_photo = findViewById(R.id.btn_select_photo)
         name = findViewById(R.id.name)

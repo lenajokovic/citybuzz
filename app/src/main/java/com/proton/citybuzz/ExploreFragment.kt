@@ -55,13 +55,6 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
             69)
 
         CityBuzzApp.eventViewModel.loadEvents()
-        CityBuzzApp.eventViewModel.addEvent("First",
-            "Blahblah",
-            "Beograd",
-            LocalDate.of(2025, 10, 15),
-            LocalTime.of(12, 30),
-            0,
-            0)
 
         val events = listOf(event1, event2) //CityBuzzApp.eventViewModel.events.value
 
