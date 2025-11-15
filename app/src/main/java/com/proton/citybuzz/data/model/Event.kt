@@ -15,7 +15,7 @@ enum class EventPrivacy {
 data class Event(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val creatorId: Long
+    val creatorId: Long = 0,
     val title: String = "",
     val date: LocalDate = LocalDate.now(),
     val time: LocalTime = LocalTime.now(),

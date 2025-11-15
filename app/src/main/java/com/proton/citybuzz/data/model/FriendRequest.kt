@@ -8,6 +8,5 @@ data class FriendRequest(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val fromUserId: Long,
-    val toUserId: Long,
-    val status: String = "pending" // "pending", "accepted", "rejected"
+    val toUserId: Long
 )

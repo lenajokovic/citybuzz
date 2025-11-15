@@ -13,6 +13,11 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Properties
 
+/*
+EVENTS (EVENT_ID int, TITLE varchar, DATE date, DESCRIPTION varchar, LOC varchar, PRIVACY INT(0-2), USER_ID int
+USERS (USER_ID int, NAME varchar, EMAIL varchar, PASSWORD varchar, PROFILEIMAGE varchar)
+ */
+
 class SnowflakeCaller {
     // --- SECURITY WARNING: HARDCODED CREDENTIALS ---
     // These will be visible to anyone who decompiles your app.
