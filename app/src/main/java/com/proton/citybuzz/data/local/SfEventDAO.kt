@@ -45,8 +45,9 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
      */
 
     //GET ALL EVENTS
-    suspend fun getAllEvents() {
-        sf.executeQuery("SELECT * FROM EVENTS")
+    suspend fun getAllEvents(): List<Event> {
+        val rs = sf.executeQuery("SELECT * FROM EVENTS")
+        return parseEventList(rs)
     }
 
     // INSERT ATTENDEE
