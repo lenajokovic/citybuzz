@@ -147,7 +147,7 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
         val rs = sf.executeQuery("SELECT MAX(EVENT_ID) AS maxId FROM EVENTS")
         var maxId = 0
         if (rs.next()) {
-            maxId = rs.getInt("maxId")
+            maxId = rs.getInt("MAXID")
         }
         return maxId
     }

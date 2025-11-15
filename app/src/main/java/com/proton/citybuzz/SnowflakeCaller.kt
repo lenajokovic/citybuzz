@@ -42,7 +42,7 @@ class SnowflakeCaller {
                 val statement = connection!!.createStatement()
                 Log.d("SnowflakeCaller", "Executing query: $query")
                 val resultSet = statement.executeQuery(query.trimIndent())
-                Log.d("SnowflakeCaller", "Query successful.")
+                Log.d("SnowflakeCaller", "Query successful. ")
                 resultSet
             } catch (e: SQLException) {
                 Log.e("SnowflakeCaller", "Error executing query", e)

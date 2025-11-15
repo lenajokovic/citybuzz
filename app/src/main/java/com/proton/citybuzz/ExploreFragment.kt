@@ -20,7 +20,9 @@ import kotlinx.coroutines.launch
 class ExploreFragment: Fragment(R.layout.activity_explore) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        populateView()
+        lifecycleScope.launch {
+            populateView()
+        }
     }
 
     fun populateView(){
@@ -55,7 +57,6 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
 
                 profilePic.setImageResource(R.drawable.ic_explore)
                 eventName.text = item?.title
-                userName.text = "Name Surname"
                 lifecycleScope.launch {
                     val eventCreator = CityBuzzApp.getInstance().socialViewModel.getUser(item?.creatorId)?.name
                     userName.text = eventCreator

@@ -7,6 +7,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
@@ -30,6 +32,9 @@ class LoginActivity : AppCompatActivity() {
 
         create_account.setOnClickListener {
             startActivity(Intent(this, CreateAccountActivity::class.java))
+        }
+        lifecycleScope.launch {1
+            SnowflakeCaller.getInstance().createConnection()
         }
     }
 

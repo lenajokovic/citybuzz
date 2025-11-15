@@ -16,9 +16,9 @@ class SfFriendRequestDao (private val sf: SnowflakeCaller = SnowflakeCaller.getI
 
     suspend fun getPendingRequests(toUserId: Int): List<FriendRequest> {
         val query = """
-        SELECT USER_ID, FRIEND_ID
+        SELECT FROM_USER_ID, TO_USER_ID
         FROM FRIEND_REQUESTS
-        WHERE FRIEND_ID = $toUserId
+        WHERE TO_USER_ID = $toUserId
     """.trimIndent()
 
         val rs = sf.executeQuery(query)
@@ -27,8 +27,8 @@ class SfFriendRequestDao (private val sf: SnowflakeCaller = SnowflakeCaller.getI
         while (rs.next()) {
             list.add(
                 FriendRequest(
-                    fromUserId = rs.getInt("USER_ID"),
-                    toUserId = rs.getInt("FRIEND_ID")
+                    fromUserId = rs.getInt("FROM_USER_ID"),
+                    toUserId = rs.getInt("TO_USER_ID")
                 )
             )
         }
@@ -40,8 +40,8 @@ class SfFriendRequestDao (private val sf: SnowflakeCaller = SnowflakeCaller.getI
     suspend fun deleteRequest(fromUserId: Int, toUserId: Int) {
         val query = """
             DELETE FROM FRIEND_REQUESTS
-            WHERE USER_ID = $fromUserId
-              AND FRIEND_ID = $toUserId
+            WHERE FROM_USER_ID = $fromUserId
+              AND TO_USER_ID = $toUserId
         """.trimIndent()
 
         sf.executeUpdate(query)
