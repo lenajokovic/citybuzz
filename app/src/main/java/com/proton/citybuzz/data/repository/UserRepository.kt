@@ -25,21 +25,37 @@ class UserRepository(private val dao: SfUserDao) {
     suspend fun getFriends(userId: Int) = dao.getFriends(userId)
 
     suspend fun getFriendsOfFriends(userId: Int): List<User> {
-        val myFriends = dao.getFriends(userId).toSet()
+
+        // 1. Učitaj moje prijatelje (User objekti)
+        val myFriends: List<User> = dao.getFriends(userId)
+
+        // Set ID-eva mojih prijatelja radi brže provere
+        val myFriendIds = myFriends.map { it.id.toInt() }.toSet()
 
         val suggestions = mutableSetOf<Int>()
 
-        for (friendId in myFriends) {
-            val friendsOfFriend = dao.getFriends(friendId)
+        // 2. Za svakog mog prijatelja — uzmi njegove prijatelje
+        for (friend in myFriends) {
+
+            val friendsOfFriend: List<User> = dao.getFriends(friend.id.toInt())
 
             for (fof in friendsOfFriend) {
-                if (fof != userId && fof !in myFriends) {
-                    suggestions.add(fof)
+
+                val fofId = fof.id.toInt()
+
+                // 3. Uslovi:
+                // - da nisam ja
+                // - da već nisu moji prijatelji
+                if (fofId != userId && fofId !in myFriendIds) {
+                    suggestions.add(fofId)
                 }
             }
         }
 
-        return if (suggestions.isEmpty()) emptyList()
-        else dao.getUsersByIds(suggestions.toList())
+        // 4. Ako nema predloga vrati prazno
+        if (suggestions.isEmpty()) return emptyList()
+
+        // 5. Uzmi kompletne User objekte
+        return dao.getUsersByIds(suggestions.toList())
     }
 }

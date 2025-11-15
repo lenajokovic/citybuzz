@@ -16,7 +16,7 @@ class SocialViewModel(
 
     val users = MutableLiveData<List<User>>()
     val loggedInUser = MutableLiveData<User?>()
-    val friends = MutableLiveData<List<Int>>()
+    val friends = MutableLiveData<List<User>>()
     val pendingRequests = MutableLiveData<List<FriendRequest>>()
     val suggestions = MutableLiveData<List<User>>()
 

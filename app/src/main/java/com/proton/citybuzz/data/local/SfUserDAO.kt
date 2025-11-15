@@ -73,20 +73,46 @@ class SfUserDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()
     }
 
     // GET FRIENDS
-    suspend fun getFriends(userId: Int): List<Int> {
-        val query = """
-            SELECT FRIEND_ID AS ID FROM USER_FRIENDS WHERE USER_ID = $userId
-            UNION
-            SELECT USER_ID AS ID FROM USER_FRIENDS WHERE FRIEND_ID = $userId
-        """.trimIndent()
+    suspend fun getFriends(userId: Int): List<User> {
+        // 1. Uzmemo samo ID-eve prijatelja
+        val idQuery = """
+        SELECT FRIEND_ID AS ID FROM USER_FRIENDS WHERE USER_ID = $userId
+        UNION
+        SELECT USER_ID AS ID FROM USER_FRIENDS WHERE FRIEND_ID = $userId
+    """.trimIndent()
 
-        val rs = sf.executeQuery(query)
-        val list = mutableListOf<Int>()
+        val rs = sf.executeQuery(idQuery)
+        val friendIds = mutableListOf<Int>()
 
         while (rs.next()) {
-            list.add(rs.getInt("ID"))
+            friendIds.add(rs.getInt("ID"))
         }
-        return list
+
+        if (friendIds.isEmpty()) return emptyList()
+
+        // 2. Učitamo sve korisnike prema ID-jevima
+        val usersQuery = """
+        SELECT USER_ID, NAME, EMAIL, PASSWORD, PROFILEIMAGE
+        FROM USERS
+        WHERE USER_ID IN (${friendIds.joinToString(",")})
+    """.trimIndent()
+
+        val userRs = sf.executeQuery(usersQuery)
+        val users = mutableListOf<User>()
+
+        while (userRs.next()) {
+            users.add(
+                User(
+                    id = userRs.getInt("USER_ID").toInt(),
+                    name = userRs.getString("NAME"),
+                    email = userRs.getString("EMAIL"),
+                    password = userRs.getString("PASSWORD"),
+                    profileImage = userRs.getString("PROFILEIMAGE")
+                )
+            )
+        }
+
+        return users
     }
 
 
