@@ -82,12 +82,12 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
         listView.adapter = adapter
 
         listView.setOnItemClickListener { parent, view, position, id ->
-            val eventDetailsContainer = view.findViewById<LinearLayout>(R.id.event_details_container)
+            val inviteContainer = view.findViewById<LinearLayout>(R.id.event_invite_container)
 
-            if(eventDetailsContainer.visibility == View.VISIBLE)
-                eventDetailsContainer.visibility = View.GONE
+            if(inviteContainer.visibility == View.VISIBLE)
+                inviteContainer.visibility = View.GONE
             else
-                eventDetailsContainer.visibility = View.VISIBLE
+                inviteContainer.visibility = View.VISIBLE
         }
     }
 }

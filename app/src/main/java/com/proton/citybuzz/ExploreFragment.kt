@@ -9,12 +9,10 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
-import android.widget.ScrollView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.proton.citybuzz.data.model.Event
-import com.proton.citybuzz.ui.theme.CityBuzzTheme
 import kotlinx.coroutines.launch
 
 
@@ -58,6 +56,10 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
 
                 profilePic.setImageResource(R.drawable.ic_explore)
                 eventName.text = item?.title
+                val joinEventButton = view?.findViewById<Button>(R.id.join_event_button)
+                joinEventButton?.setOnClickListener {
+                    joinToEvent(item?.id!!)
+                }
                 lifecycleScope.launch {
                     val eventCreator = CityBuzzApp.getInstance().socialViewModel.getUser(item?.creatorId)?.name
                     userName.text = eventCreator
@@ -75,11 +77,6 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
                 eventDetailsContainer.visibility = View.GONE
             else
                 eventDetailsContainer.visibility = View.VISIBLE
-
-            val joinEventButton = view.findViewById<Button>(R.id.join_event_button)
-            joinEventButton.setOnClickListener {
-                joinToEvent(events[id.toInt()].id)
-            }
         }
     }
 
