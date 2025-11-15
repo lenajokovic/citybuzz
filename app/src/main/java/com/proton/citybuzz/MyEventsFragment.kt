@@ -70,8 +70,8 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
                 val eventName = view.findViewById<TextView>(R.id.event_name)
                 val userName = view.findViewById<TextView>(R.id.user_name)
 
-                val joinEventButton = view?.findViewById<Button>(R.id.join_event_button)
-                joinEventButton?.setOnClickListener {
+                val inviteButton = view?.findViewById<Button>(R.id.invite_button)
+                inviteButton?.setOnClickListener {
                     // TODO LENOOOOOOOOOOOOOOOOOOOOOOO
                 }
 
