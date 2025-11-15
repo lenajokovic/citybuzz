@@ -20,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import com.proton.citybuzz.data.model.Event
 import kotlinx.coroutines.launch
+import androidx.core.view.isVisible
 
 
 class MyEventsFragment: Fragment(R.layout.activity_my_events) {
@@ -142,7 +143,7 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
             val eventDetailsContainer = view.findViewById<LinearLayout>(R.id.event_details_container)
             val inviteButton = view.findViewById<MaterialButton>(R.id.invite_button)
 
-            if (eventDetailsContainer.visibility == View.VISIBLE) {
+            if (eventDetailsContainer.isVisible) {
                 eventDetailsContainer.visibility = View.GONE
                 inviteButton.visibility = View.GONE
             }
