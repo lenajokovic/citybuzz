@@ -45,4 +45,9 @@ class SfNotificationDao(private val sf: SnowflakeCaller = SnowflakeCaller.getIns
         val query = "UPDATE NOTIFICATIONS SET IS_READ = TRUE WHERE NOT_ID = $id"
         sf.executeUpdate(query)
     }
+
+    suspend fun removeNotification(id: Int) {
+        val query = "DELETE FROM NOTIFICATIONS WHERE NOT_ID = $id"
+        sf.executeUpdate(query)
+    }
 }

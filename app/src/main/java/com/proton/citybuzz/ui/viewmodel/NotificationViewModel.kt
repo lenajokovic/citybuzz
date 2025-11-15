@@ -21,4 +21,8 @@ class NotificationViewModel(
     fun markRead(id: Int) = viewModelScope.launch {
         notifRepo.markRead(id)
     }
+
+    fun removeNotification(id: Int) = viewModelScope.launch {
+        notifRepo.removeNotification(id)
+    }
 }

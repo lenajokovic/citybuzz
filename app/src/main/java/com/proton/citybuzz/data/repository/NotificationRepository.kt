@@ -15,4 +15,8 @@ class NotificationRepository(private val dao: SfNotificationDao = SfNotification
 
     suspend fun markRead(id: Int) =
         dao.markAsRead(id)
+
+    suspend fun removeNotification(id: Int) =
+        dao.removeNotification(id)
+
 }
