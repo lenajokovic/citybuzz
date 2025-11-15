@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.CityBuzz" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
+    <style name="Theme.CityBuzz" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowSplashScreenBackground">@color/ic_launcher_background</item>
+    </style>
     <style name="ToolbarTitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">32sp</item> <!-- Set your desired font size -->
     </style>
