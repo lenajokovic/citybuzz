@@ -1,7 +1,6 @@
 package com.proton.citybuzz
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,13 +12,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.proton.citybuzz.data.model.Event
-import com.proton.citybuzz.data.model.EventPrivacy
-import com.proton.citybuzz.snowflaketest.SnowflakeCaller
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import com.proton.citybuzz.ui.theme.CityBuzzTheme
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalTime
 
 
 class ExploreFragment: Fragment(R.layout.activity_explore) {
@@ -42,36 +36,37 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
     }
 
     suspend fun setUpListView(listView: ListView){
-        val caller = SnowflakeCaller.getInstance()
-        caller.createConnection()
-        val events = caller.getEvents()
+        val eventViewModel = CityBuzzApp.getInstance().eventViewModel
+        eventViewModel.loadEvents()
 
-        val adapter = object : ArrayAdapter<Event>(context!!, 0, events) {
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val view = convertView ?: LayoutInflater.from(context)
-                    .inflate(R.layout.event_list_item, parent, false)
+        eventViewModel.events.observe(viewLifecycleOwner, { events ->
+            val adapter = object : ArrayAdapter<Event>(context!!, 0, events) {
+                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val view = convertView ?: LayoutInflater.from(context)
+                        .inflate(R.layout.event_list_item, parent, false)
 
-                val item = getItem(position)
+                    val item = getItem(position)
 
-                val profilePic = view.findViewById<ImageView>(R.id.profile_pic)
-                val eventName = view.findViewById<TextView>(R.id.event_name)
-                val userName = view.findViewById<TextView>(R.id.user_name)
+                    val profilePic = view.findViewById<ImageView>(R.id.profile_pic)
+                    val eventName = view.findViewById<TextView>(R.id.event_name)
+                    val userName = view.findViewById<TextView>(R.id.user_name)
 
-                profilePic.setImageResource(R.drawable.ic_explore)
-                eventName.text = item?.title
-                lifecycleScope.launch {
-                    //userName.text = CityBuzzApp.socialViewModel.getUser(item?.creatorId).name
+                    profilePic.setImageResource(R.drawable.ic_explore)
+                    eventName.text = item?.title
+                    lifecycleScope.launch {
+                        //userName.text = CityBuzzApp.socialViewModel.getUser(item?.creatorId).name
+                    }
+
+                    return view
                 }
-
-                return view
             }
-        }
 
-        listView.adapter = adapter
+            listView.adapter = adapter
 
-        listView.setOnItemClickListener { parent, view, position, id ->
-            showEventDetails(events[position].creatorId)
-        }
+            listView.setOnItemClickListener { parent, view, position, id ->
+                showEventDetails(events[position].creatorId)
+            }
+        })
     }
 
     fun showEventDetails(event_id: Int){

@@ -9,7 +9,7 @@ import com.proton.citybuzz.data.model.EventPrivacy
 import com.proton.citybuzz.data.repository.EventRepository
 import java.time.LocalDateTime
 
-class EventViewModel(private val eventRepo: EventRepository) : ViewModel() {
+class EventViewModel(private val eventRepo: EventRepository = EventRepository()) : ViewModel() {
 
     val events = MutableLiveData<List<Event>>()
     val attendees = MutableLiveData<List<Int>>()
@@ -17,7 +17,7 @@ class EventViewModel(private val eventRepo: EventRepository) : ViewModel() {
     val suggestedEvents = MutableLiveData<List<Event>>()
 
     fun loadEvents() = viewModelScope.launch {
-        //events.value = eventRepo.getAllEvents()
+        events.value = eventRepo.getAllEvents()
     }
 
     fun addEvent(title: String, description: String, location: String, date: LocalDateTime,
@@ -43,7 +43,7 @@ class EventViewModel(private val eventRepo: EventRepository) : ViewModel() {
 
     fun removeAttendee(eventId: Int, userId: Int) = viewModelScope.launch {
         eventRepo.removeAttendee(eventId, userId)
-        //attendees.value = eventRepo.getAttendees(eventId)
+        attendees.value = eventRepo.getAttendees(eventId)
     }
 
     fun loadMyEvents(userId: Int) = viewModelScope.launch {

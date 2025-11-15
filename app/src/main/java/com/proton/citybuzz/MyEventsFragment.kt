@@ -14,13 +14,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.proton.citybuzz.data.model.Event
-import com.proton.citybuzz.data.model.EventPrivacy
-import com.proton.citybuzz.snowflaketest.SnowflakeCaller
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalTime
 
 
 class MyEventsFragment: Fragment(R.layout.activity_my_events) {

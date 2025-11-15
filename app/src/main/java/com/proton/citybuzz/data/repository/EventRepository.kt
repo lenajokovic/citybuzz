@@ -5,7 +5,7 @@ import com.proton.citybuzz.data.local.SfEventDao
 import com.proton.citybuzz.data.model.Event
 import com.proton.citybuzz.data.model.EventAttendee
 
-class EventRepository(private val dao: SfEventDao) {
+class EventRepository(private val dao: SfEventDao = SfEventDao()) {
     suspend fun addEvent(event: Event) = dao.insertEvent(event)
     suspend fun removeEvent(eventId: Int) = dao.deleteEvent(eventId)
     suspend fun getAllEvents() = dao.getAllEvents()

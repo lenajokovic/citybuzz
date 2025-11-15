@@ -2,7 +2,7 @@ package com.proton.citybuzz.data.local
 
 import java.sql.ResultSet
 
-import com.proton.citybuzz.snowflaketest.SnowflakeCaller
+import com.proton.citybuzz.SnowflakeCaller
 import com.proton.citybuzz.data.model.User
 import com.proton.citybuzz.data.model.UserFriend
 

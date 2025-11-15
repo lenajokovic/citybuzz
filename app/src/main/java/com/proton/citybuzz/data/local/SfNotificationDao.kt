@@ -1,6 +1,6 @@
 package com.proton.citybuzz.data.local
 
-import com.proton.citybuzz.snowflaketest.SnowflakeCaller
+import com.proton.citybuzz.SnowflakeCaller
 import com.proton.citybuzz.data.model.Notification
 import com.proton.citybuzz.data.model.NotificationType
 

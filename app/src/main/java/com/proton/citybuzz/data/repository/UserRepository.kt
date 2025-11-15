@@ -5,7 +5,7 @@ import com.proton.citybuzz.data.local.SfUserDao
 import com.proton.citybuzz.data.model.User
 import com.proton.citybuzz.data.model.UserFriend
 
-class UserRepository(private val dao: SfUserDao) {
+class UserRepository(private val dao: SfUserDao = SfUserDao()) {
     suspend fun addUser(user: User) = dao.insertUser(user)
 
     suspend fun getUserByEmail(email: String): User? = dao.getUserByEmail(email)

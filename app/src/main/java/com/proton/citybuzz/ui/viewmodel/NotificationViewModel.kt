@@ -9,7 +9,7 @@ import com.proton.citybuzz.data.model.NotificationType
 import com.proton.citybuzz.data.repository.NotificationRepository
 
 class NotificationViewModel(
-    private val notifRepo: NotificationRepository
+    private val notifRepo: NotificationRepository = NotificationRepository()
 ) : ViewModel() {
 
     val notifications = MutableLiveData<List<Notification>>()

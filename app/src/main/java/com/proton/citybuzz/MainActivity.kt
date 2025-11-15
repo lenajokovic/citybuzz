@@ -1,13 +1,11 @@
 package com.proton.citybuzz
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.proton.citybuzz.snowflaketest.SnowflakeCaller
 import kotlinx.coroutines.launch
 
 

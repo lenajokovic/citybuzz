@@ -1,13 +1,11 @@
 package com.proton.citybuzz.data.local
 
-import java.sql.ResultSet
-import java.time.LocalDate
-import java.time.LocalDateTime
-
-import com.proton.citybuzz.snowflaketest.SnowflakeCaller
+import com.proton.citybuzz.SnowflakeCaller
 import com.proton.citybuzz.data.model.Event
-import com.proton.citybuzz.data.model.EventAttendee
 import com.proton.citybuzz.data.model.EventPrivacy
+import java.sql.ResultSet
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()) {
 
@@ -131,11 +129,13 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
     private fun parseEventList(rs: ResultSet): List<Event> {
         val list = mutableListOf<Event>()
         while (rs.next()) {
+            val formatter: DateTimeFormatter? = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+
             list.add(
                 Event(
                     id = rs.getInt("EVENT_ID"),
                     title = rs.getString("TITLE"),
-                    date = LocalDateTime.parse(rs.getString("DATE")),
+                    date = LocalDateTime.parse(rs.getString("DATE"), formatter),
                     description = rs.getString("DESCRIPTION"),
                     location = rs.getString("LOC"),
                     privacy = EventPrivacy.entries[rs.getInt("PRIVACY")],
