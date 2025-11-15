@@ -6,11 +6,11 @@ import com.proton.citybuzz.data.model.FriendRequest
 class FriendRequestRepository(private val dao: SfFriendRequestDao) {
 
     suspend fun sendRequest(fromUserId: Int, toUserId: Int) {
-        dao.insertRequest(FriendRequest(userId = fromUserId, friendId = toUserId))
+        dao.insertRequest(FriendRequest(fromUserId = fromUserId, toUserId = toUserId))
     }
 
-    suspend fun getPendingRequests(userId: Int): List<FriendRequest> =
-        dao.getPendingRequests(userId)
+    suspend fun getPendingRequests(toUserId: Int): List<FriendRequest> =
+        dao.getPendingRequests(toUserId)
 
     suspend fun deleteRequest(fromUserId: Int, toUserId: Int) {
         dao.deleteRequest(fromUserId, toUserId)
