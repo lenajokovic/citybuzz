@@ -115,6 +115,53 @@ class SfUserDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()
         return users
     }
 
+    // UPDATE NAME
+    suspend fun updateName(userId: Int, newName: String) {
+        val safe = newName.replace("'", "''")
+        val query = """
+        UPDATE USERS
+        SET NAME = '$safe'
+        WHERE USER_ID = $userId
+    """.trimIndent()
+
+        sf.executeUpdate(query)
+    }
+
+    // UPDATE EMAIL
+    suspend fun updateEmail(userId: Int, newEmail: String) {
+        val safe = newEmail.replace("'", "''")
+        val query = """
+        UPDATE USERS
+        SET EMAIL = '$safe'
+        WHERE USER_ID = $userId
+    """.trimIndent()
+
+        sf.executeUpdate(query)
+    }
+
+    // UPDATE PASSWORD
+    suspend fun updatePassword(userId: Int, newPassword: String) {
+        val safe = newPassword.replace("'", "''")
+        val query = """
+        UPDATE USERS
+        SET PASSWORD = '$safe'
+        WHERE USER_ID = $userId
+    """.trimIndent()
+
+        sf.executeUpdate(query)
+    }
+
+    // UPDATE PROFILE IMAGE
+    suspend fun updateProfileImage(userId: Int, base64: String?) {
+        val safe = base64?.replace("'", "''")
+        val query = """
+        UPDATE USERS
+        SET PROFILEIMAGE = ${ if (safe == null) "NULL" else "'$safe'" }
+        WHERE USER_ID = $userId
+    """.trimIndent()
+
+        sf.executeUpdate(query)
+    }
 
     // ---------- PARSER FUNKCIJE ----------
     private fun parseUsers(rs: ResultSet): List<User> {
@@ -156,7 +203,6 @@ class SfUserDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()
                 )
             )
         }
-
         return list
     }
 

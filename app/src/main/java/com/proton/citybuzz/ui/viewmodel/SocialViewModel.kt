@@ -50,8 +50,28 @@ class SocialViewModel(
         loadFriends(userId)
     }
 
-    suspend fun getUser(userId: Int?): User? {
+    suspend fun getUserById(userId: Int?): User? {
         return userRepo.getUserById(userId)
+    }
+
+    fun updateName(userId: Int, name: String) = viewModelScope.launch {
+        userRepo.updateName(userId, name)
+        loggedInUser.value = userRepo.getUserById(userId)
+    }
+
+    fun updateEmail(userId: Int, email: String) = viewModelScope.launch {
+        userRepo.updateEmail(userId, email)
+        loggedInUser.value = userRepo.getUserById(userId)
+    }
+
+    fun updatePassword(userId: Int, password: String) = viewModelScope.launch {
+        userRepo.updatePassword(userId, password)
+        loggedInUser.value = userRepo.getUserById(userId)
+    }
+
+    fun updateProfileImage(userId: Int, profileImage: String?) = viewModelScope.launch {
+        userRepo.updateProfileImage(userId, profileImage)
+        loggedInUser.value = userRepo.getUserById(userId)
     }
 
     // FriendRequest funkcije

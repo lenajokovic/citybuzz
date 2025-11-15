@@ -63,4 +63,15 @@ class UserRepository(private val dao: SfUserDao = SfUserDao()) {
         return dao.searchUsersByName(text)
     }
 
+    suspend fun updateName(userId: Int, name: String) =
+        dao.updateName(userId, name)
+
+    suspend fun updateEmail(userId: Int, email: String) =
+        dao.updateEmail(userId, email)
+
+    suspend fun updatePassword(userId: Int, password: String) =
+        dao.updatePassword(userId, password)
+
+    suspend fun updateProfileImage(userId: Int, profileImage: String?) =
+        dao.updateProfileImage(userId, profileImage)
 }

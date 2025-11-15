@@ -9,7 +9,7 @@ class SfNotificationDao(private val sf: SnowflakeCaller = SnowflakeCaller.getIns
     suspend fun addNotification(userId: Int, type: NotificationType, message: String) {
         val query = """
             INSERT INTO NOTIFICATIONS (USER_ID, TYPE, MESSAGE, CREATED_AT, IS_READ)
-            VALUES ($userId, '${type.name}', '$message', CURRENT_TIMESTAMP(), FALSE)
+            VALUES ($userId, '${type.ordinal}', '$message', CURRENT_TIMESTAMP(), FALSE)
         """.trimIndent()
 
         sf.executeUpdate(query)
@@ -28,7 +28,7 @@ class SfNotificationDao(private val sf: SnowflakeCaller = SnowflakeCaller.getIns
         while (rs.next()) {
             list.add(
                 Notification(
-                    id = rs.getInt("NOTIFICATION_ID"),
+                    id = rs.getInt("NOT_ID"),
                     userId = rs.getInt("USER_ID"),
                     type = NotificationType.valueOf(rs.getString("TYPE")), // ovdje pretvaramo u enum
                     message = rs.getString("MESSAGE"),
@@ -41,7 +41,7 @@ class SfNotificationDao(private val sf: SnowflakeCaller = SnowflakeCaller.getIns
     }
 
     suspend fun markAsRead(id: Int) {
-        val query = "UPDATE NOTIFICATIONS SET IS_READ = TRUE WHERE NOTIFICATION_ID = $id"
+        val query = "UPDATE NOTIFICATIONS SET IS_READ = TRUE WHERE NOT_ID = $id"
         sf.executeUpdate(query)
     }
 }
