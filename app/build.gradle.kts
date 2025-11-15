@@ -21,6 +21,12 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    packaging {resources {
+        excludes.add("META-INF/DEPENDENCIES")
+        }
+    }
+
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -53,6 +59,8 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.snowflake.jdbc)
+    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
