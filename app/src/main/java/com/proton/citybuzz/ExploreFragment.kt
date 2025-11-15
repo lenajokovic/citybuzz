@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -54,10 +55,11 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
 
                 profilePic.setImageResource(R.drawable.ic_explore)
                 eventName.text = item?.title
+                userName.text = "Name Surname"
                 lifecycleScope.launch {
-                    //userName.text = CityBuzzApp.socialViewModel.getUser(item?.creatorId).name
+                    val eventCreator = CityBuzzApp.getInstance().socialViewModel.getUser(item?.creatorId)?.name
+                    userName.text = eventCreator
                 }
-
                 return view
             }
         }
@@ -65,11 +67,16 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
         listView.adapter = adapter
 
         listView.setOnItemClickListener { parent, view, position, id ->
-            showEventDetails(events[position].creatorId)
+            val eventDetailsContainer = view.findViewById<LinearLayout>(R.id.event_details_container)
+
+            if(eventDetailsContainer.visibility == View.VISIBLE)
+                eventDetailsContainer.visibility = View.GONE
+            else
+                eventDetailsContainer.visibility = View.VISIBLE
         }
     }
 
-    fun showEventDetails(event_id: Int){
+    fun showEventDetails(event_id: Long){
 
     }
 

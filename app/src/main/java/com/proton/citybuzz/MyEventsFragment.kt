@@ -10,6 +10,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -78,11 +79,12 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
         listView.adapter = adapter
 
         listView.setOnItemClickListener { parent, view, position, id ->
-            showEventDetails(events[position].id)
+            val eventDetailsContainer = view.findViewById<LinearLayout>(R.id.event_details_container)
+
+            if(eventDetailsContainer.visibility == View.VISIBLE)
+                eventDetailsContainer.visibility = View.GONE
+            else
+                eventDetailsContainer.visibility = View.VISIBLE
         }
-    }
-
-    fun showEventDetails(event_id: Int){
-
     }
 }

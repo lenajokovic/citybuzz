@@ -16,12 +16,20 @@
         android:theme="@style/Theme.CityBuzz"
         android:networkSecurityConfig="@xml/network_security_config">
         <activity
+            android:name=".CreateAccountActivity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".CreateEventActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.CityBuzz">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

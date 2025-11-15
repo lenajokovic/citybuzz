@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.NumberPicker
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -115,5 +116,14 @@ class CreateEventActivity : AppCompatActivity() {
             privacy = selectedCategory,
             idUser = 420 // CityBuzzApp.getInstance().socialViewModel.loggedInUser.value!!.id,
         )
+
+        CityBuzzApp.getInstance().eventViewModel.addEvent("Second",
+            "Blahblah",
+            "Beograd",
+            LocalDateTime.of(2025, 10, 15, 12, 30),
+            selectedCategory,
+            CityBuzzApp.getInstance().socialViewModel.loggedInUser.value!!.id)
+
+        Toast.makeText(this, "Event created!", Toast.LENGTH_SHORT).show()
     }
 }
