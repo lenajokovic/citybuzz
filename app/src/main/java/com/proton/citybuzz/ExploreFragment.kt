@@ -60,7 +60,7 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
                 profilePic.setImageResource(R.drawable.ic_explore)
                 eventName.text = item?.title
                 GlobalScope.async {
-                    userName.text = CityBuzzApp.socialViewModel.getUser(item?.creatorId).name
+                    //userName.text = CityBuzzApp.socialViewModel.getUser(item?.creatorId).name
                 }
 
                 return view
@@ -70,7 +70,7 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
         listView.adapter = adapter
 
         listView.setOnItemClickListener { parent, view, position, id ->
-            showEventDetails(events[position].userId)
+            showEventDetails(events[position].creatorId)
         }
     }
 

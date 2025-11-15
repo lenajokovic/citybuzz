@@ -18,7 +18,7 @@ class EventViewModel(private val eventRepo: EventRepository) : ViewModel() {
     val suggestedEvents = MutableLiveData<List<Event>>()
 
     fun loadEvents() = viewModelScope.launch {
-        events.value = eventRepo.getAllEvents()
+        //events.value = eventRepo.getAllEvents()
     }
 
     fun addEvent(title: String, description: String, location: String, date: LocalDate,
@@ -38,20 +38,20 @@ class EventViewModel(private val eventRepo: EventRepository) : ViewModel() {
 
     fun addAttendee(eventId: Long, userId: Long) = viewModelScope.launch {
         eventRepo.addAttendee(eventId, userId)
-        attendees.value = eventRepo.getAttendees(eventId)
+        //attendees.value = eventRepo.getAttendees(eventId)
     }
 
     fun removeAtendee(eventId: Long, userId: Long) = viewModelScope.launch {
         eventRepo.removeAttendee(eventId, userId)
-        attendees.value = eventRepo.getAttendees(eventId)
+        //attendees.value = eventRepo.getAttendees(eventId)
     }
 
     fun loadMyEvents(userId: Long) = viewModelScope.launch {
-        myEvents.value = eventRepo.getMyEvents(userId)
+        //myEvents.value = eventRepo.getMyEvents(userId)
     }
 
     fun loadSuggestedEvents(userId: Long) = viewModelScope.launch {
-        suggestedEvents.value = eventRepo.getSuggestedEvents(userId)
+        //suggestedEvents.value = eventRepo.getSuggestedEvents(userId)
     }
 
     fun getTitle(eventId: Long): String? =

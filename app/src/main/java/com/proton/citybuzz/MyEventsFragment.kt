@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.proton.citybuzz.data.model.Event
 import com.proton.citybuzz.data.model.EventPrivacy
+import com.proton.citybuzz.snowflaketest.SnowflakeCaller
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import java.time.LocalDate
@@ -50,23 +51,7 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
     }
 
     suspend fun setUpListView(listView: ListView){
-
-        val event1 = Event(0, "First Event",
-            LocalDate.of(2023, 10, 10),
-            LocalTime.now(),
-            "Description",
-            "Location",
-            EventPrivacy.PUBLIC,
-            0)
-        val event2 = Event(0, "Second Event",
-            LocalDate.of(2023, 3, 3),
-            LocalTime.NOON,
-            "Description",
-            "Location",
-            EventPrivacy.PUBLIC,
-            69)
-
-        val events = listOf(event1, event2)//eventDAO.getAllEvents()
+        val events = SnowflakeCaller.getInstance().getEvents()
 
         val adapter = object : ArrayAdapter<Event>(context!!, 0, events) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -81,7 +66,7 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
                 profilePic.setImageResource(R.drawable.ic_explore)
                 eventName.text = item?.title
                 GlobalScope.async {
-                    userName.text = CityBuzzApp.socialViewModel.getUser(item?.creatorId).name
+                    //userName.text = CityBuzzApp.socialViewModel.getUser(item?.creatorId).name
                 }
                 return view
             }

@@ -101,29 +101,6 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
         return parseEventList(sf.executeQuery(query))
     }
 
-    // PARSE EVENT LIST FROM RESULTSET
-    private fun parseEventList(rs: ResultSet): List<Event> {
-        val list = mutableListOf<Event>()
-
-        while (rs.next()) {
-            val privacyInt = rs.getInt("PRIVACY")
-
-            list.add(
-                Event(
-                    id = rs.getLong("EVENT_ID"),
-                    title = rs.getString("TITLE"),
-                    date = rs.getDate("DATE").toLocalDate(),
-                    time = null, // NEMA TIME u tabeli
-                    description = rs.getString("DESCRIPTION"),
-                    location = rs.getString("LOC"),
-                    privacy = EventPrivacy.values()[privacyInt],
-                    creatorId = rs.getLong("USER_ID")
-                )
-            )
-        }
-        return list
-    }
-
     private fun parseEventList(rs: ResultSet): List<Event> {
         val list = mutableListOf<Event>()
         while (rs.next()) {
@@ -132,10 +109,10 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
                     id = rs.getLong("ID"),
                     title = rs.getString("TITLE"),
                     date = LocalDate.parse(rs.getString("DATE")),
-                    time = LocalTime.parse(rs.getString("TIME")),
+                    //time = LocalTime.parse(rs.getString("TIME")),
                     description = rs.getString("DESCRIPTION"),
                     location = rs.getString("LOCATION"),
-                    privacy = EventPrivacy.valueOf(rs.getString("PRIVACY")),
+                    //privacy = EventPrivacy.valueOf(rs.getString("PRIVACY")),
                     creatorId = rs.getLong("CREATORID")
                 )
             )
