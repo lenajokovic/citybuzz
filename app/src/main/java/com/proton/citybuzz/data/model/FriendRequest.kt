@@ -1,6 +1,6 @@
 package com.proton.citybuzz.data.model
 
-//FRIEND_REQUEST (USER_ID int, FRIEND_ID int)
+//FRIEND_REQUEST (FROM_USER_ID int, TO_USER_ID int)
 class FriendRequest(
     val fromUserId: Int,
     val toUserId: Int

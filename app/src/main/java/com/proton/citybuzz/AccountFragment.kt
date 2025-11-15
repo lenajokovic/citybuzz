@@ -7,10 +7,18 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.proton.citybuzz.ui.viewmodel.SocialViewModel
 
 class AccountFragment : Fragment(R.layout.account_page) {
+    private lateinit var socialVM: SocialViewModel
+    private lateinit var friendsAdapter: FriendAdapter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        socialVM = CityBuzzApp.getInstance().socialViewModel
 
         val editNameButton = view.findViewById<ImageButton>(R.id.edit_name)
         val editEmailButton = view.findViewById<ImageButton>(R.id.edit_email)
@@ -28,6 +36,23 @@ class AccountFragment : Fragment(R.layout.account_page) {
         val currentPassword = view.findViewById<EditText>(R.id.current_password)
         val newPassword = view.findViewById<EditText>(R.id.new_password)
         val confirmPassword = view.findViewById<EditText>(R.id.confirm_password)
+
+        val rvFriends = view.findViewById<RecyclerView>(R.id.rvFriends)
+        rvFriends.layoutManager = LinearLayoutManager(requireContext())
+
+        friendsAdapter = FriendAdapter(
+            friends = emptyList(),
+            getUserName = { userId ->
+                socialVM.getUser(userId)?.name ?: "Unknown"
+            },
+            onRemoveFriend = { friendId ->
+                val userId = socialVM.loggedInUser.value?.id ?: 0L
+                socialVM.removeFriend(userId.toInt(), friendId) // use friendId directly
+            }
+        )
+
+        rvFriends.adapter = friendsAdapter
+
 
         editNameButton.setOnClickListener {
             infoLayout.visibility = View.GONE

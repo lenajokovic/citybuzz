@@ -59,7 +59,7 @@ class MainActivity: AppCompatActivity() {
         }
 
         accountButton.setOnClickListener {
-            replaceFragment(accountFragment, accountButton, closeButton)
+            //replaceFragment(accountFragment, accountButton, closeButton)
             accountButton.visibility = View.GONE
             closeButton.visibility = View.VISIBLE
         }

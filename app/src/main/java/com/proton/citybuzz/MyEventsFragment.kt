@@ -24,8 +24,7 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
         populateView()
     }
 
-    fun populateView(){
-
+    fun populateView() {
         val eventListContainer = view?.findViewById<LinearLayout>(R.id.explore_event_container)
         val inflater = LayoutInflater.from(requireContext())
         val eventList = inflater.inflate(R.layout.day_event_list, eventListContainer, false)
@@ -49,7 +48,8 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
 
     fun setUpListView(listView: ListView) {
         val eventViewModel = CityBuzzApp.getInstance().eventViewModel
-        eventViewModel.loadMyEvents(0)
+        val userId = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value?.id
+        eventViewModel.loadMyEvents(userId!!)
 
         eventViewModel.myEvents.observe(viewLifecycleOwner, { events ->
             updateListView(listView, events)

@@ -114,7 +114,7 @@ class CreateEventActivity : AppCompatActivity() {
                 startMinute.value
             ),
             privacy = selectedCategory,
-            idUser = 420 // CityBuzzApp.getInstance().socialViewModel.loggedInUser.value!!.id,
+            idUser = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value!!.id,
         )
 
         CityBuzzApp.getInstance().eventViewModel.addEvent("Second",
