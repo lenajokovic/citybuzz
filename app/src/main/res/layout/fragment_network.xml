@@ -38,7 +38,11 @@
                 android:contentDescription="Search"
                 android:src="@android:drawable/ic_menu_search" />
         </LinearLayout>
-
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_suggestions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"/>
         <!-- Friend requests -->
         <TextView
             android:id="@+id/requests_title"
