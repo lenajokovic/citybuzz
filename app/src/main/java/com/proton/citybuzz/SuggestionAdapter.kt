@@ -14,23 +14,24 @@ class SuggestionAdapter(
     private val onSendRequest: (User) -> Unit
 ) : RecyclerView.Adapter<SuggestionAdapter.ViewHolder>() {
 
-    inner class ViewHolder(val binding: ItemSuggestionBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val ivProfile: ImageView = view.findViewById(R.id.ivProfile)
+        val tvName: TextView = view.findViewById(R.id.tvName)
+        val tvHeadline: TextView = view.findViewById(R.id.tvHeadline)
+        val btnAdd: Button = view.findViewById(R.id.btnConnect)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemSuggestionBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-        return ViewHolder(binding)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_suggestion, parent, false)
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = items[position]
 
-        holder.binding.tvName.text = user.name
-        holder.binding.btnAdd.setOnClickListener { onSendRequest(user) }
+        holder.tvName.text = user.name
+        holder.btnAdd.setOnClickListener { onSendRequest(user) }
     }
 
     override fun getItemCount() = items.size

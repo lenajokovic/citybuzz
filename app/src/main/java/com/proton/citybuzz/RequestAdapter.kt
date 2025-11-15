@@ -8,24 +8,29 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.proton.citybuzz.data.model.FriendRequest
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class RequestAdapter(
     private var items: List<FriendRequest>,
     private val onAccept: (FriendRequest) -> Unit,
     private val onReject: (FriendRequest) -> Unit,
-    //private val getUser: suspend (Long) -> User
+    private val getUser: suspend (Long) -> com.proton.citybuzz.data.model.User
 ) : RecyclerView.Adapter<RequestAdapter.ViewHolder>() {
 
-    inner class ViewHolder(val binding: ItemFriendRequestBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val ivProfile: ImageView = view.findViewById(R.id.ivProfile)
+        val tvName: TextView = view.findViewById(R.id.tvName)
+        val tvHeadline: TextView = view.findViewById(R.id.tvHeadline)
+        val btnAccept: Button = view.findViewById(R.id.btnAccept)
+        val btnReject: Button = view.findViewById(R.id.btnIgnore)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemFriendRequestBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-        return ViewHolder(binding)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_friend_request, parent, false)
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -35,11 +40,11 @@ class RequestAdapter(
         val context = holder.itemView.context
         CoroutineScope(Dispatchers.Main).launch {
             val sender = getUser(request.fromUserId)
-            holder.binding.tvName.text = sender.name
+            holder.tvName.text = sender.name
         }
 
-        holder.binding.btn_accept.setOnClickListener { onAccept(request) }
-        holder.binding.btn_reject.setOnClickListener { onReject(request) }
+        holder.btnAccept.setOnClickListener { onAccept(request) }
+        holder.btnReject.setOnClickListener { onReject(request) }
     }
 
     override fun getItemCount() = items.size

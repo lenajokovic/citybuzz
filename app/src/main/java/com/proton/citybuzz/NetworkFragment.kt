@@ -5,58 +5,54 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.proton.citybuzz.data.model.FriendRequest
-import com.proton.citybuzz.data.model.Suggestion
 
-class NetworkFragment : Fragment() {
 
-    private lateinit var binding: FragmentNetworkBinding
-    val viewModel = CityBuzzApp.socialViewModel
-    val userId = viewModel.loggedInUser.value?.id ?: 0L
+class NetworkFragment : Fragment(R.layout.fragment_network) {
 
-    private lateinit var requestAdapter: RequestAdapter
-    private lateinit var suggestionAdapter: SuggestionAdapter
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentNetworkBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private lateinit var rvFriendRequests: RecyclerView
+    private lateinit var rvSuggestions: RecyclerView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val user = viewModel.loggedInUser.value ?: return
-        val userId = user.id
+        super.onViewCreated(view, savedInstanceState)
 
-        // Init adapters
-        requestAdapter = RequestAdapter(
+        // Find views manually
+        rvFriendRequests = view.findViewById(R.id.friend_requests)
+        rvSuggestions = view.findViewById(R.id.suggestions)
+
+        // LayoutManagers
+        rvFriendRequests.layoutManager = LinearLayoutManager(requireContext())
+        rvSuggestions.layoutManager = LinearLayoutManager(requireContext())
+
+        val socialVM = CityBuzzApp.socialViewModel
+        val userId = socialVM.loggedInUser.value?.id ?: 0L
+
+        // Friend Requests Adapter
+        val friendRequestsAdapter = RequestAdapter(
             emptyList(),
-            onAccept = { viewModel.acceptRequest(it) },
-            onReject  = { viewModel.rejectRequest(it) },
-            getUser = { viewModel.getUser(it) }
+            onAccept = { socialVM.acceptRequest(it) },
+            onReject  = { socialVM.rejectRequest(it) },
+            getUser   = { socialVM.getUser(it) }
         )
+        rvFriendRequests.adapter = friendRequestsAdapter
 
-        suggestionAdapter = SuggestionAdapter(
+        // Suggestions Adapter
+        val suggestionAdapter = SuggestionAdapter(
             emptyList(),
-            onSendRequest = { target ->
-                viewModel.sendRequest(userId, target.id)
-            }
+            onSendRequest = { target -> socialVM.sendRequest(userId, target.id) }
         )
+        rvSuggestions.adapter = suggestionAdapter
 
-        binding.rvFriendRequests.adapter = requestAdapter
-        binding.rvSuggestions.adapter = suggestionAdapter
-
-        // Observers
-        viewModel.pendingRequests.observe(viewLifecycleOwner) {
-            requestAdapter.update(it ?: emptyList())
+        // Observe LiveData
+        socialVM.pendingRequests.observe(viewLifecycleOwner) { list ->
+            friendRequestsAdapter.update(list ?: emptyList())
         }
 
-        viewModel.suggestions.observe(viewLifecycleOwner) {
-            suggestionAdapter.update(it ?: emptyList())
+        socialVM.suggestions.observe(viewLifecycleOwner) { list ->
+            suggestionAdapter.update(list ?: emptyList())
         }
 
         // Load data
-        viewModel.loadPendingRequests(userId)
-        viewModel.loadFriendSuggestions(userId)
+        socialVM.loadPendingRequests(userId)
+        socialVM.loadFriendSuggestions(userId)
     }
 }
