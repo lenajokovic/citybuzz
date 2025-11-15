@@ -61,19 +61,33 @@ class NetworkFragment : Fragment(R.layout.fragment_network) {
             val query = text.toString().trim()
             lifecycleScope.launch {
                 val results = socialVM.searchUsers(query)
-                suggestionAdapter.update(results)
+                val currentUserId = userId.toInt()
+                socialVM.loadFriends(userId.toInt())
+                val friendIds = socialVM.friends.value?.map { it.id } ?: emptyList()
+
+                val filtered = results.filter { user ->
+                    user.id != currentUserId &&       // hide yourself
+                            user.id !in friendIds            // hide existing friends
+                }
+                suggestionAdapter.update(filtered)
             }
         }
 
 
         // --- OBSERVE LIVE DATA ---
+
         socialVM.pendingRequests.observe(viewLifecycleOwner) { list ->
             friendRequestsAdapter.update(list ?: emptyList())
         }
-
-        socialVM.suggestions.observe(viewLifecycleOwner) { list ->
-            suggestionAdapter.update(list ?: emptyList())
+        socialVM.suggestions.observe(viewLifecycleOwner) {
+            list -> suggestionAdapter.update(list ?: emptyList())
         }
+        /*socialVM.suggestions.observe(viewLifecycleOwner) {
+             suggestionsList ->
+    val friendsIds = socialVM.friends.value?.map { it.id } ?: emptyList()
+    val filteredList = suggestionsList?.filter { user -> user.id !in friendsIds && user.id != userId.toInt() } ?: emptyList()
+   suggestionAdapter.update(filteredList)
+        }*/
 
         // Load initial data
         socialVM.loadPendingRequests(userId.toInt())
