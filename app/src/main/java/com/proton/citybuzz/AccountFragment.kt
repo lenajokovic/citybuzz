@@ -56,6 +56,10 @@ class AccountFragment : Fragment(R.layout.account_page) {
 
         rvFriends?.adapter = friendsAdapter
 
+        socialVM.friends.observe(viewLifecycleOwner) { friendsList ->
+            friendsAdapter.updateData(friendsList)
+        }
+
         loggedInUser?.id?.let { userId ->
             socialVM.loadFriends(userId)
         }
@@ -113,6 +117,8 @@ class AccountFragment : Fragment(R.layout.account_page) {
         saveChangesButton?.setOnClickListener {
             val inputPassword = currentPassword?.text.toString()
 
+            val userId = loggedInUser?.id ?: 0
+
             if(inputPassword != loggedInUser?.password){
                 Toast.makeText(requireContext(), "Incorrect password", Toast.LENGTH_SHORT).show()
             }
@@ -121,13 +127,13 @@ class AccountFragment : Fragment(R.layout.account_page) {
             }
             else {
                 if(editingName){
-                    loggedInUser.name = editNameText?.text.toString()
+                    CityBuzzApp.getInstance().socialViewModel.updateName(userId,  editNameText?.text.toString())
                 }
                 if(editingEmail){
-                    loggedInUser.email = editEmailText?.text.toString()
+                    CityBuzzApp.getInstance().socialViewModel.updateEmail(userId,  editEmailText?.text.toString())
                 }
                 if(editingPassword){
-                    loggedInUser.password = newPassword?.text.toString()
+                    CityBuzzApp.getInstance().socialViewModel.updatePassword(userId,  newPassword?.text.toString())
                 }
 
                 Toast.makeText(requireContext(), "Changes saved!", Toast.LENGTH_SHORT).show()

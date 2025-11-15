@@ -1,5 +1,6 @@
 package com.proton.citybuzz
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -62,15 +63,16 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
     fun updateListView(listView: ListView, events: List<Event>) {
         val userId = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value?.id
         val adapter = object : ArrayAdapter<Event>(requireContext(), 0, events) {
+            @SuppressLint("DefaultLocale")
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater.from(context)
                     .inflate(R.layout.event_list_item, parent, false)
 
                 val item = getItem(position)
 
-                val profilePic = view.findViewById<ImageView>(R.id.profile_pic)
                 val eventName = view.findViewById<TextView>(R.id.event_name)
                 val userName = view.findViewById<TextView>(R.id.user_name)
+                val startTime = view.findViewById<TextView>(R.id.event_start_time)
 
                 val inviteButton = view.findViewById<Button>(R.id.invite_button)
                 val friendsListContainer = view.findViewById<LinearLayout>(R.id.friends_list_container)
@@ -117,8 +119,15 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
                     }
                 }
 
-                profilePic?.setImageResource(R.drawable.ic_explore)
                 eventName.text = item?.title
+                startTime.text = String.format("%02d:%02d", item?.date?.hour, item?.date?.minute)
+
+                val eventLocation = view.findViewById<TextView>(R.id.event_location)
+                eventLocation.text = item?.location
+
+                val eventDescription = view.findViewById<TextView>(R.id.event_description)
+                eventDescription.text = item?.description
+
                 lifecycleScope.launch {
                     val eventCreator = CityBuzzApp.getInstance().socialViewModel.getUserById(item?.creatorId)?.name
                     userName.text = eventCreator

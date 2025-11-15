@@ -7,12 +7,13 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.proton.citybuzz.data.model.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FriendAdapter(
-    private var friends: List<Int>,
+    private var friends: List<User>,
     private val getUserName: suspend (Int) -> String,
     private val onRemoveFriend: (Int) -> Unit
 ) : RecyclerView.Adapter<FriendAdapter.ViewHolder>() {
@@ -30,23 +31,23 @@ class FriendAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val userId = friends[position]
+        val user = friends[position]
 
         // Fetch the name from SocialViewModel asynchronously
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
-            val name = getUserName(userId)
+            val name = user.name
             holder.tvName.text = name
         }
 
         holder.btnRemove.setOnClickListener {
-            onRemoveFriend(userId)
+            onRemoveFriend(user.id)
         }
     }
 
     override fun getItemCount() = friends.size
 
-    fun updateList(newList: List<Int>) {
-        friends = newList
+    fun updateData(newFriends: List<User>) {
+        friends = newFriends
         notifyDataSetChanged()
     }
 }
