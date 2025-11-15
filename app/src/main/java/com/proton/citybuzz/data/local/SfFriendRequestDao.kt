@@ -7,7 +7,7 @@ class SfFriendRequestDao (private val sf: SnowflakeCaller = SnowflakeCaller.getI
     // INSERT FRIEND REQUEST
     suspend fun insertRequest(request: FriendRequest) {
         val query = """
-            INSERT INTO FRIEND_REQUESTS (USER_ID, FRIEND_ID)
+            INSERT INTO FRIEND_REQUESTS (FROM_USER_ID, TO_USER_ID)
             VALUES (${request.fromUserId}, ${request.toUserId})
         """.trimIndent()
 
