@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
 
 
 class MainActivity: AppCompatActivity() {
@@ -13,12 +15,18 @@ class MainActivity: AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        lifecycleScope.launch {
+            // SnowflakeCaller.getInstance().createConnection()
+        }
+        setupNavigationBar()
+    }
+
+    private fun setupNavigationBar() {
         val navigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
 
         val exploreFragment = ExploreFragment()
         val myEventsFragment = MyEventsFragment()
         replaceFragment(exploreFragment)
-
         navigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_explore -> {

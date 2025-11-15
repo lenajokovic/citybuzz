@@ -1,12 +1,8 @@
 package com.proton.citybuzz.data.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-@Entity(tableName = "users")
-data class User(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+//USERS (USER_ID int, NAME varchar, EMAIL varchar, PASSWORD varchar, PROFILEIMAGE varchar)
+class User(
+    val id: Int,
     val name: String,
     val email: String,
     val password: String,
