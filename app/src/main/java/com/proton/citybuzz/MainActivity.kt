@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.proton.citybuzz.ui.fragment.NotificationFragment
 import kotlinx.coroutines.launch
 
 
@@ -33,6 +34,7 @@ class MainActivity: AppCompatActivity() {
 
         val exploreFragment = ExploreFragment()
         val networkFragment = NetworkFragment()
+        val notificationFragment = NotificationFragment()
         val accountFragment = AccountFragment()
         val myEventsFragment = MyEventsFragment()
         replaceFragment(exploreFragment, accountButton, closeButton)
@@ -46,6 +48,11 @@ class MainActivity: AppCompatActivity() {
 
                 R.id.nav_network -> {
                     replaceFragment(networkFragment, accountButton, closeButton)
+                    true
+                }
+
+                R.id.nav_notification -> {
+                    replaceFragment(notificationFragment, accountButton, closeButton)
                     true
                 }
 

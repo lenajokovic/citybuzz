@@ -16,6 +16,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.button.MaterialButton
 import com.proton.citybuzz.data.model.Event
 import kotlinx.coroutines.launch
 
@@ -130,7 +131,7 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
 
         listView.setOnItemClickListener { parent, view, position, id ->
             val eventDetailsContainer = view.findViewById<LinearLayout>(R.id.event_details_container)
-            val inviteButton = view.findViewById<LinearLayout>(R.id.invite_button)
+            val inviteButton = view.findViewById<MaterialButton>(R.id.invite_button)
 
             if (eventDetailsContainer.visibility == View.VISIBLE) {
                 eventDetailsContainer.visibility = View.GONE

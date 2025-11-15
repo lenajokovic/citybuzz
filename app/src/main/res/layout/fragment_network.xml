@@ -39,12 +39,12 @@
                 android:src="@android:drawable/ic_menu_search" />
         </LinearLayout>
 
-        <!-- Invitations -->
+        <!-- Friend requests -->
         <TextView
             android:id="@+id/requests_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Invitations"
+            android:text="Friend requests"
             android:textSize="22sp"
             android:textStyle="bold"
             android:layout_marginTop="8dp"

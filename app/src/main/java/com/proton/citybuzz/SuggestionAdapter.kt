@@ -15,9 +15,7 @@ class SuggestionAdapter(
 ) : RecyclerView.Adapter<SuggestionAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val ivProfile: ImageView = view.findViewById(R.id.ivProfile)
         val tvName: TextView = view.findViewById(R.id.tvName)
-        val tvHeadline: TextView = view.findViewById(R.id.tvHeadline)
         val btnAdd: Button = view.findViewById(R.id.btnConnect)
     }
 
