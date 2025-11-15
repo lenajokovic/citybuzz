@@ -19,7 +19,7 @@ class SocialViewModel(
 ) : ViewModel() {
 
     val users = MutableLiveData<List<User>>()
-    val loggedInUser = MutableLiveData<User?>()
+    var loggedInUser = MutableLiveData<User?>()
     val friends = MutableLiveData<List<User>>()
     val pendingRequests = MutableLiveData<List<FriendRequest>>()
     val suggestions = MutableLiveData<List<User>>()

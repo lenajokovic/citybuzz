@@ -1,5 +1,6 @@
 package com.proton.citybuzz
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -36,6 +37,11 @@ class AccountFragment : Fragment(R.layout.account_page) {
         val currentPassword = view.findViewById<EditText>(R.id.current_password)
         val newPassword = view.findViewById<EditText>(R.id.new_password)
         val confirmPassword = view.findViewById<EditText>(R.id.confirm_password)
+
+        val logoutButton = view.findViewById<Button>(R.id.logout_button)
+        logoutButton.setOnClickListener {
+            logOut()
+        }
 
         val rvFriends = view.findViewById<RecyclerView>(R.id.rvFriends)
         rvFriends.layoutManager = LinearLayoutManager(requireContext())
@@ -83,5 +89,17 @@ class AccountFragment : Fragment(R.layout.account_page) {
             infoLayout.visibility = View.VISIBLE
             editLayout.visibility = View.GONE
         }
+    }
+
+    fun logOut(){
+        CityBuzzApp.getInstance().socialViewModel.loggedInUser.value = null
+
+        parentFragmentManager.beginTransaction()
+            .remove(this)
+            .commit()
+
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        startActivity(intent)
+        requireActivity().finish()
     }
 }
