@@ -61,7 +61,7 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
                     joinToEvent(item?.id!!)
                 }
                 lifecycleScope.launch {
-                    val eventCreator = CityBuzzApp.getInstance().socialViewModel.getUser(item?.creatorId)?.name
+                    val eventCreator = CityBuzzApp.getInstance().socialViewModel.getUserById(item?.creatorId)?.name
                     userName.text = eventCreator
                 }
                 return view

@@ -36,7 +36,7 @@ class NetworkFragment : Fragment(R.layout.fragment_network) {
             emptyList(),
             onAccept = { socialVM.acceptRequest(it) },
             onReject = { socialVM.rejectRequest(it) },
-            getUser = { socialVM.getUser(it.toInt())!! }
+            getUser = { socialVM.getUserById(it.toInt())!! }
         )
         rvFriendRequests.adapter = friendRequestsAdapter
 

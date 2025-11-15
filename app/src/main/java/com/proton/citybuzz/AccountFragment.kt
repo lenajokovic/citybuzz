@@ -46,7 +46,7 @@ class AccountFragment : Fragment(R.layout.account_page) {
         friendsAdapter = FriendAdapter(
             friends = emptyList(),
             getUserName = { userId ->
-                socialVM.getUser(userId)?.name ?: "Unknown"
+                socialVM.getUserById(userId)?.name ?: "Unknown"
             },
             onRemoveFriend = { friendId ->
                 socialVM.removeFriend(loggedInUser?.id ?: 0, friendId) // use friendId directly
@@ -109,10 +109,10 @@ class AccountFragment : Fragment(R.layout.account_page) {
             val inputPassword = currentPassword?.text.toString()
 
             if(inputPassword != loggedInUser?.password){
-                Toast.makeText(context!!, "Incorrect password", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Incorrect password", Toast.LENGTH_SHORT).show()
             }
             else if (editingPassword && newPassword?.text.toString() != confirmPassword?.text.toString()){
-                Toast.makeText(context!!, "Passwords don't match", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Passwords don't match", Toast.LENGTH_SHORT).show()
             }
             else {
                 if(editingName){
@@ -125,7 +125,7 @@ class AccountFragment : Fragment(R.layout.account_page) {
                     loggedInUser.password = newPassword?.text.toString()
                 }
 
-                Toast.makeText(context!!, "Changes saved!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Changes saved!", Toast.LENGTH_SHORT).show()
             }
 
             editNameText?.text?.clear()
