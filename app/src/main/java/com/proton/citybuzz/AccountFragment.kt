@@ -6,10 +6,15 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.proton.citybuzz.data.model.User
 import com.proton.citybuzz.ui.viewmodel.SocialViewModel
 
 class AccountFragment : Fragment(R.layout.account_page) {
@@ -21,30 +26,22 @@ class AccountFragment : Fragment(R.layout.account_page) {
 
         socialVM = CityBuzzApp.getInstance().socialViewModel
 
-        val editNameButton = view.findViewById<ImageButton>(R.id.edit_name)
-        val editEmailButton = view.findViewById<ImageButton>(R.id.edit_email)
-        val editPasswordButton = view.findViewById<Button>(R.id.edit_password)
+        val loggedInUser = socialVM.loggedInUser.value
+        setUpAccountInformationUI(loggedInUser)
+        setUpEditAccountUI(loggedInUser)
+    }
 
-        val infoLayout = view.findViewById<LinearLayout>(R.id.acc_info_layout)
-        val editLayout = view.findViewById<LinearLayout>(R.id.edit_account_layout)
-        val changePassLayout = view.findViewById<LinearLayout>(R.id.change_password_layout)
+    fun setUpAccountInformationUI(loggedInUser: User?){
 
-        val editNameText = view.findViewById<EditText>(R.id.acc_edit_username)
-        val editEmailText = view.findViewById<EditText>(R.id.acc_edit_email)
+        val username = view?.findViewById<TextView>(R.id.acc_username)
+        username?.text = loggedInUser?.name
+        val email = view?.findViewById<TextView>(R.id.acc_email)
+        email?.text = loggedInUser?.email
+        val profilePic = view?.findViewById<ImageView>(R.id.acc_profile_pic)
+        profilePic?.setImageURI(loggedInUser?.profileImage?.toUri())
 
-        val saveChangesButton = view.findViewById<Button>(R.id.acc_save_changes)
-
-        val currentPassword = view.findViewById<EditText>(R.id.current_password)
-        val newPassword = view.findViewById<EditText>(R.id.new_password)
-        val confirmPassword = view.findViewById<EditText>(R.id.confirm_password)
-
-        val logoutButton = view.findViewById<Button>(R.id.logout_button)
-        logoutButton.setOnClickListener {
-            logOut()
-        }
-
-        val rvFriends = view.findViewById<RecyclerView>(R.id.rvFriends)
-        rvFriends.layoutManager = LinearLayoutManager(requireContext())
+        val rvFriends = view?.findViewById<RecyclerView>(R.id.rvFriends)
+        rvFriends?.layoutManager = LinearLayoutManager(requireContext())
 
         friendsAdapter = FriendAdapter(
             friends = emptyList(),
@@ -52,42 +49,97 @@ class AccountFragment : Fragment(R.layout.account_page) {
                 socialVM.getUser(userId)?.name ?: "Unknown"
             },
             onRemoveFriend = { friendId ->
-                val userId = socialVM.loggedInUser.value?.id ?: 0L
-                socialVM.removeFriend(userId.toInt(), friendId) // use friendId directly
+                socialVM.removeFriend(loggedInUser?.id ?: 0, friendId) // use friendId directly
             }
         )
 
-        rvFriends.adapter = friendsAdapter
+        rvFriends?.adapter = friendsAdapter
 
+        val logoutButton = view?.findViewById<Button>(R.id.logout_button)
+        logoutButton?.setOnClickListener {
+            logOut()
+        }
+    }
 
-        editNameButton.setOnClickListener {
-            infoLayout.visibility = View.GONE
-            editLayout.visibility = View.VISIBLE
-            editNameText.visibility = View.VISIBLE
+    fun setUpEditAccountUI(loggedInUser: User?){
+
+        val infoLayout = view?.findViewById<LinearLayout>(R.id.acc_info_layout)
+        val editLayout = view?.findViewById<LinearLayout>(R.id.edit_account_layout)
+
+        val changePassLayout = view?.findViewById<LinearLayout>(R.id.change_password_layout)
+
+        val editNameText = view?.findViewById<EditText>(R.id.acc_edit_username)
+        val editEmailText = view?.findViewById<EditText>(R.id.acc_edit_email)
+
+        val currentPassword = view?.findViewById<EditText>(R.id.current_password)
+        val newPassword = view?.findViewById<EditText>(R.id.new_password)
+        val confirmPassword = view?.findViewById<EditText>(R.id.confirm_password)
+
+        val editNameButton = view?.findViewById<ImageButton>(R.id.edit_name)
+        val editEmailButton = view?.findViewById<ImageButton>(R.id.edit_email)
+        val editPasswordButton = view?.findViewById<Button>(R.id.edit_password)
+
+        var editingName = false
+        var editingEmail = false
+        var editingPassword = false
+
+        editNameButton?.setOnClickListener {
+            infoLayout?.visibility = View.GONE
+            editLayout?.visibility = View.VISIBLE
+            editNameText?.visibility = View.VISIBLE
+            editingName = true
         }
 
-        editEmailButton.setOnClickListener {
-            infoLayout.visibility = View.GONE
-            editLayout.visibility = View.VISIBLE
-            editEmailText.visibility = View.VISIBLE
+        editEmailButton?.setOnClickListener {
+            infoLayout?.visibility = View.GONE
+            editLayout?.visibility = View.VISIBLE
+            editEmailText?.visibility = View.VISIBLE
+            editingEmail = false
         }
 
-        editPasswordButton.setOnClickListener {
-            infoLayout.visibility = View.GONE
-            editLayout.visibility = View.VISIBLE
-            changePassLayout.visibility = View.VISIBLE
+        editPasswordButton?.setOnClickListener {
+            infoLayout?.visibility = View.GONE
+            editLayout?.visibility = View.VISIBLE
+            changePassLayout?.visibility = View.VISIBLE
+            editingPassword = false
         }
 
-        saveChangesButton.setOnClickListener {
-            val inputPassword = currentPassword.text.toString()
-            // TODO check if inputPass == password in database
+        val saveChangesButton = view?.findViewById<Button>(R.id.acc_save_changes)
+        saveChangesButton?.setOnClickListener {
+            val inputPassword = currentPassword?.text.toString()
 
-            editNameText.visibility = View.GONE
-            editEmailText.visibility = View.GONE
-            changePassLayout.visibility = View.GONE
+            if(inputPassword != loggedInUser?.password){
+                Toast.makeText(context!!, "Incorrect password", Toast.LENGTH_SHORT).show()
+            }
+            else if (editingPassword && newPassword?.text.toString() != confirmPassword?.text.toString()){
+                Toast.makeText(context!!, "Passwords don't match", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                if(editingName){
+                    loggedInUser.name = editNameText?.text.toString()
+                }
+                if(editingEmail){
+                    loggedInUser.email = editEmailText?.text.toString()
+                }
+                if(editingPassword){
+                    loggedInUser.password = newPassword?.text.toString()
+                }
 
-            infoLayout.visibility = View.VISIBLE
-            editLayout.visibility = View.GONE
+                Toast.makeText(context!!, "Changes saved!", Toast.LENGTH_SHORT).show()
+            }
+
+            editNameText?.text?.clear()
+            editEmailText?.text?.clear()
+            currentPassword?.text?.clear()
+            newPassword?.text?.clear()
+            confirmPassword?.text?.clear()
+
+            editNameText?.visibility = View.GONE
+            editEmailText?.visibility = View.GONE
+            changePassLayout?.visibility = View.GONE
+
+            infoLayout?.visibility = View.VISIBLE
+            editLayout?.visibility = View.GONE
         }
     }
 
