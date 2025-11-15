@@ -32,26 +32,27 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_height="41dp"
+                    android:layout_gravity="start"
                     android:gravity="start"
-                    android:layout_gravity="start">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/acc_username"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:text="Name Surname"
-                        android:textSize="@dimen/title_font_size"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/title_font_size" />
 
                     <ImageButton
                         android:id="@+id/edit_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_edit"
+                        android:layout_width="46dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
                         android:background="@color/transparent"
-                        android:layout_marginLeft="10dp"/>
+                        android:contentDescription="Edit username"
+                        android:src="@drawable/ic_edit" />
 
                 </LinearLayout>
 
@@ -65,25 +66,26 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_gravity="start"
                     android:gravity="start"
-                    android:layout_gravity="start">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/acc_email"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:text="email@gmail.com"
-                        android:textSize="@dimen/title_font_size"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/title_font_size" />
 
                     <ImageButton
                         android:id="@+id/edit_email"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_edit"
+                        android:layout_width="46dp"
+                        android:layout_height="42dp"
+                        android:layout_marginLeft="10dp"
                         android:background="@color/transparent"
-                        android:layout_marginLeft="10dp"/>
+                        android:contentDescription="Edit email"
+                        android:src="@drawable/ic_edit" />
 
                 </LinearLayout>
 
@@ -98,6 +100,22 @@
                     android:background="@color/transparent"
                     android:textSize="@dimen/subtitle_font_size"/>
 
+                <!-- Friends List RecyclerView -->
+                <TextView
+                    android:id="@+id/friends_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Friends"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvFriends"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"/>
             </LinearLayout>
 
             <LinearLayout
