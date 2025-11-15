@@ -39,7 +39,7 @@ class RequestAdapter(
         // Load user info (name, avatar)
         val context = holder.itemView.context
         CoroutineScope(Dispatchers.Main).launch {
-            val sender = getUser(request.fromUserId)
+            val sender = getUser(request.fromUserId.toLong())
             holder.tvName.text = sender.name
         }
 

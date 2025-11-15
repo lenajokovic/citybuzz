@@ -82,7 +82,7 @@ class CreateAccountActivity : AppCompatActivity() {
         // Convert selected image URI to string (optional, can store null)
         val profileImageString = selected_image_uri?.toString()
 
-        CityBuzzApp.socialViewModel.addUser(name, email, password, profileImageString)
+        CityBuzzApp.getInstance().socialViewModel.addUser(name, email, password, profileImageString)
 
         Toast.makeText(this, "Account created!", Toast.LENGTH_SHORT).show()
         finish()

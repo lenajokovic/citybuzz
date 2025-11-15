@@ -6,17 +6,21 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import com.proton.citybuzz.data.model.User
 import com.proton.citybuzz.data.model.FriendRequest
+import com.proton.citybuzz.data.model.Notification
+import com.proton.citybuzz.data.model.NotificationType
 import com.proton.citybuzz.data.repository.UserRepository
 import com.proton.citybuzz.data.repository.FriendRequestRepository
+import com.proton.citybuzz.data.repository.NotificationRepository
 
 class SocialViewModel(
-    private val userRepo: UserRepository,
-    private val requestRepo: FriendRequestRepository
+    private val userRepo: UserRepository = UserRepository(),
+    private val requestRepo: FriendRequestRepository = FriendRequestRepository(),
+    private val notifRepo : NotificationRepository = NotificationRepository()
 ) : ViewModel() {
 
     val users = MutableLiveData<List<User>>()
     val loggedInUser = MutableLiveData<User?>()
-    val friends = MutableLiveData<List<Long>>()
+    val friends = MutableLiveData<List<User>>()
     val pendingRequests = MutableLiveData<List<FriendRequest>>()
     val suggestions = MutableLiveData<List<User>>()
 
@@ -37,41 +41,57 @@ class SocialViewModel(
         }
     }
 
-    fun loadFriends(userId: Long) = viewModelScope.launch {
+    fun loadFriends(userId: Int) = viewModelScope.launch {
         friends.value = userRepo.getFriends(userId)
     }
 
-    fun removeFriend(userId: Long, friendId : Long) = viewModelScope.launch {
+    fun removeFriend(userId: Int, friendId : Int) = viewModelScope.launch {
         userRepo.removeFriend(userId, friendId)
         loadFriends(userId)
     }
 
-    suspend fun getUser(userId: Long?): User {
-        return userRepo.getUser(userId)
+    suspend fun getUser(userId: Int?): User? {
+        return userRepo.getUserById(userId)
     }
 
     // FriendRequest funkcije
-    fun loadPendingRequests(userId: Long) = viewModelScope.launch {
-        pendingRequests.value = requestRepo.getPendingRequests(userId)
+    fun loadPendingRequests(toUserId: Int) = viewModelScope.launch {
+        pendingRequests.value = requestRepo.getPendingRequests(toUserId)
     }
 
-    fun sendRequest(fromUserId: Long, toUserId: Long) = viewModelScope.launch {
+    fun sendRequest(fromUserId: Int, toUserId: Int) = viewModelScope.launch {
         requestRepo.sendRequest(fromUserId, toUserId)
+
+        val sender = userRepo.getUserById(fromUserId)
+        notifRepo.addNotification(
+            userId = toUserId,
+            type = NotificationType.FRIEND_REQUEST,
+            message = "You received a friend request from ${sender?.name ?: "Unknown"}"
+        )
+
         loadPendingRequests(toUserId)
     }
 
     fun acceptRequest(request: FriendRequest) = viewModelScope.launch {
-        requestRepo.acceptRequest(request)
+        requestRepo.deleteRequest(request.fromUserId, request.toUserId)
         userRepo.addFriend(request.fromUserId, request.toUserId)
+
+        val sender = userRepo.getUserById(request.fromUserId)
+        notifRepo.addNotification(
+            userId = request.toUserId,
+            type = NotificationType.FRIEND_ACCEPTED,
+            message = "You accepted a friend request from ${sender?.name ?: "Unknown"}"
+        )
+
         loadPendingRequests(request.toUserId)
     }
 
     fun rejectRequest(request: FriendRequest) = viewModelScope.launch {
-        requestRepo.rejectRequest(request)
+        requestRepo.deleteRequest(request.fromUserId, request.toUserId)
         loadPendingRequests(request.toUserId)
     }
 
-    fun loadFriendSuggestions(userId: Long) = viewModelScope.launch {
+    fun loadFriendSuggestions(userId: Int) = viewModelScope.launch {
         suggestions.value = userRepo.getFriendsOfFriends(userId)
     }
 }

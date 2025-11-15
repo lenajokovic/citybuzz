@@ -6,14 +6,21 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import com.proton.citybuzz.data.model.Event
 import com.proton.citybuzz.data.model.EventPrivacy
+import com.proton.citybuzz.data.model.Notification
+import com.proton.citybuzz.data.model.NotificationType
 import com.proton.citybuzz.data.repository.EventRepository
-import java.time.LocalDate
-import java.time.LocalTime
+import com.proton.citybuzz.data.repository.NotificationRepository
+import com.proton.citybuzz.data.repository.UserRepository
+import java.time.LocalDateTime
 
-class EventViewModel(private val eventRepo: EventRepository) : ViewModel() {
+class EventViewModel(
+    private val eventRepo: EventRepository,
+    private val notifRepo: NotificationRepository,
+    private val userRepo: UserRepository
+) : ViewModel() {
 
     val events = MutableLiveData<List<Event>>()
-    val attendees = MutableLiveData<List<Long>>()
+    val attendees = MutableLiveData<List<Int>>()
     val myEvents = MutableLiveData<List<Event>>()
     val suggestedEvents = MutableLiveData<List<Event>>()
 
@@ -21,57 +28,76 @@ class EventViewModel(private val eventRepo: EventRepository) : ViewModel() {
         events.value = eventRepo.getAllEvents()
     }
 
-    fun addEvent(title: String, description: String, location: String, date: LocalDate,
-        time: LocalTime, privacy: Int, idUser: Long
+    fun addEvent(title: String, description: String, location: String, date: LocalDateTime,
+                 privacy: Int, idUser: Int
     ) = viewModelScope.launch {
-        val event = Event(title = title, date = date, time = time, description = description,
+        val event = Event(id = eventRepo.getMaxEventId() + 1, title = title, date = date, description = description,
             location = location, privacy = EventPrivacy.entries[privacy], creatorId = idUser
         )
         eventRepo.addEvent(event)
         loadEvents()
     }
 
-    fun removeEvent(eventId: Long) = viewModelScope.launch {
+    fun removeEvent(eventId: Int) = viewModelScope.launch {
         eventRepo.removeEvent(eventId)
         loadEvents()
     }
 
-    fun addAttendee(eventId: Long, userId: Long) = viewModelScope.launch {
+    fun addAttendee(eventId: Int, userId: Int) = viewModelScope.launch {
         eventRepo.addAttendee(eventId, userId)
         attendees.value = eventRepo.getAttendees(eventId)
+
+        val event = eventRepo.getEventById(eventId)
+        val user = userRepo.getUserById(userId)
+
+        event?.let { e ->
+            notifRepo.addNotification(
+                userId = e.creatorId,
+                type = NotificationType.EVENT_JOIN,
+                message = "${user?.name ?: "A user"} joined your event '${e.title}'"
+            )
+        }
     }
 
-    fun removeAtendee(eventId: Long, userId: Long) = viewModelScope.launch {
+    fun removeAttendee(eventId: Int, userId: Int) = viewModelScope.launch {
         eventRepo.removeAttendee(eventId, userId)
         attendees.value = eventRepo.getAttendees(eventId)
+
+        val event = eventRepo.getEventById(eventId)
+        val user = userRepo.getUserById(userId)
+
+        event?.let { e ->
+            notifRepo.addNotification(
+                userId = e.creatorId,
+                type = NotificationType.EVENT_LEAVE,
+                message = "${user?.name ?: "A user"} left your event '${e.title}'"
+            )
+        }
     }
 
-    fun loadMyEvents(userId: Long) = viewModelScope.launch {
+    fun loadMyEvents(userId: Int) = viewModelScope.launch {
         myEvents.value = eventRepo.getMyEvents(userId)
     }
 
-    fun loadSuggestedEvents(userId: Long) = viewModelScope.launch {
+    fun loadSuggestedEvents(userId: Int) = viewModelScope.launch {
         suggestedEvents.value = eventRepo.getSuggestedEvents(userId)
     }
 
-    fun getTitle(eventId: Long): String? =
+    fun getTitle(eventId: Int): String? =
         events.value?.firstOrNull { it.id == eventId }?.title
 
-    fun getDate(eventId: Long): LocalDate? =
+    fun getDate(eventId: Int): LocalDateTime? =
         events.value?.firstOrNull { it.id == eventId }?.date
 
-    fun getTime(eventId: Long): LocalTime? =
-        events.value?.firstOrNull { it.id == eventId }?.time
-
-    fun getDescription(eventId: Long): String? =
+    fun getDescription(eventId: Int): String? =
         events.value?.firstOrNull { it.id == eventId }?.description
 
-    fun getLocation(eventId: Long): String? =
+    fun getLocation(eventId: Int): String? =
         events.value?.firstOrNull { it.id == eventId }?.location
 
-    fun getPrivacy(eventId: Long): EventPrivacy? =
+    fun getPrivacy(eventId: Int): EventPrivacy? =
         events.value?.firstOrNull { it.id == eventId }?.privacy
 
-    fun getCreatorId(eventId: Long): Long? =
+    fun getCreatorId(eventId: Int): Int? =
         events.value?.firstOrNull { it.id == eventId }?.creatorId
 }

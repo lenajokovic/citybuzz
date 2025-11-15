@@ -6,8 +6,10 @@ import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
 
 
 class MainActivity: AppCompatActivity() {
@@ -18,6 +20,13 @@ class MainActivity: AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        lifecycleScope.launch {
+            // SnowflakeCaller.getInstance().createConnection()
+        }
+        setupNavigationBar()
+    }
+
+    private fun setupNavigationBar() {
         val navigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
         val accountButton = findViewById<ImageButton>(R.id.show_account_button)
         val closeButton = findViewById<ImageButton>(R.id.close_button)

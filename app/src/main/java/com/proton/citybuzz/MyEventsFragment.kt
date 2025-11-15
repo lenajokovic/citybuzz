@@ -13,12 +13,9 @@ import android.widget.ListView
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.proton.citybuzz.data.model.Event
-import com.proton.citybuzz.data.model.EventPrivacy
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import java.time.LocalDate
-import java.time.LocalTime
+import kotlinx.coroutines.launch
 
 
 class MyEventsFragment: Fragment(R.layout.activity_my_events) {
@@ -29,11 +26,11 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
 
     fun populateView(){
 
-        val eventListContainer = view?.findViewById<LinearLayout>(R.id.my_events_container)
-        val inflater = LayoutInflater.from(context!!)
+        val eventListContainer = view?.findViewById<LinearLayout>(R.id.explore_event_container)
+        val inflater = LayoutInflater.from(requireContext())
         val eventList = inflater.inflate(R.layout.day_event_list, eventListContainer, false)
 
-        GlobalScope.async {
+        lifecycleScope.launch {
             setUpListView(eventList.findViewById(R.id.list_view))
         }
 
@@ -50,26 +47,17 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
         startActivity(intent)
     }
 
-    suspend fun setUpListView(listView: ListView){
+    fun setUpListView(listView: ListView) {
+        val eventViewModel = CityBuzzApp.getInstance().eventViewModel
+        eventViewModel.loadMyEvents(0)
 
-        val event1 = Event(0, "First Event",
-            LocalDate.of(2023, 10, 10),
-            LocalTime.now(),
-            "Description",
-            "Location",
-            EventPrivacy.PUBLIC,
-            0)
-        val event2 = Event(0, "Second Event",
-            LocalDate.of(2023, 3, 3),
-            LocalTime.NOON,
-            "Description",
-            "Location",
-            EventPrivacy.PUBLIC,
-            69)
+        eventViewModel.myEvents.observe(viewLifecycleOwner, { events ->
+            updateListView(listView, events)
+        })
+    }
 
-        val events = listOf(event1, event2)//eventDAO.getAllEvents()
-
-        val adapter = object : ArrayAdapter<Event>(context!!, 0, events) {
+    fun updateListView(listView: ListView, events: List<Event>) {
+        val adapter = object : ArrayAdapter<Event>(requireContext(), 0, events) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.event_list_item, parent, false)
 
@@ -81,8 +69,8 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
 
                 profilePic.setImageResource(R.drawable.ic_explore)
                 eventName.text = item?.title
-                GlobalScope.async {
-                    userName.text = CityBuzzApp.socialViewModel.getUser(item?.creatorId).name
+                lifecycleScope.launch {
+                    //userName.text = CityBuzzApp.socialViewModel.getUser(item?.creatorId).name
                 }
                 return view
             }

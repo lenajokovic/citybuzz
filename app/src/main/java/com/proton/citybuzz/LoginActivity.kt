@@ -42,7 +42,7 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-        CityBuzzApp.socialViewModel.login(email, password) { user ->
+        CityBuzzApp.getInstance().socialViewModel.login(email, password) { user ->
             if (user != null) {
                 Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show()
                 // Go to main activity or home

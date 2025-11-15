@@ -10,6 +10,9 @@ activityCompose = "1.11.0"
 composeBom = "2024.09.00"
 appcompat = "1.7.1"
 material = "1.13.0"
+snowflakeJdbc = "3.27.1"
+kotlinxCoroutinesAndroid = "1.8.1"
+arrowMemoryNetty = "18.3.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
 
@@ -30,6 +33,9 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+snowflake-jdbc = { group = "net.snowflake", name = "snowflake-jdbc", version.ref = "snowflakeJdbc" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+arrow-memory-netty = { group = "org.apache.arrow", name = "arrow-memory-netty", version.ref = "arrowMemoryNetty" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 

@@ -23,7 +23,7 @@ class NetworkFragment : Fragment(R.layout.fragment_network) {
         rvFriendRequests.layoutManager = LinearLayoutManager(requireContext())
         rvSuggestions.layoutManager = LinearLayoutManager(requireContext())
 
-        val socialVM = CityBuzzApp.socialViewModel
+        val socialVM = CityBuzzApp.getInstance().socialViewModel
         val userId = socialVM.loggedInUser.value?.id ?: 0L
 
         // Friend Requests Adapter
@@ -31,14 +31,14 @@ class NetworkFragment : Fragment(R.layout.fragment_network) {
             emptyList(),
             onAccept = { socialVM.acceptRequest(it) },
             onReject  = { socialVM.rejectRequest(it) },
-            getUser   = { socialVM.getUser(it) }
+            getUser   = { socialVM.getUser(it.toInt())!! }
         )
         rvFriendRequests.adapter = friendRequestsAdapter
 
         // Suggestions Adapter
         val suggestionAdapter = SuggestionAdapter(
             emptyList(),
-            onSendRequest = { target -> socialVM.sendRequest(userId, target.id) }
+            onSendRequest = { target -> socialVM.sendRequest(userId.toInt(), target.id) }
         )
         rvSuggestions.adapter = suggestionAdapter
 
@@ -52,7 +52,7 @@ class NetworkFragment : Fragment(R.layout.fragment_network) {
         }
 
         // Load data
-        socialVM.loadPendingRequests(userId)
-        socialVM.loadFriendSuggestions(userId)
+        socialVM.loadPendingRequests(userId.toInt())
+        socialVM.loadFriendSuggestions(userId.toInt())
     }
 }
