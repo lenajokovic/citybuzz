@@ -78,7 +78,7 @@ class CreateEventActivity : AppCompatActivity() {
             }
         }
         category.adapter = adapter
-
+        /*
         CityBuzzApp.eventViewModel.addEvent(
             eventName.text.toString(),
             description.text.toString(),
@@ -88,5 +88,6 @@ class CreateEventActivity : AppCompatActivity() {
             selectedCategory,
             CityBuzzApp.socialViewModel.loggedInUser.value?.id ?: 0
         )
+         */
     }
 }

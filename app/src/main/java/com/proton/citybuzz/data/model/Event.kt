@@ -13,9 +13,7 @@ enum class EventPrivacy {
     FRIENDS_OF_FRIENDS
 }
 
-@Entity(tableName = "events")
-data class Event(
-    @PrimaryKey(autoGenerate = true)
+class Event(
     val id: Int = 0,
     val creatorId: Int = 0,
     val title: String = "",

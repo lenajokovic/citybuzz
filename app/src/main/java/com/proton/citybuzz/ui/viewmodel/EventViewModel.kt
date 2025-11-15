@@ -31,7 +31,7 @@ class EventViewModel(
     fun addEvent(title: String, description: String, location: String, date: LocalDateTime,
                  privacy: Int, idUser: Int
     ) = viewModelScope.launch {
-        val event = Event(title = title, date = date, description = description,
+        val event = Event(id = eventRepo.getMaxEventId() + 1, title = title, date = date, description = description,
             location = location, privacy = EventPrivacy.entries[privacy], creatorId = idUser
         )
         eventRepo.addEvent(event)

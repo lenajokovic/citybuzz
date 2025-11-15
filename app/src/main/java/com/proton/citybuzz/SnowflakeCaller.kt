@@ -1,4 +1,4 @@
-package com.proton.citybuzz.snowflaketest
+package com.proton.citybuzz
 
 import android.util.Log
 import com.proton.citybuzz.data.model.Event
@@ -8,18 +8,7 @@ import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.SQLException
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Properties
-
-/*
-EVENTS (EVENT_ID int, TITLE varchar, DATE date, DESCRIPTION varchar, LOC varchar, PRIVACY INT(0-2), USER_ID int
-USERS (USER_ID int, NAME varchar, EMAIL varchar, PASSWORD varchar, PROFILEIMAGE varchar)
-FRIEND_REQUEST (USER_ID int, FRIEND_ID int)
-USER_FRIEND (USER_ID int, FRIEND_ID int)
-EVENT_ATTENDEE (EVENT_ID int, USER_ID int)
- */
 
 class SnowflakeCaller {
     // --- SECURITY WARNING: HARDCODED CREDENTIALS ---
@@ -47,7 +36,8 @@ class SnowflakeCaller {
         return withContext(Dispatchers.IO) {
             try {
                 if (connection == null || connection!!.isClosed) {
-                    Log.e("SnowflakeCaller", "Connection is null or closed. Cannot execute query.")
+                    createConnection()
+                    //Log.e("SnowflakeCaller", "Connection is null or closed. Cannot execute query.")
                 }
                 val statement = connection!!.createStatement()
                 Log.d("SnowflakeCaller", "Executing query: $query")
@@ -85,10 +75,12 @@ class SnowflakeCaller {
         while (resultSet.next()) {
             //TODO: val dateTime = LocalDateTime.parse(resultSet.getString("DATE"))
             events.add(
-                Event(title = resultSet.getString("TITLE"),
+                Event(
+                    title = resultSet.getString("TITLE"),
                     description = resultSet.getString("DESCRIPTION"),
                     //date = dateTime.toLocalDateTime(),
-                    location = resultSet.getString("LOC"),)
+                    location = resultSet.getString("LOC"),
+                )
             )
         }
         return events

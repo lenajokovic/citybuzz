@@ -1,24 +1,23 @@
 package com.proton.citybuzz.data.local
 
-import java.sql.ResultSet
-import java.time.LocalDate
-import java.time.LocalDateTime
-
-import com.proton.citybuzz.snowflaketest.SnowflakeCaller
+import com.proton.citybuzz.SnowflakeCaller
 import com.proton.citybuzz.data.model.Event
-import com.proton.citybuzz.data.model.EventAttendee
 import com.proton.citybuzz.data.model.EventPrivacy
 import com.proton.citybuzz.data.model.User
+import java.sql.ResultSet
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()) {
 
     // INSERT EVENT
     suspend fun insertEvent(event: Event) {
         val query = """
-            INSERT INTO EVENTS (TITLE, DATE, DESCRIPTION, LOC, PRIVACY, USER_ID)
-            VALUES (
+            INSERT INTO EVENTS (EVENT_ID, TITLE, DATE, DESCRIPTION, LOC, PRIVACY, USER_ID)
+            VALUES ( 
+                '${event.id}',
                 '${event.title}',
-                '${event.date}', 
+                '${event.date}',
                 '${event.description}',
                 '${event.location}',
                 ${event.privacy.ordinal},
@@ -132,14 +131,24 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
     }
 
     private fun parseEvent(rs: ResultSet): Event {
+        val formatter: DateTimeFormatter? = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
         return Event(
             id = rs.getInt("EVENT_ID"),
             title = rs.getString("TITLE"),
-            date = LocalDateTime.parse(rs.getString("DATE")),
+            date = LocalDateTime.parse(rs.getString("DATE"), formatter),
             description = rs.getString("DESCRIPTION"),
             location = rs.getString("LOC"),
             privacy = EventPrivacy.entries[rs.getInt("PRIVACY")],
             creatorId = rs.getInt("USER_ID")
         )
+    }
+
+    suspend fun getMaxEventId(): Int {
+        val rs = sf.executeQuery("SELECT MAX(EVENT_ID) AS maxId FROM EVENTS")
+        var maxId = 0
+        if (rs.next()) {
+            maxId = rs.getInt("maxId")
+        }
+        return maxId
     }
 }

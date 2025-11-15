@@ -13,9 +13,9 @@ import com.proton.citybuzz.data.repository.FriendRequestRepository
 import com.proton.citybuzz.data.repository.NotificationRepository
 
 class SocialViewModel(
-    private val userRepo: UserRepository,
-    private val requestRepo: FriendRequestRepository,
-    private val notifRepo : NotificationRepository
+    private val userRepo: UserRepository = UserRepository(),
+    private val requestRepo: FriendRequestRepository = FriendRequestRepository(),
+    private val notifRepo : NotificationRepository = NotificationRepository()
 ) : ViewModel() {
 
     val users = MutableLiveData<List<User>>()
