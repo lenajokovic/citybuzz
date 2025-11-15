@@ -56,6 +56,10 @@ class AccountFragment : Fragment(R.layout.account_page) {
 
         rvFriends?.adapter = friendsAdapter
 
+        socialVM.friends.observe(viewLifecycleOwner) { friendsList ->
+            friendsAdapter.updateData(friendsList)
+        }
+
         loggedInUser?.id?.let { userId ->
             socialVM.loadFriends(userId)
         }
