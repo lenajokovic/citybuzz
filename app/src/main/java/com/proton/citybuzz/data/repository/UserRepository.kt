@@ -58,4 +58,9 @@ class UserRepository(private val dao: SfUserDao = SfUserDao()) {
         // 5. Uzmi kompletne User objekte
         return dao.getUsersByIds(suggestions.toList())
     }
+
+    suspend fun searchUsersByName(text: String): List<User> {
+        return dao.searchUsersByName(text)
+    }
+
 }
