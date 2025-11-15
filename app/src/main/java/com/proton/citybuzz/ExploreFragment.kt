@@ -72,11 +72,16 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
 
         listView.setOnItemClickListener { parent, view, position, id ->
             val eventDetailsContainer = view.findViewById<LinearLayout>(R.id.event_details_container)
+            val joinEventButton = view.findViewById<Button>(R.id.join_event_button)
 
-            if(eventDetailsContainer.visibility == View.VISIBLE)
+            if (eventDetailsContainer.visibility == View.VISIBLE) {
                 eventDetailsContainer.visibility = View.GONE
-            else
+                joinEventButton.visibility = View.GONE
+            }
+            else {
                 eventDetailsContainer.visibility = View.VISIBLE
+                joinEventButton.visibility = View.VISIBLE
+            }
         }
     }
 
