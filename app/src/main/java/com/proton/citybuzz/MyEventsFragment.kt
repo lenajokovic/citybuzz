@@ -26,7 +26,7 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
     fun populateView(){
 
         val eventListContainer = view?.findViewById<LinearLayout>(R.id.explore_event_container)
-        val inflater = LayoutInflater.from(context!!)
+        val inflater = LayoutInflater.from(requireContext())
         val eventList = inflater.inflate(R.layout.day_event_list, eventListContainer, false)
 
         lifecycleScope.launch {
@@ -46,10 +46,17 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
         startActivity(intent)
     }
 
-    suspend fun setUpListView(listView: ListView){
-        val events = SnowflakeCaller.getInstance().getEvents()
+    fun setUpListView(listView: ListView) {
+        val eventViewModel = CityBuzzApp.getInstance().eventViewModel
+        eventViewModel.loadMyEvents(0)
 
-        val adapter = object : ArrayAdapter<Event>(context!!, 0, events) {
+        eventViewModel.myEvents.observe(viewLifecycleOwner, { events ->
+            updateListView(listView, events)
+        })
+    }
+
+    fun updateListView(listView: ListView, events: List<Event>) {
+        val adapter = object : ArrayAdapter<Event>(requireContext(), 0, events) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.event_list_item, parent, false)
 

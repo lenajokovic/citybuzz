@@ -23,50 +23,50 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
     }
 
     fun populateView(){
-
         val eventListContainer = view?.findViewById<LinearLayout>(R.id.explore_event_container)
-        val inflater = LayoutInflater.from(context!!)
+        val inflater = LayoutInflater.from(requireContext())
         val eventList = inflater.inflate(R.layout.day_event_list, eventListContainer, false)
 
-        lifecycleScope.launch {
-            setUpListView(eventList.findViewById(R.id.list_view))
-        }
+        setUpListView(eventList.findViewById(R.id.list_view))
 
         eventListContainer?.addView(eventList)
     }
-
-    suspend fun setUpListView(listView: ListView){
+    fun setUpListView(listView: ListView){
         val eventViewModel = CityBuzzApp.getInstance().eventViewModel
         eventViewModel.loadEvents()
 
         eventViewModel.events.observe(viewLifecycleOwner, { events ->
-            val adapter = object : ArrayAdapter<Event>(context!!, 0, events) {
-                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                    val view = convertView ?: LayoutInflater.from(context)
-                        .inflate(R.layout.event_list_item, parent, false)
-
-                    val item = getItem(position)
-
-                    val profilePic = view.findViewById<ImageView>(R.id.profile_pic)
-                    val eventName = view.findViewById<TextView>(R.id.event_name)
-                    val userName = view.findViewById<TextView>(R.id.user_name)
-
-                    profilePic.setImageResource(R.drawable.ic_explore)
-                    eventName.text = item?.title
-                    lifecycleScope.launch {
-                        //userName.text = CityBuzzApp.socialViewModel.getUser(item?.creatorId).name
-                    }
-
-                    return view
-                }
-            }
-
-            listView.adapter = adapter
-
-            listView.setOnItemClickListener { parent, view, position, id ->
-                showEventDetails(events[position].creatorId)
-            }
+            updateListView(listView, events)
         })
+    }
+
+    fun updateListView(listView: ListView, events: List<Event>) {
+        val adapter = object : ArrayAdapter<Event>(requireContext(), 0, events) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = convertView ?: LayoutInflater.from(context)
+                    .inflate(R.layout.event_list_item, parent, false)
+
+                val item = getItem(position)
+
+                val profilePic = view.findViewById<ImageView>(R.id.profile_pic)
+                val eventName = view.findViewById<TextView>(R.id.event_name)
+                val userName = view.findViewById<TextView>(R.id.user_name)
+
+                profilePic.setImageResource(R.drawable.ic_explore)
+                eventName.text = item?.title
+                lifecycleScope.launch {
+                    //userName.text = CityBuzzApp.socialViewModel.getUser(item?.creatorId).name
+                }
+
+                return view
+            }
+        }
+
+        listView.adapter = adapter
+
+        listView.setOnItemClickListener { parent, view, position, id ->
+            showEventDetails(events[position].creatorId)
+        }
     }
 
     fun showEventDetails(event_id: Int){

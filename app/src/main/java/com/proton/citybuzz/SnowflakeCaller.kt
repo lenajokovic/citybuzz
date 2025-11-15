@@ -69,23 +69,6 @@ class SnowflakeCaller {
         }
     }
 
-    suspend fun getEvents() : List<Event> {
-        val resultSet = executeQuery("""select * from EVENTS""")
-        var events = mutableListOf<Event>()
-        while (resultSet.next()) {
-            //TODO: val dateTime = LocalDateTime.parse(resultSet.getString("DATE"))
-            events.add(
-                Event(
-                    title = resultSet.getString("TITLE"),
-                    description = resultSet.getString("DESCRIPTION"),
-                    //date = dateTime.toLocalDateTime(),
-                    location = resultSet.getString("LOC"),
-                )
-            )
-        }
-        return events
-    }
-
     suspend fun createConnection(){
         return withContext(Dispatchers.IO) {
             val properties = Properties().apply {
