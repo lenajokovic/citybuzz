@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
@@ -74,6 +75,17 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
                 eventDetailsContainer.visibility = View.GONE
             else
                 eventDetailsContainer.visibility = View.VISIBLE
+
+            val joinEventButton = view.findViewById<Button>(R.id.join_event_button)
+            joinEventButton.setOnClickListener {
+                joinToEvent(events[id.toInt()].id)
+            }
         }
     }
+
+    fun joinToEvent(eventId: Int){
+        val currentUserId = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value?.id
+        CityBuzzApp.getInstance().eventViewModel.addAttendee(eventId, currentUserId ?: 0)
+    }
+
 }
