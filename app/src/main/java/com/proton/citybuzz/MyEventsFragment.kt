@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -68,6 +69,12 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
                 val profilePic = view.findViewById<ImageView>(R.id.profile_pic)
                 val eventName = view.findViewById<TextView>(R.id.event_name)
                 val userName = view.findViewById<TextView>(R.id.user_name)
+
+                val joinEventButton = view?.findViewById<Button>(R.id.join_event_button)
+                joinEventButton?.setOnClickListener {
+                    // TODO LENOOOOOOOOOOOOOOOOOOOOOOO
+                }
+
 
                 profilePic.setImageResource(R.drawable.ic_explore)
                 eventName.text = item?.title
