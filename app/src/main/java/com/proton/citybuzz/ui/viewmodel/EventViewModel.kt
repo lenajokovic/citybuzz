@@ -75,6 +75,18 @@ class EventViewModel(
         }
     }
 
+    fun sendEventInvite(eventId: Int, fromUserId: Int, toUserId: Int) = viewModelScope.launch {
+        val event = eventRepo.getEventById(eventId)
+        val sender = userRepo.getUserById(fromUserId)
+
+        if (event == null || sender == null) return@launch
+
+        notifRepo.addNotification(
+            userId = toUserId,
+            type = NotificationType.EVENT_INVITE,
+            message = "${sender.name} invited you to the event '${event.title}'"
+        )
+    }
     fun loadMyEvents(userId: Int) = viewModelScope.launch {
         myEvents.value = eventRepo.getMyEvents(userId)
     }

@@ -4,7 +4,8 @@ enum class NotificationType {
     FRIEND_REQUEST,
     FRIEND_ACCEPTED,
     EVENT_JOIN,
-    EVENT_LEAVE
+    EVENT_LEAVE,
+    EVENT_INVITE
 }
 
 class Notification(
