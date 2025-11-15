@@ -96,12 +96,11 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
             SELECT DISTINCT e.*
             FROM EVENTS e
             WHERE
-                AND e.EVENT_ID NOT IN (
-                    SELECT EVENT_ID FROM EVENT_ATTENDEES WHERE USER_ID = ${'$'}userId
+                e.EVENT_ID NOT IN (
+                    SELECT EVENT_ID FROM EVENT_ATTENDEES WHERE USER_ID = $userId
                 )
                 
-               
-                AND e.USER_ID != ${'$'}userId
+                AND e.USER_ID != $userId
                 
                 AND
                 (

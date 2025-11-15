@@ -3,7 +3,6 @@ package com.proton.citybuzz.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.proton.citybuzz.CityBuzzApp
 import kotlinx.coroutines.launch
 import com.proton.citybuzz.data.model.Event
 import com.proton.citybuzz.data.model.EventPrivacy
@@ -55,7 +54,7 @@ class EventViewModel(
             notifRepo.addNotification(
                 userId = e.creatorId,
                 type = NotificationType.EVENT_JOIN,
-                message = "${user?.name ?: "A user"} joined your event: ${e.title}"
+                message = "${user?.name ?: "A user"} joined your event ${e.title}"
             )
         }
 
@@ -74,7 +73,7 @@ class EventViewModel(
             notifRepo.addNotification(
                 userId = e.creatorId,
                 type = NotificationType.EVENT_LEAVE,
-                message = "${user?.name ?: "A user"} left your event: ${e.title}"
+                message = "${user?.name ?: "A user"} left your event ${e.title}"
             )
         }
 
@@ -91,7 +90,7 @@ class EventViewModel(
         notifRepo.addNotification(
             userId = toUserId,
             type = NotificationType.EVENT_INVITE,
-            message = "${sender.name} invited you to the event: ${event.title}"
+            message = "${sender.name} invited you to the event ${event.title}"
         )
     }
 
