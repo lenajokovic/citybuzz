@@ -132,4 +132,32 @@ class SfUserDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()
             profileImage = rs.getString("PROFILEIMAGE")
         )
     }
+
+    suspend fun searchUsersByName(queryText: String): List<User> {
+        val safe = queryText.lowercase().replace("'", "''")
+
+        val query = """
+        SELECT USER_ID, NAME, EMAIL, PASSWORD, PROFILEIMAGE
+        FROM USERS
+        WHERE LOWER(NAME) LIKE '%$safe%'
+    """.trimIndent()
+
+        val rs = sf.executeQuery(query)
+        val list = mutableListOf<User>()
+
+        while (rs.next()) {
+            list.add(
+                User(
+                    id = rs.getInt("USER_ID"),
+                    name = rs.getString("NAME"),
+                    email = rs.getString("EMAIL"),
+                    password = rs.getString("PASSWORD"),
+                    profileImage = rs.getString("PROFILEIMAGE")
+                )
+            )
+        }
+
+        return list
+    }
+
 }

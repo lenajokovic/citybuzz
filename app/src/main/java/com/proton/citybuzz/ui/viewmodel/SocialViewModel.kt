@@ -94,4 +94,8 @@ class SocialViewModel(
     fun loadFriendSuggestions(userId: Int) = viewModelScope.launch {
         suggestions.value = userRepo.getFriendsOfFriends(userId)
     }
+
+    suspend fun searchUsers(query: String): List<User> {
+        return userRepo.searchUsersByName(query)
+    }
 }
