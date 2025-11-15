@@ -59,9 +59,15 @@ class NotificationFragment : Fragment(R.layout.fragment_notification) {
             ): Boolean = false
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
+                val position = viewHolder.absoluteAdapterPosition
                 val removed = adapter.removeAt(position)
-                //notificationVM.markRead(removed.id)
+                adapter.notifyItemRemoved(position)
+
+                val currentList = notificationVM.notifications.value
+                val updatedList = currentList?.toMutableList()
+                updatedList?.remove(removed)
+                notificationVM.notifications.value = updatedList
+
                 notificationVM.removeNotification(removed.id)
             }
         })
