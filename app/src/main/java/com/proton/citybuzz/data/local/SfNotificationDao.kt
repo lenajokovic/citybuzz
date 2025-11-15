@@ -1,6 +1,7 @@
 package com.proton.citybuzz.data.local
 
 import com.proton.citybuzz.SnowflakeCaller
+import com.proton.citybuzz.data.model.EventPrivacy
 import com.proton.citybuzz.data.model.Notification
 import com.proton.citybuzz.data.model.NotificationType
 
@@ -30,7 +31,7 @@ class SfNotificationDao(private val sf: SnowflakeCaller = SnowflakeCaller.getIns
                 Notification(
                     id = rs.getInt("NOT_ID"),
                     userId = rs.getInt("USER_ID"),
-                    type = NotificationType.valueOf(rs.getString("TYPE")), // ovdje pretvaramo u enum
+                    type = NotificationType.entries[rs.getInt("TYPE")],
                     message = rs.getString("MESSAGE"),
                     createdAt = rs.getString("CREATED_AT"),
                     isRead = rs.getBoolean("IS_READ")

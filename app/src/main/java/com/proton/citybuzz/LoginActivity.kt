@@ -8,6 +8,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.proton.citybuzz.data.SessionManager
+import com.proton.citybuzz.data.model.User
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
@@ -21,6 +24,10 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_loading)
+        lifecycleScope.launch { loadUserFromSession() }
+    }
+    fun setupUI() {
         setContentView(R.layout.login_page)
 
         email = findViewById(R.id.email)
@@ -33,8 +40,24 @@ class LoginActivity : AppCompatActivity() {
         create_account.setOnClickListener {
             startActivity(Intent(this, CreateAccountActivity::class.java))
         }
-        lifecycleScope.launch {1
-            SnowflakeCaller.getInstance().createConnection()
+    }
+
+    suspend private fun loadUserFromSession() {
+        val sessionUserId = SessionManager.getInstance(this).getLoggedInUserId()
+        val socialViewModel = CityBuzzApp.getInstance().socialViewModel
+
+        if (sessionUserId != -1) {
+            val user = socialViewModel.getUserById(sessionUserId)
+            if (user != null) {
+                socialViewModel.loggedInUser.postValue(user)
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            } else {
+                SessionManager.getInstance(this).logoutUser()
+                setupUI()
+            }
+        } else {
+            setupUI()
         }
     }
 
@@ -47,15 +70,18 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
+        setContentView(R.layout.activity_loading)
         CityBuzzApp.getInstance().socialViewModel.login(email, password) { user ->
             if (user != null) {
                 Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show()
-                // Go to main activity or home
+                SessionManager.getInstance(this).saveUser(user.id, user.password)
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
                 Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show()
+                setupUI()
             }
         }
     }
+
 }

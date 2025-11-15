@@ -57,6 +57,9 @@ class EventViewModel(
                 message = "${user?.name ?: "A user"} joined your event '${e.title}'"
             )
         }
+
+        loadMyEvents(userId)
+        loadSuggestedEvents(userId)
     }
 
     fun removeAttendee(eventId: Int, userId: Int) = viewModelScope.launch {
@@ -73,6 +76,9 @@ class EventViewModel(
                 message = "${user?.name ?: "A user"} left your event '${e.title}'"
             )
         }
+
+        loadMyEvents(userId)
+        loadSuggestedEvents(userId)
     }
 
     fun sendEventInvite(eventId: Int, fromUserId: Int, toUserId: Int) = viewModelScope.launch {
@@ -87,6 +93,7 @@ class EventViewModel(
             message = "${sender.name} invited you to the event '${event.title}'"
         )
     }
+
     fun loadMyEvents(userId: Int) = viewModelScope.launch {
         myEvents.value = eventRepo.getMyEvents(userId)
     }

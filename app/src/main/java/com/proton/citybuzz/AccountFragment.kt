@@ -14,6 +14,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.proton.citybuzz.data.SessionManager
 import com.proton.citybuzz.data.model.User
 import com.proton.citybuzz.ui.viewmodel.SocialViewModel
 
@@ -54,6 +55,10 @@ class AccountFragment : Fragment(R.layout.account_page) {
         )
 
         rvFriends?.adapter = friendsAdapter
+
+        loggedInUser?.id?.let { userId ->
+            socialVM.loadFriends(userId)
+        }
 
         val logoutButton = view?.findViewById<Button>(R.id.logout_button)
         logoutButton?.setOnClickListener {
@@ -145,6 +150,7 @@ class AccountFragment : Fragment(R.layout.account_page) {
 
     fun logOut(){
         CityBuzzApp.getInstance().socialViewModel.loggedInUser.value = null
+        SessionManager.getInstance(requireContext()).logoutUser()
 
         parentFragmentManager.beginTransaction()
             .remove(this)
