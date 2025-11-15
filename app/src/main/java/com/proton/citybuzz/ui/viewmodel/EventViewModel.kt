@@ -3,6 +3,7 @@ package com.proton.citybuzz.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.proton.citybuzz.CityBuzzApp
 import kotlinx.coroutines.launch
 import com.proton.citybuzz.data.model.Event
 import com.proton.citybuzz.data.model.EventPrivacy

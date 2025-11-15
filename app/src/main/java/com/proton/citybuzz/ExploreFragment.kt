@@ -99,7 +99,10 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
 
     fun joinToEvent(eventId: Int){
         val currentUserId = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value?.id
-        CityBuzzApp.getInstance().eventViewModel.addAttendee(eventId, currentUserId ?: 0)
+        val eventVM = CityBuzzApp.getInstance().eventViewModel
+        eventVM.addAttendee(eventId, currentUserId ?: 0)
+        eventVM.loadSuggestedEvents(currentUserId ?: 0)
+        eventVM.loadMyEvents(currentUserId ?: 0)
     }
 
 }
