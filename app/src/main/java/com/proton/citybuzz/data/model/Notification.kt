@@ -1,5 +1,7 @@
 package com.proton.citybuzz.data.model
 
+// NOTIFICATIONS (NOT_ID int, USER_ID int, TYPE int, MESSAGE varchar, CREATED_AT varchar, IS_READ boolean)
+
 enum class NotificationType {
     FRIEND_REQUEST,
     FRIEND_ACCEPTED,
