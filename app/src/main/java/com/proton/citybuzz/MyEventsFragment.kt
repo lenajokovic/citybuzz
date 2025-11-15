@@ -68,7 +68,6 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
 
                 val item = getItem(position)
 
-                val profilePic = view.findViewById<ImageView>(R.id.profile_pic)
                 val eventName = view.findViewById<TextView>(R.id.event_name)
                 val userName = view.findViewById<TextView>(R.id.user_name)
 
@@ -117,7 +116,6 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
                     }
                 }
 
-                profilePic?.setImageResource(R.drawable.ic_explore)
                 eventName.text = item?.title
                 lifecycleScope.launch {
                     val eventCreator = CityBuzzApp.getInstance().socialViewModel.getUserById(item?.creatorId)?.name
