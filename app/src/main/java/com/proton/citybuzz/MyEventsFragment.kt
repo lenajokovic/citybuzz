@@ -12,11 +12,13 @@ import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.proton.citybuzz.data.model.Event
 import com.proton.citybuzz.data.model.EventPrivacy
 import com.proton.citybuzz.snowflaketest.SnowflakeCaller
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -33,7 +35,7 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
         val inflater = LayoutInflater.from(context!!)
         val eventList = inflater.inflate(R.layout.day_event_list, eventListContainer, false)
 
-        GlobalScope.async {
+        lifecycleScope.launch {
             setUpListView(eventList.findViewById(R.id.list_view))
         }
 
@@ -65,7 +67,7 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
 
                 profilePic.setImageResource(R.drawable.ic_explore)
                 eventName.text = item?.title
-                GlobalScope.async {
+                lifecycleScope.launch {
                     //userName.text = CityBuzzApp.socialViewModel.getUser(item?.creatorId).name
                 }
                 return view
@@ -79,7 +81,7 @@ class MyEventsFragment: Fragment(R.layout.activity_my_events) {
         }
     }
 
-    fun showEventDetails(event_id: Long){
+    fun showEventDetails(event_id: Int){
 
     }
 }

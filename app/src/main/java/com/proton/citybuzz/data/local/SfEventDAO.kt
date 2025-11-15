@@ -2,10 +2,12 @@ package com.proton.citybuzz.data.local
 
 import java.sql.ResultSet
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 import com.proton.citybuzz.snowflaketest.SnowflakeCaller
 import com.proton.citybuzz.data.model.Event
 import com.proton.citybuzz.data.model.EventAttendee
+import com.proton.citybuzz.data.model.EventPrivacy
 
 class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance()) {
 
@@ -22,12 +24,12 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
                 ${event.creatorId}
             )
         """
-        sf.executeQuery(query)
+        sf.executeUpdate(query)
     }
 
     // DELETE EVENT
-    suspend fun deleteEvent(eventId: Long) {
-        sf.executeQuery("DELETE FROM EVENTS WHERE EVENT_ID = $eventId")
+    suspend fun deleteEvent(eventId: Int) {
+        sf.executeUpdate("DELETE FROM EVENTS WHERE EVENT_ID = $eventId")
     }
 
     /*
@@ -42,19 +44,44 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
 
      */
 
+    //GET ALL EVENTS
+    suspend fun getAllEvents(): List<Event> {
+        val rs = sf.executeQuery("SELECT * FROM EVENTS")
+        return parseEventList(rs)
+    }
+
+    // INSERT ATTENDEE
+    suspend fun insertAttendee(eventId: Int, userId: Int) {
+        val query = """
+        INSERT INTO EVENT_ATTENDEES (EVENT_ID, USER_ID)
+        VALUES ($eventId, $userId)
+    """
+        sf.executeUpdate(query)
+    }
+
+    // REMOVE ATTENDEE
+    suspend fun deleteAttendee(eventId: Int, userId: Int) {
+        val query = """
+        DELETE FROM EVENT_ATTENDEES
+        WHERE EVENT_ID = $eventId
+          AND USER_ID = $userId
+    """
+        sf.executeUpdate(query)
+    }
+
     // GET EVENT ATTENDEES
-    suspend fun getAttendees(eventId: Long): List<Long> {
+    suspend fun getAttendees(eventId: Int): List<Int> {
         val rs = sf.executeQuery("SELECT USER_ID FROM EVENT_ATTENDEES WHERE EVENT_ID = $eventId")
-        val list = mutableListOf<Long>()
+        val list = mutableListOf<Int>()
 
         while (rs.next()) {
-            list.add(rs.getLong("USER_ID"))
+            list.add(rs.getInt("USER_ID"))
         }
         return list
     }
 
     // GET MY EVENTS
-    suspend fun getMyEvents(userId: Long): List<Event> {
+    suspend fun getMyEvents(userId: Int): List<Event> {
         val query = """
             SELECT * FROM EVENTS
             WHERE USER_ID = $userId
@@ -68,7 +95,7 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
     }
 
     // GET SUGGESTED EVENTS
-    suspend fun getSuggestedEvents(userId: Long): List<Event> {
+    suspend fun getSuggestedEvents(userId: Int): List<Event> {
         val query = """
             SELECT DISTINCT e.*
             FROM EVENTS e
@@ -106,14 +133,13 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
         while (rs.next()) {
             list.add(
                 Event(
-                    id = rs.getLong("ID"),
+                    id = rs.getInt("EVENT_ID"),
                     title = rs.getString("TITLE"),
-                    date = LocalDate.parse(rs.getString("DATE")),
-                    //time = LocalTime.parse(rs.getString("TIME")),
+                    date = LocalDateTime.parse(rs.getString("DATE")),
                     description = rs.getString("DESCRIPTION"),
-                    location = rs.getString("LOCATION"),
-                    //privacy = EventPrivacy.valueOf(rs.getString("PRIVACY")),
-                    creatorId = rs.getLong("CREATORID")
+                    location = rs.getString("LOC"),
+                    privacy = EventPrivacy.entries[rs.getInt("PRIVACY")],
+                    creatorId = rs.getInt("USER_ID")
                 )
             )
         }

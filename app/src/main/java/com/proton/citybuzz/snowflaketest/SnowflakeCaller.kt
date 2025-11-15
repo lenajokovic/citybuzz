@@ -87,8 +87,7 @@ class SnowflakeCaller {
             events.add(
                 Event(title = resultSet.getString("TITLE"),
                     description = resultSet.getString("DESCRIPTION"),
-                    //date = dateTime.toLocalDate(),
-                    //time = dateTime.toLocalTime(),
+                    //date = dateTime.toLocalDateTime(),
                     location = resultSet.getString("LOC"),)
             )
         }

@@ -7,6 +7,6 @@ import androidx.room.Entity
     primaryKeys = ["eventId", "userId"]
 )
 data class EventAttendee(
-    val eventId: Long,
-    val userId: Long
+    val eventId: Int,
+    val userId: Int
 )

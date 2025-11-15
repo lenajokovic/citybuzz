@@ -59,7 +59,7 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
 
                 profilePic.setImageResource(R.drawable.ic_explore)
                 eventName.text = item?.title
-                GlobalScope.async {
+                lifecycleScope.launch {
                     //userName.text = CityBuzzApp.socialViewModel.getUser(item?.creatorId).name
                 }
 
@@ -74,7 +74,7 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
         }
     }
 
-    fun showEventDetails(event_id: Long){
+    fun showEventDetails(event_id: Int){
 
     }
 
