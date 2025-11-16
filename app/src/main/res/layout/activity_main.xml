@@ -12,8 +12,8 @@
         app:title="@string/all_events"
         app:titleTextAppearance="@style/ToolbarTitleText"
         android:layout_marginBottom="30dp"
-        app:titleTextColor="@color/purple"
-        android:background="@color/white"
+        app:titleTextColor="@color/white"
+        android:background="@color/purple"
         android:gravity="bottom"
         android:paddingBottom="5dp"/>
 
@@ -54,6 +54,9 @@
         android:id="@+id/navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/nav_bar_height"
+        android:background="@color/purple"
+        app:itemIconTint="@color/white"
+        app:labelVisibilityMode="unlabeled"
         app:menu="@menu/navigation_bar_menu"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

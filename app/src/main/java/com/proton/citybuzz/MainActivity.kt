@@ -30,13 +30,17 @@ class MainActivity: AppCompatActivity() {
         lifecycleScope.launch {
             // SnowflakeCaller.getInstance().createConnection()
         }
-        setupNavigationBar()
-    }
 
-    private fun setupNavigationBar() {
-        val navigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
+        val accountFragment = AccountFragment()
+        val exploreFragment = ExploreFragment()
+        val networkFragment = NetworkFragment()
+        val notificationFragment = NotificationFragment()
+        val myEventsFragment = MyEventsFragment()
+
         val accountButton = findViewById<ImageButton>(R.id.show_account_button)
         val closeButton = findViewById<ImageButton>(R.id.close_button)
+
+        setupNavigationBar(exploreFragment, notificationFragment, networkFragment, myEventsFragment, accountButton, closeButton)
 
         val imageBitmap = CityBuzzApp.getInstance().socialViewModel.getImageBitmap()
         if (imageBitmap != null) {
@@ -45,11 +49,21 @@ class MainActivity: AppCompatActivity() {
             accountButton.setImageResource(R.drawable.ic_account)
         }
 
-        val exploreFragment = ExploreFragment()
-        val networkFragment = NetworkFragment()
-        val notificationFragment = NotificationFragment()
-        val accountFragment = AccountFragment()
-        val myEventsFragment = MyEventsFragment()
+        accountButton.setOnClickListener {
+            replaceFragment(accountFragment, accountButton, closeButton, "Account")
+            accountButton.visibility = View.GONE
+            closeButton.visibility = View.VISIBLE
+        }
+
+
+        closeButton?.setOnClickListener {
+            replaceFragment(exploreFragment, accountButton, closeButton, "All Events")
+        }
+    }
+
+    private fun setupNavigationBar(exploreFragment: ExploreFragment, notificationFragment: NotificationFragment, networkFragment: NetworkFragment, myEventsFragment: MyEventsFragment, accountButton: ImageButton, closeButton: ImageButton) {
+        val navigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
+
         replaceFragment(exploreFragment, accountButton, closeButton, "All Events")
 
         navigationView.setOnItemSelectedListener { item ->
@@ -78,17 +92,6 @@ class MainActivity: AppCompatActivity() {
             }
         }
 
-        accountButton.setOnClickListener {
-            replaceFragment(accountFragment, accountButton, closeButton)
-            accountButton.visibility = View.GONE
-            closeButton.visibility = View.VISIBLE
-        }
-
-
-        closeButton?.setOnClickListener {
-            replaceFragment(exploreFragment, accountButton, closeButton, "All Events")
-        }
-
     }
 
     private fun replaceFragment(fragment: Fragment, accountButton: ImageButton, closeButton: ImageButton, fragmentName: String = "") {
@@ -102,9 +105,10 @@ class MainActivity: AppCompatActivity() {
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         if(fragmentName.isEmpty())
             toolbar.visibility = View.GONE
-        else{
+        else {
             toolbar.visibility = View.VISIBLE
             toolbar.title = fragmentName
+        }
             
         if (fragment !is AccountFragment) {
             lastFragment = fragment

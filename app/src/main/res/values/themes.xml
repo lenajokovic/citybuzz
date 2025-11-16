@@ -2,7 +2,6 @@
 <resources>
 
     <style name="Theme.CityBuzz" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:windowSplashScreenBackground">@color/ic_launcher_background</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">@font/momotrustsans</item>
         <item name="fontFamily">@font/momotrustsans</item>

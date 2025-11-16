@@ -11,7 +11,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +18,7 @@ import com.proton.citybuzz.data.SessionManager
 import com.proton.citybuzz.data.model.User
 import com.proton.citybuzz.ui.viewmodel.SocialViewModel
 
-class AccountFragment : Fragment(R.layout.account_page) {
+class AccountFragment : Fragment(R.layout.fragment_account) {
     private lateinit var socialVM: SocialViewModel
     private lateinit var friendsAdapter: FriendAdapter
 

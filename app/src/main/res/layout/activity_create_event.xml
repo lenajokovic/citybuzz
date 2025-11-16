@@ -2,31 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:paddingHorizontal="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/action_bar_size"
-            app:title="@string/title_create_event"
-            app:titleTextAppearance="@style/ToolbarTitleText"
-            android:layout_marginBottom="50dp">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="bottom"
+            android:layout_marginBottom="30dp">
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/action_bar_size"
+                app:title="@string/title_create_event"
+                app:titleTextAppearance="@style/ToolbarTitleText"
+                app:titleTextColor="@color/purple"
+                android:layout_weight="1"
+                android:gravity="bottom"/>
 
             <ImageButton
                 android:id="@+id/cancel_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_cancel"
-                android:layout_gravity="end"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="20dp"
                 android:background="@color/transparent"/>
 
-        </androidx.appcompat.widget.Toolbar>
+        </LinearLayout>
 
         <!-- Event Name -->
         <EditText
