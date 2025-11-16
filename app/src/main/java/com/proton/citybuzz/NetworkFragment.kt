@@ -16,6 +16,8 @@ class NetworkFragment : Fragment(R.layout.fragment_network) {
     private lateinit var rvFriendRequests: RecyclerView
     private lateinit var rvSuggestions: RecyclerView
 
+    private lateinit var rvSearchResults: RecyclerView
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -24,7 +26,9 @@ class NetworkFragment : Fragment(R.layout.fragment_network) {
 
         rvFriendRequests = view.findViewById(R.id.friend_requests)
         rvSuggestions    = view.findViewById(R.id.suggestions)
+        rvSearchResults = view.findViewById(R.id.search_suggestions)
 
+        rvSearchResults.layoutManager = LinearLayoutManager(requireContext())
         rvFriendRequests.layoutManager = LinearLayoutManager(requireContext())
         rvSuggestions.layoutManager    = LinearLayoutManager(requireContext())
 
@@ -42,9 +46,31 @@ class NetworkFragment : Fragment(R.layout.fragment_network) {
 
         val suggestionAdapter = SuggestionAdapter(
             emptyList(),
-            onSendRequest = { target -> socialVM.sendRequest(userId.toInt(), target.id) }
+            onSendRequest = { target ->
+                socialVM.sendRequest(userId.toInt(), target.id)
+                //socialVM.removeSuggestion(target)
+            }
         )
         rvSuggestions.adapter = suggestionAdapter
+
+        val searchAdapter = SuggestionAdapter(
+            emptyList(),
+            onSendRequest = { target ->
+                socialVM.sendRequest(userId.toInt(), target.id)
+                //socialVM.removeSuggestion(target)
+            }
+        )
+        rvSearchResults.adapter = searchAdapter
+
+        // --- OBSERVE PENDING REQUESTS ---
+        socialVM.outgoingRequests.observe(viewLifecycleOwner) { outgoing ->
+            val outgoingSet = outgoing ?: emptySet()
+            suggestionAdapter.outgoingRequests = outgoingSet
+            suggestionAdapter.notifyDataSetChanged()
+
+            searchAdapter.outgoingRequests = outgoingSet
+            searchAdapter.notifyDataSetChanged()
+        }
 
         // --- SEARCH HANDLERS AFTER ADAPTER IS CREATED ---
         // Search button click
@@ -52,7 +78,7 @@ class NetworkFragment : Fragment(R.layout.fragment_network) {
             val query = searchInput.text.toString().trim()
             lifecycleScope.launch {
                 val results = socialVM.searchUsers(query)  // suspend function
-                suggestionAdapter.update(results)
+                searchAdapter.update(results)
             }
         }
 
@@ -69,25 +95,18 @@ class NetworkFragment : Fragment(R.layout.fragment_network) {
                     user.id != currentUserId &&       // hide yourself
                             user.id !in friendIds            // hide existing friends
                 }
-                suggestionAdapter.update(filtered)
+                searchAdapter.update(filtered)
             }
         }
 
 
         // --- OBSERVE LIVE DATA ---
-
         socialVM.pendingRequests.observe(viewLifecycleOwner) { list ->
             friendRequestsAdapter.update(list ?: emptyList())
         }
         socialVM.suggestions.observe(viewLifecycleOwner) {
-            list -> suggestionAdapter.update(list ?: emptyList())
+            list -> searchAdapter.update(list ?: emptyList())
         }
-        /*socialVM.suggestions.observe(viewLifecycleOwner) {
-             suggestionsList ->
-    val friendsIds = socialVM.friends.value?.map { it.id } ?: emptyList()
-    val filteredList = suggestionsList?.filter { user -> user.id !in friendsIds && user.id != userId.toInt() } ?: emptyList()
-   suggestionAdapter.update(filteredList)
-        }*/
 
         // Load initial data
         socialVM.loadPendingRequests(userId.toInt())

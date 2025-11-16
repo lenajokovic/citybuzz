@@ -74,4 +74,14 @@ class NotificationFragment : Fragment(R.layout.fragment_notification) {
 
         itemTouchHelper.attachToRecyclerView(rv)
     }
+
+    override fun onResume() {
+        super.onResume()
+
+        val socialVM = CityBuzzApp.getInstance().socialViewModel
+        val notificationVM = CityBuzzApp.getInstance().notificationViewModel
+
+        val userId = socialVM.loggedInUser.value?.id ?: return
+        notificationVM.loadNotifications(userId)
+    }
 }

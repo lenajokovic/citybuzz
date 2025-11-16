@@ -122,11 +122,12 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
 
     fun setUpListView(listView: ListView){
         val eventViewModel = CityBuzzApp.getInstance().eventViewModel
-        eventViewModel.loadEvents()
+        val userId = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value?.id ?: 0
+        eventViewModel.loadSuggestedEvents(userId)
 
-        eventViewModel.events.observe(listView.findViewTreeLifecycleOwner(), { events ->
+        eventViewModel.suggestedEvents.observe(viewLifecycleOwner) { events ->
             updateListView(listView, events)
-        })
+        }
     }
 
     fun updateListView(listView: ListView, events: List<Event>) {
@@ -184,7 +185,10 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
 
     fun joinToEvent(eventId: Int){
         val currentUserId = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value?.id
-        CityBuzzApp.getInstance().eventViewModel.addAttendee(eventId, currentUserId ?: 0)
+        val eventVM = CityBuzzApp.getInstance().eventViewModel
+        eventVM.addAttendee(eventId, currentUserId ?: 0)
+        eventVM.loadSuggestedEvents(currentUserId ?: 0)
+        eventVM.loadMyEvents(currentUserId ?: 0)
     }
 
 }
