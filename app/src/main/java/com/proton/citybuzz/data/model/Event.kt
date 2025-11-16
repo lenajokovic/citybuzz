@@ -1,5 +1,6 @@
 package com.proton.citybuzz.data.model
 
+import android.util.Log
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.LocalDate
@@ -22,3 +23,18 @@ class Event(
     val location: String = "",
     val privacy: EventPrivacy = EventPrivacy.PUBLIC,
 )
+
+fun Event.isToday(): Boolean {
+    return date.toLocalDate() == LocalDate.now()
+}
+
+fun Event.isTomorrow(): Boolean {
+    return date.toLocalDate() == LocalDate.now().plusDays(1)
+}
+fun Event.isThisWeek(): Boolean {
+    return date.toLocalDate() >= LocalDate.now() && date.toLocalDate() <= LocalDate.now().plusDays(7)
+}
+
+fun Event.isFuture(): Boolean {
+    return date.toLocalDate() > LocalDate.now()
+}

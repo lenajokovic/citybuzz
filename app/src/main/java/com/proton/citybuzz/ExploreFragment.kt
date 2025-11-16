@@ -2,12 +2,12 @@ package com.proton.citybuzz
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
@@ -16,37 +16,121 @@ import androidx.lifecycle.lifecycleScope
 import com.proton.citybuzz.data.model.Event
 import kotlinx.coroutines.launch
 import androidx.core.view.isVisible
-import org.w3c.dom.Text
+import androidx.lifecycle.Observer
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import com.proton.citybuzz.data.model.isFuture
+import com.proton.citybuzz.data.model.isThisWeek
+import com.proton.citybuzz.data.model.isToday
+import com.proton.citybuzz.data.model.isTomorrow
+import com.proton.citybuzz.ui.viewmodel.EventViewModel
 
+
+private var tomorrow: Boolean = TODO("initialize me")
 
 class ExploreFragment: Fragment(R.layout.activity_explore) {
+
+    private lateinit var eventViewModel: EventViewModel
+    private lateinit var eventListContainer: LinearLayout
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launch {
-            populateView()
-        }
+
+        eventViewModel = CityBuzzApp.getInstance().eventViewModel
+        eventListContainer = view.findViewById(R.id.explore_event_container)
+        eventViewModel.loadEvents()
+        observeEvents()
     }
 
-    fun populateView(){
-        val eventListContainer = view?.findViewById<LinearLayout>(R.id.explore_event_container)
+    fun observeEvents(){
+        eventViewModel.events.observe(viewLifecycleOwner, Observer { allEvents ->
+            // Clear previous views if you're reloading data
+            eventListContainer.removeAllViews()
+
+            val todayEvents = allEvents.filter { it.isToday() }
+            if (todayEvents.isNotEmpty()) {
+                populateDayList("Today", todayEvents)
+            }
+
+            val tomorrowEvents = allEvents.filter { it.isTomorrow() }
+            if (tomorrowEvents.isNotEmpty()) {
+                populateDayList("Tomorrow", tomorrowEvents)
+            }
+
+            val weekendEvents = allEvents.filter { it.isThisWeek() && !it.isToday() && !it.isTomorrow() }
+            if (weekendEvents.isNotEmpty()) {
+                populateDayList("This Week", weekendEvents)
+            }
+
+            val futureEvents = allEvents.filter { it.isFuture() && !it.isThisWeek() && !it.isToday() && !it.isTomorrow() }
+            if (futureEvents.isNotEmpty()) {
+                populateDayList("Future Events", futureEvents)
+            }
+        })
+    }
+
+    private fun populateDayList(title: String, events: List<Event>) {
         val inflater = LayoutInflater.from(requireContext())
-        val eventList = inflater.inflate(R.layout.day_event_list, eventListContainer, false)
+        // Inflate your day_event_list layout
+        val dayListView = inflater.inflate(R.layout.day_event_list, eventListContainer, false)
 
-        setUpListView(eventList.findViewById(R.id.list_view))
+        // Find the views within the inflated layout
+        val titleTextView = dayListView.findViewById<TextView>(R.id.day_title)
+        val listView = dayListView.findViewById<ListView>(R.id.list_view)
 
-        eventListContainer?.addView(eventList)
+        // Set the title ("Today", "Tomorrow", etc.)
+        titleTextView.text = title
+
+        // Create an adapter for this specific list
+        val adapter = object : ArrayAdapter<Event>(requireContext(), R.layout.event_list_item, events) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = convertView ?: inflater.inflate(R.layout.event_list_item, parent, false)
+
+                val item = getItem(position)
+
+                // Populate your event_list_item views here...
+                val eventName = view.findViewById<TextView>(R.id.event_name)
+                eventName.text = item?.title
+                // ... setup other views like images, user names, etc.
+
+                return view
+            }
+        }
+
+        listView.adapter = adapter
+
+        // **CRUCIAL**: Manually set the height of the ListView
+        // This is required when a ListView is inside a ScrollView
+        setListViewHeightBasedOnChildren(listView)
+
+        // Add the fully populated day list view to the main container
+        eventListContainer.addView(dayListView)
     }
+
+    private fun setListViewHeightBasedOnChildren(listView: ListView) {
+        val listAdapter = listView.adapter ?: return
+        var totalHeight = 0
+        for (i in 0 until listAdapter.count) {
+            val listItem = listAdapter.getView(i, null, listView)
+            listItem.measure(0, 0)
+            totalHeight += listItem.measuredHeight
+        }
+        val params = listView.layoutParams
+        params.height = totalHeight + (listView.dividerHeight * (listAdapter.count - 1))
+        listView.layoutParams = params
+        listView.requestLayout()
+    }
+
     fun setUpListView(listView: ListView){
         val eventViewModel = CityBuzzApp.getInstance().eventViewModel
         eventViewModel.loadEvents()
 
-        eventViewModel.events.observe(viewLifecycleOwner, { events ->
+        eventViewModel.events.observe(listView.findViewTreeLifecycleOwner(), { events ->
             updateListView(listView, events)
         })
     }
 
     fun updateListView(listView: ListView, events: List<Event>) {
-        val adapter = object : ArrayAdapter<Event>(requireContext(), 0, events) {
+        val adapter = object : ArrayAdapter<Event>(listView.context, 0, events) {
             @SuppressLint("DefaultLocale")
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater.from(context)
@@ -72,8 +156,9 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
                     joinToEvent(item?.id!!)
                 }
 
-                lifecycleScope.launch {
-                    val eventCreator = CityBuzzApp.getInstance().socialViewModel.getUserById(item?.creatorId)?.name
+                listView.findViewTreeLifecycleOwner()?.lifecycleScope?.launch {
+                    val eventCreator =
+                        CityBuzzApp.getInstance().socialViewModel.getUserById(item?.creatorId)?.name
                     userName.text = eventCreator
                 }
                 return view
@@ -83,14 +168,14 @@ class ExploreFragment: Fragment(R.layout.activity_explore) {
         listView.adapter = adapter
 
         listView.setOnItemClickListener { parent, view, position, id ->
-            val eventDetailsContainer = view.findViewById<LinearLayout>(R.id.event_details_container)
+            val eventDetailsContainer =
+                view.findViewById<LinearLayout>(R.id.event_details_container)
             val joinEventButton = view.findViewById<Button>(R.id.join_event_button)
 
             if (eventDetailsContainer.isVisible) {
                 eventDetailsContainer.visibility = View.GONE
                 joinEventButton.visibility = View.GONE
-            }
-            else {
+            } else {
                 eventDetailsContainer.visibility = View.VISIBLE
                 joinEventButton.visibility = View.VISIBLE
             }
