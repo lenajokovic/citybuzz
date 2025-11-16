@@ -18,24 +18,24 @@ import com.google.android.material.button.MaterialButton
 import com.proton.citybuzz.data.model.Event
 import kotlinx.coroutines.launch
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 
 class MyEventsFragment: Fragment(R.layout.fragment_my_events) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         populateView()
+        setupRecyclerView()
     }
 
     fun populateView() {
         val eventListContainer = view?.findViewById<LinearLayout>(R.id.my_events_container)
         val inflater = LayoutInflater.from(requireContext())
-        val eventList = inflater.inflate(R.layout.day_event_list, eventListContainer, false)
 
-        lifecycleScope.launch {
-            setUpListView(eventList.findViewById(R.id.list_view))
-        }
+        val eventListLayout = inflater.inflate(R.layout.day_event_list, eventListContainer, false)
 
-        eventListContainer?.addView(eventList)
+        eventListContainer?.addView(eventListLayout)
 
         val createEventButton = view?.findViewById<ImageButton>(R.id.create_event_button)
         createEventButton?.setOnClickListener {
@@ -43,22 +43,57 @@ class MyEventsFragment: Fragment(R.layout.fragment_my_events) {
         }
     }
 
-    fun createEvent(){
+    fun createEvent() {
         val intent = Intent(requireContext(), CreateEventActivity::class.java)
         startActivity(intent)
     }
-
-    fun setUpListView(listView: ListView) {
+    
+    private fun setupRecyclerView() {
+        // 1. Find the RecyclerView and get the ViewModels
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view) ?: return
         val eventViewModel = CityBuzzApp.getInstance().eventViewModel
-        val userId = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value?.id
-        eventViewModel.loadMyEvents(userId!!)
+        val socialViewModel = CityBuzzApp.getInstance().socialViewModel
 
-        eventViewModel.myEvents.observe(viewLifecycleOwner, { events ->
-            updateListView(listView, events)
-        })
+        val events = eventViewModel.events.value
+
+        val adapter = EventAdapter(
+            events ?: emptyList(),
+            viewLifecycleOwner.lifecycleScope,
+            socialViewModel // Pass the ViewModel
+        ) { event ->
+            // This is the ONLY thing that should be in the callback
+            joinToEvent(event.id)
+        }
+
+        // 3. Set up the RecyclerView with the layout manager and the adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = adapter
+
+        // 4. Observe the logged-in user state to safely get the ID
+        socialViewModel.loggedInUser.observe(viewLifecycleOwner) { user ->
+            // This block will run when the user is loaded, and again if they log out.
+            if (user != null) {
+                eventViewModel.loadMyEvents(user.id)
+            } else {
+                adapter.updateEvents(emptyList())
+            }
+        }
+
+        eventViewModel.myEvents.observe(viewLifecycleOwner) { events ->
+            adapter.updateEvents(events)
+        }
     }
 
-    fun updateListView(listView: ListView, events: List<Event>) {
+    fun joinToEvent(eventId: Int) {
+        val currentUserId = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value?.id
+        val eventVM = CityBuzzApp.getInstance().eventViewModel
+        eventVM.addAttendee(eventId, currentUserId ?: 0)
+        eventVM.loadSuggestedEvents(currentUserId ?: 0)
+        eventVM.loadMyEvents(currentUserId ?: 0)
+    }
+}
+ /*
+    fun updateListView(recyclerView: RecyclerView, events: List<Event>) {
         val userId = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value?.id
         val adapter = object : ArrayAdapter<Event>(requireContext(), 0, events) {
             @SuppressLint("DefaultLocale")
@@ -134,7 +169,7 @@ class MyEventsFragment: Fragment(R.layout.fragment_my_events) {
             }
         }
 
-        listView.adapter = adapter
+        recyclerView.adapter = adapter
 
         listView.setOnItemClickListener { parent, view, position, id ->
             val eventDetailsContainer = view.findViewById<LinearLayout>(R.id.event_details_container)
@@ -151,3 +186,4 @@ class MyEventsFragment: Fragment(R.layout.fragment_my_events) {
         }
     }
 }
+  */
