@@ -104,8 +104,8 @@ class NetworkFragment : Fragment(R.layout.fragment_network) {
         socialVM.pendingRequests.observe(viewLifecycleOwner) { list ->
             friendRequestsAdapter.update(list ?: emptyList())
         }
-        socialVM.suggestions.observe(viewLifecycleOwner) {
-            list -> searchAdapter.update(list ?: emptyList())
+        socialVM.suggestions.observe(viewLifecycleOwner) { list ->
+            suggestionAdapter.update(list ?: emptyList())
         }
 
         // Load initial data
