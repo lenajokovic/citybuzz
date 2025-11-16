@@ -98,7 +98,7 @@ class MainActivity: AppCompatActivity() {
 
         accountButton.visibility = View.VISIBLE
         closeButton.visibility = View.GONE
-        
+
         if (fragment !is AccountFragment) {
             lastFragment = fragment
         }

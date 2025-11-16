@@ -2,7 +2,6 @@ package com.proton.citybuzz
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +26,7 @@ import com.proton.citybuzz.ui.viewmodel.EventViewModel
 
 private var tomorrow: Boolean = TODO("initialize me")
 
-class ExploreFragment: Fragment(R.layout.activity_explore) {
+class ExploreFragment: Fragment(R.layout.fragment_explore) {
 
     private lateinit var eventViewModel: EventViewModel
     private lateinit var eventListContainer: LinearLayout
