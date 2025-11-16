@@ -110,7 +110,7 @@ class MainActivity: AppCompatActivity() {
             toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
         }
         else {
-            toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.fragment_background))
+            toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.background))
         }
 
         if (fragment !is AccountFragment) {
