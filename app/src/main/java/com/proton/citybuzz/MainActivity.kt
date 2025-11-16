@@ -3,6 +3,7 @@ package com.proton.citybuzz
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
+import android.widget.Toolbar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -37,27 +38,27 @@ class MainActivity: AppCompatActivity() {
         val notificationFragment = NotificationFragment()
         val accountFragment = AccountFragment()
         val myEventsFragment = MyEventsFragment()
-        replaceFragment(exploreFragment, accountButton, closeButton)
+        replaceFragment(exploreFragment, accountButton, closeButton, "All Events")
 
         navigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_explore -> {
-                    replaceFragment(exploreFragment, accountButton, closeButton)
+                    replaceFragment(exploreFragment, accountButton, closeButton, "All Events")
                     true
                 }
 
                 R.id.nav_network -> {
-                    replaceFragment(networkFragment, accountButton, closeButton)
+                    replaceFragment(networkFragment, accountButton, closeButton, "Network")
                     true
                 }
 
                 R.id.nav_notification -> {
-                    replaceFragment(notificationFragment, accountButton, closeButton)
+                    replaceFragment(notificationFragment, accountButton, closeButton, "Notifications")
                     true
                 }
 
                 R.id.nav_my_events -> {
-                    replaceFragment(myEventsFragment, accountButton, closeButton)
+                    replaceFragment(myEventsFragment, accountButton, closeButton, "My Events")
                     true
                 }
 
@@ -73,18 +74,26 @@ class MainActivity: AppCompatActivity() {
 
 
         closeButton?.setOnClickListener {
-            replaceFragment(exploreFragment, accountButton, closeButton)
+            replaceFragment(exploreFragment, accountButton, closeButton, "All Events")
         }
 
     }
 
-    private fun replaceFragment(fragment: Fragment, accountButton: ImageButton, closeButton: ImageButton) {
+    private fun replaceFragment(fragment: Fragment, accountButton: ImageButton, closeButton: ImageButton, fragmentName: String = "") {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .commit()
 
         accountButton.visibility = View.VISIBLE
         closeButton.visibility = View.GONE
+
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        if(fragmentName.isEmpty())
+            toolbar.visibility = View.GONE
+        else{
+            toolbar.visibility = View.VISIBLE
+            toolbar.title = fragmentName
+        }
     }
 
 }

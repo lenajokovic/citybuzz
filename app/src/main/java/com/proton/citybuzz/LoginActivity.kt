@@ -9,8 +9,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.proton.citybuzz.data.SessionManager
-import com.proton.citybuzz.data.model.User
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
@@ -28,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
         lifecycleScope.launch { loadUserFromSession() }
     }
     fun setupUI() {
-        setContentView(R.layout.login_page)
+        setContentView(R.layout.activity_login)
 
         email = findViewById(R.id.email)
         password = findViewById(R.id.password)

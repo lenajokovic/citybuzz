@@ -7,6 +7,7 @@
         <item name="android:fontFamily">@font/momotrustsans</item>
         <item name="fontFamily">@font/momotrustsans</item>
 
+        <item name="android:windowBackground">@color/light_yellow</item>
         <item name="colorPrimary">@color/default_color_primary</item>
         <item name="colorAccent">@color/oker</item>
         <item name="colorOnPrimary">@color/white</item>

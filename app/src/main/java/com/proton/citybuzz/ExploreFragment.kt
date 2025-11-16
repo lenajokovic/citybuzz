@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
@@ -16,10 +15,10 @@ import androidx.lifecycle.lifecycleScope
 import com.proton.citybuzz.data.model.Event
 import kotlinx.coroutines.launch
 import androidx.core.view.isVisible
-import org.w3c.dom.Text
+import androidx.recyclerview.widget.RecyclerView
 
 
-class ExploreFragment: Fragment(R.layout.activity_explore) {
+class ExploreFragment: Fragment(R.layout.fragment_explore) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {

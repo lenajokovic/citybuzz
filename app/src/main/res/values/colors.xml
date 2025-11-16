@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="oker">#DCA525</color>
-    <color name="light_yellow">#fcf5e3</color>
+    <color name="light_yellow">#FEFBD8</color>
     <color name="black">#FF000000</color>
     <color name="gray">#858585</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
+    <color name="purple">#80558C</color>
 
-    <color name="card_background">@color/light_yellow</color>
-    <color name="default_color_primary">#A97BFF</color>
+    <color name="card_background">@color/oker</color>
+    <color name="fragment_background">@color/light_yellow</color>
+    <color name="default_color_primary">@color/purple</color>
     <color name="default_color_on_primary">@color/oker</color>
 </resources>
