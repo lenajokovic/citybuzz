@@ -31,6 +31,7 @@ class EventInviteAdapter(
         val userName: TextView = itemView.findViewById(R.id.user_name)
         val startTime: TextView = itemView.findViewById(R.id.event_start_time)
         val eventLocation: TextView = itemView.findViewById(R.id.event_location)
+        val attendeeCount: TextView = itemView.findViewById(R.id.attendee_count)
         val eventDescription: TextView = itemView.findViewById(R.id.event_description)
         val eventDetailsContainer: LinearLayout = itemView.findViewById(R.id.event_details_container)
         val inviteEventButton: Button = itemView.findViewById(R.id.invite_button)
@@ -62,11 +63,11 @@ class EventInviteAdapter(
         holder.eventName.text = item.title
         holder.startTime.text = String.format("%02d:%02d", item.date.hour, item.date.minute)
         holder.eventLocation.text = item.location
+        holder.eventDescription.text = item.description
 
-        // Prikaz description + broj učesnika
         lifecycleScope.launch {
             val attendeeCount = eventViewModel.getAttendeeCount(item.id)
-            holder.eventDescription.text = "${item.description}\nAttendees: $attendeeCount"
+            holder.attendeeCount.text = "$attendeeCount people attending"
         }
 
         // Remove button samo za kreatora

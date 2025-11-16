@@ -81,6 +81,14 @@
                     android:text="Description"
                     android:focusable="false"/>
 
+                <TextView
+                    android:id="@+id/attendee_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size"
+                    android:text="Count"
+                    android:focusable="false"/>
+
                 <Button
                     android:id="@+id/join_event_button"
                     android:layout_width="wrap_content"

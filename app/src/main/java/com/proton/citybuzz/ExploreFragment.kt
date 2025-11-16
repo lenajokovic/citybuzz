@@ -87,7 +87,8 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
         val adapter = EventAdapter(
             events,
             viewLifecycleOwner.lifecycleScope,
-            socialViewModel // Pass the ViewModel
+            socialViewModel,
+            eventViewModel
         ) { event ->
             // This is the ONLY thing that should be in the callback
             joinToEvent(event.id)

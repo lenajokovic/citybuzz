@@ -14,6 +14,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import com.proton.citybuzz.data.model.Event
+import com.proton.citybuzz.ui.viewmodel.EventViewModel
 import com.proton.citybuzz.ui.viewmodel.SocialViewModel
 import kotlinx.coroutines.launch
 
@@ -22,6 +23,7 @@ class EventAdapter(
     private val lifecycleScope: LifecycleCoroutineScope,
     // Pass the ViewModel to the adapter
     private val socialViewModel: SocialViewModel,
+    private val eventViewModel: EventViewModel,
     private val onJoinClicked: (Event) -> Unit
 ) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
 
@@ -32,6 +34,7 @@ class EventAdapter(
         val startTime: TextView = itemView.findViewById(R.id.event_start_time)
         val eventLocation: TextView = itemView.findViewById(R.id.event_location)
         val eventDescription: TextView = itemView.findViewById(R.id.event_description)
+        val attendeeCount: TextView = itemView.findViewById(R.id.attendee_count)
         val eventDetailsContainer: LinearLayout = itemView.findViewById(R.id.event_details_container)
         val joinEventButton: Button = itemView.findViewById(R.id.join_event_button)
 
@@ -63,6 +66,11 @@ class EventAdapter(
         holder.startTime.text = String.format("%02d:%02d", item.date.hour, item.date.minute)
         holder.eventLocation.text = item.location
         holder.eventDescription.text = item.description
+
+        lifecycleScope.launch {
+            val attendeeCount = eventViewModel.getAttendeeCount(item.id)
+            holder.attendeeCount.text = "$attendeeCount people attending"
+        }
 
         // Set the click listener for the "Join Event" button
         holder.joinEventButton.setOnClickListener {
