@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import android.widget.Toolbar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.fragment.app.FragmentTransaction
@@ -103,13 +104,13 @@ class MainActivity: AppCompatActivity() {
         closeButton.visibility = View.GONE
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        if(fragmentName.isEmpty())
-            toolbar.visibility = View.GONE
-        else {
-            toolbar.visibility = View.VISIBLE
-            toolbar.title = fragmentName
-        }
-            
+        toolbar.visibility = View.VISIBLE
+        toolbar.title = fragmentName
+        if(fragmentName == "Account")
+            toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+        else
+            toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.fragment_background))
+
         if (fragment !is AccountFragment) {
             lastFragment = fragment
         }

@@ -62,7 +62,7 @@
                     android:text="✓"
                     android:textSize="20sp"
                     android:textColor="#FFFFFF"
-                    android:backgroundTint="#0A66C2"
+                    android:backgroundTint="@color/default_color_accent"
                     android:gravity="center"/>
 
                 <Button

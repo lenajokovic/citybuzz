@@ -7,10 +7,12 @@
     <color name="gray">#858585</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
+    <color name="red">#ff0000</color>
     <color name="purple">#80558C</color>
+    <color name="purple2">#CBA0AE</color>
 
-    <color name="card_background">@color/oker</color>
     <color name="fragment_background">@color/light_yellow</color>
     <color name="default_color_primary">@color/purple</color>
+    <color name="default_color_accent">@color/oker</color>
     <color name="default_color_on_primary">@color/oker</color>
 </resources>
