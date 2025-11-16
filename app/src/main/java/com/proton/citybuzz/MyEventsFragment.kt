@@ -61,6 +61,7 @@ class MyEventsFragment: Fragment(R.layout.fragment_my_events) {
             events ?: emptyList(),
             viewLifecycleOwner.lifecycleScope,
             socialViewModel,
+            eventViewModel,
             { event ->
                 if (friendsListContainer?.visibility == View.VISIBLE) {
                     friendsListContainer.visibility = View.GONE

@@ -14,6 +14,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import com.proton.citybuzz.data.model.Event
+import com.proton.citybuzz.ui.viewmodel.EventViewModel
 import com.proton.citybuzz.ui.viewmodel.SocialViewModel
 import kotlinx.coroutines.launch
 
@@ -21,6 +22,7 @@ class EventInviteAdapter(
     private var events: List<Event>,
     private val lifecycleScope: LifecycleCoroutineScope,
     private val socialViewModel: SocialViewModel,
+    private val eventViewModel: EventViewModel,
     private val onJoinClicked: (Event) -> Unit,
     private val onRemoveClicked: (Event) -> Unit
 ) : RecyclerView.Adapter<EventInviteAdapter.EventViewHolder>() {
@@ -62,7 +64,12 @@ class EventInviteAdapter(
         holder.eventName.text = item.title
         holder.startTime.text = String.format("%02d:%02d", item.date.hour, item.date.minute)
         holder.eventLocation.text = item.location
-        holder.eventDescription.text = item.description
+
+        //holder.eventDescription.text = item.description
+        lifecycleScope.launch {
+            val attendeeCount = eventViewModel.getAttendeeCount(item.id)
+            holder.eventDescription.text = "${item.description}\nAttendees: $attendeeCount"
+        }
 
         // Set the click listener for the "Join Event" button
         holder.inviteEventButton.setOnClickListener {

@@ -82,6 +82,10 @@ class EventViewModel(
         loadSuggestedEvents(userId)
     }
 
+    suspend fun getAttendeeCount(eventId: Int): Int {
+        return eventRepo.getAttendees(eventId).size
+    }
+
     fun sendEventInvite(eventId: Int, fromUserId: Int, toUserId: Int) = viewModelScope.launch {
         val event = eventRepo.getEventById(eventId)
         val sender = userRepo.getUserById(fromUserId)
