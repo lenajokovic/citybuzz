@@ -1,6 +1,9 @@
 package com.proton.citybuzz
 
+import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.os.Bundle
+import android.provider.MediaStore.Images.Media.getBitmap
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toolbar
@@ -17,6 +20,8 @@ import kotlinx.coroutines.launch
 class MainActivity: AppCompatActivity() {
 
 
+    private lateinit var lastFragment: Fragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -32,6 +37,13 @@ class MainActivity: AppCompatActivity() {
         val navigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
         val accountButton = findViewById<ImageButton>(R.id.show_account_button)
         val closeButton = findViewById<ImageButton>(R.id.close_button)
+
+        val imageBitmap = CityBuzzApp.getInstance().socialViewModel.getImageBitmap()
+        if (imageBitmap != null) {
+            accountButton.setImageBitmap(imageBitmap)
+        } else {
+            accountButton.setImageResource(R.drawable.ic_account)
+        }
 
         val exploreFragment = ExploreFragment()
         val networkFragment = NetworkFragment()

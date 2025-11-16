@@ -1,6 +1,7 @@
 package com.proton.citybuzz
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -28,18 +29,25 @@ class AccountFragment : Fragment(R.layout.account_page) {
         socialVM = CityBuzzApp.getInstance().socialViewModel
 
         val loggedInUser = socialVM.loggedInUser.value
-        setUpAccountInformationUI(loggedInUser)
+        setUpAccountInformationUI(loggedInUser!!)
         setUpEditAccountUI(loggedInUser)
     }
 
-    fun setUpAccountInformationUI(loggedInUser: User?){
+    fun setUpAccountInformationUI(loggedInUser: User){
 
         val username = view?.findViewById<TextView>(R.id.acc_username)
-        username?.text = loggedInUser?.name
+        username?.text = loggedInUser.name
         val email = view?.findViewById<TextView>(R.id.acc_email)
-        email?.text = loggedInUser?.email
+        email?.text = loggedInUser.email
         val profilePic = view?.findViewById<ImageView>(R.id.acc_profile_pic)
-        profilePic?.setImageURI(loggedInUser?.profileImage?.toUri())
+        if (loggedInUser.profileImage != null) {
+        profilePic?.setImageBitmap(BitmapFactory.decodeByteArray(loggedInUser.profileImage, 0,
+            loggedInUser.profileImage.size
+        ))}
+        else {
+            profilePic?.setImageResource(R.drawable.ic_account)
+        }
+
 
         val rvFriends = view?.findViewById<RecyclerView>(R.id.rvFriends)
         rvFriends?.layoutManager = LinearLayoutManager(requireContext())

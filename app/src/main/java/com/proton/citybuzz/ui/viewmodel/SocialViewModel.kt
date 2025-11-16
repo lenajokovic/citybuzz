@@ -1,5 +1,7 @@
 package com.proton.citybuzz.ui.viewmodel
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -22,11 +24,14 @@ class SocialViewModel(
     var loggedInUser = MutableLiveData<User?>()
     val friends = MutableLiveData<List<User>>()
     val pendingRequests = MutableLiveData<List<FriendRequest>>()
+
+    val outgoingRequests = MutableLiveData<Set<Int>>(emptySet())
+
     val suggestions = MutableLiveData<List<User>>()
 
     fun loadUsers() = viewModelScope.launch { users.value = userRepo.getAllUsers() }
 
-    fun addUser(name: String, email: String, password: String, profileImage: String?) = viewModelScope.launch {
+    fun addUser(name: String, email: String, password: String, profileImage: ByteArray?) = viewModelScope.launch {
         val id = (userRepo.getAllUsers().maxOfOrNull { it.id } ?: 0) + 1
         userRepo.addUser(User(id, name, email, password, profileImage))
         loadUsers()
@@ -87,6 +92,11 @@ class SocialViewModel(
             type = NotificationType.FRIEND_REQUEST,
             message = "You received a friend request from ${sender?.name ?: "Unknown"}"
         )
+
+        val current = outgoingRequests.value?.toMutableSet() ?: mutableSetOf()
+        // Add a temporary FriendRequest object for UI
+        current.add(toUserId)
+        outgoingRequests.value = current
     }
 
     fun acceptRequest(request: FriendRequest) = viewModelScope.launch {
@@ -115,5 +125,11 @@ class SocialViewModel(
 
     suspend fun searchUsers(query: String): List<User> {
         return userRepo.searchUsersByName(query)
+    }
+
+    fun getImageBitmap() : Bitmap? {
+        val byteArray = loggedInUser.value?.profileImage ?: return null
+        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray?.size ?: 0)
+
     }
 }
