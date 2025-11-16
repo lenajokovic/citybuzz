@@ -23,7 +23,6 @@ class EventInviteAdapter(
     private val lifecycleScope: LifecycleCoroutineScope,
     private val socialViewModel: SocialViewModel,
     private val eventViewModel: EventViewModel,
-    private val onJoinClicked: (Event) -> Unit,
     private val onRemoveClicked: (Event) -> Unit
 ) : RecyclerView.Adapter<EventInviteAdapter.EventViewHolder>() {
 
@@ -36,9 +35,10 @@ class EventInviteAdapter(
         val eventDetailsContainer: LinearLayout = itemView.findViewById(R.id.event_details_container)
         val inviteEventButton: Button = itemView.findViewById(R.id.invite_button)
         val removeEventButton: Button = itemView.findViewById(R.id.remove_button)
-
+        val friendsListContainer: LinearLayout = itemView.findViewById(R.id.friends_list_container)
 
         init {
+            // Expand/collapse details when item is clicked
             itemView.setOnClickListener {
                 val isVisible = eventDetailsContainer.isVisible
                 eventDetailsContainer.visibility = if (isVisible) View.GONE else View.VISIBLE
@@ -55,36 +55,65 @@ class EventInviteAdapter(
 
     override fun getItemCount(): Int = events.size
 
-    // THIS IS THE CORRECTED METHOD
     @SuppressLint("DefaultLocale")
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val item = events[position]
 
-        // --- Bind all the data to the views in the ViewHolder ---
         holder.eventName.text = item.title
         holder.startTime.text = String.format("%02d:%02d", item.date.hour, item.date.minute)
         holder.eventLocation.text = item.location
 
-        //holder.eventDescription.text = item.description
+        // Prikaz description + broj učesnika
         lifecycleScope.launch {
             val attendeeCount = eventViewModel.getAttendeeCount(item.id)
             holder.eventDescription.text = "${item.description}\nAttendees: $attendeeCount"
         }
 
-        // Set the click listener for the "Join Event" button
-        holder.inviteEventButton.setOnClickListener {
-            onJoinClicked(item)
-        }
-
+        // Remove button samo za kreatora
         holder.removeEventButton.isVisible = item.creatorId == socialViewModel.loggedInUser.value?.id
         holder.removeEventButton.setOnClickListener {
             onRemoveClicked(item)
         }
 
-        // Fetch and set the event owner's name using the ViewModel
+        // Prikaz imena kreatora eventa
         lifecycleScope.launch {
-            val eventCreator = socialViewModel.getUserById(item.creatorId)?.name
-            holder.userName.text = eventCreator ?: "Unknown User" // Provide a fallback
+            val creatorName = socialViewModel.getUserById(item.creatorId)?.name
+            holder.userName.text = creatorName ?: "Unknown User"
+        }
+
+        // Invite dugme - otvara listu prijatelja direktno u holderu
+        holder.inviteEventButton.setOnClickListener {
+            val container = holder.friendsListContainer
+            if (container.isVisible) {
+                container.visibility = View.GONE
+                return@setOnClickListener
+            }
+
+            lifecycleScope.launch {
+                val friends = socialViewModel.friends.value ?: emptyList()
+                container.removeAllViews()
+                val inflater = LayoutInflater.from(holder.itemView.context)
+
+                friends.forEach { friend ->
+                    val row = inflater.inflate(R.layout.friend_invite_item, container, false)
+                    val friendName = row.findViewById<TextView>(R.id.friend_name)
+                    val sendInviteBtn = row.findViewById<Button>(R.id.send_invite_btn)
+
+                    friendName.text = friend.name
+                    sendInviteBtn.setOnClickListener {
+                        eventViewModel.sendEventInvite(
+                            eventId = item.id,
+                            fromUserId = socialViewModel.loggedInUser.value?.id ?: 0,
+                            toUserId = friend.id
+                        )
+                        container.visibility = View.GONE
+                    }
+
+                    container.addView(row)
+                }
+
+                container.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -93,3 +122,4 @@ class EventInviteAdapter(
         notifyDataSetChanged()
     }
 }
+

@@ -22,98 +22,51 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 
-class MyEventsFragment: Fragment(R.layout.fragment_my_events) {
+class MyEventsFragment : Fragment(R.layout.fragment_my_events) {
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         populateView()
         setupRecyclerView()
     }
 
-    fun populateView() {
+    private fun populateView() {
         val eventListContainer = view?.findViewById<LinearLayout>(R.id.my_events_container)
         val inflater = LayoutInflater.from(requireContext())
-
         val eventListLayout = inflater.inflate(R.layout.day_event_list, eventListContainer, false)
-
         eventListContainer?.addView(eventListLayout)
 
         val createEventButton = view?.findViewById<ImageButton>(R.id.create_event_button)
-        createEventButton?.setOnClickListener {
-            createEvent()
-        }
+        createEventButton?.setOnClickListener { createEvent() }
     }
 
-    fun createEvent() {
+    private fun createEvent() {
         val intent = Intent(requireContext(), CreateEventActivity::class.java)
         startActivity(intent)
     }
-    
+
     private fun setupRecyclerView() {
-        // 1. Find the RecyclerView and get the ViewModels
         val recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view) ?: return
         val eventViewModel = CityBuzzApp.getInstance().eventViewModel
         val socialViewModel = CityBuzzApp.getInstance().socialViewModel
-        val friendsListContainer = view?.findViewById<LinearLayout>(R.id.friends_list_container)
 
-        val events = eventViewModel.events.value
-
+        // Kreiraj adapter bez callbacka za invite jer adapter sam rukuje prijateljima
         val adapter = EventInviteAdapter(
-            events ?: emptyList(),
-            viewLifecycleOwner.lifecycleScope,
-            socialViewModel,
-            eventViewModel,
-            { event ->
-                if (friendsListContainer?.visibility == View.VISIBLE) {
-                    friendsListContainer.visibility = View.GONE
-                }
-
-                lifecycleScope.launch {
-                    val socialVM = CityBuzzApp.getInstance().socialViewModel
-                    val friends = socialVM.friends.value ?: emptyList()
-
-                    friendsListContainer?.removeAllViews()
-
-                    val inflater = LayoutInflater.from(context)
-
-                    // kreiranje UI za svakog prijatelja
-                    friends.forEach { friend ->
-                        val row = inflater.inflate(R.layout.friend_invite_item, friendsListContainer, false)
-
-                        val friendName = row.findViewById<TextView>(R.id.friend_name)
-                        val sendInviteBtn = row.findViewById<Button>(R.id.send_invite_btn)
-
-                        friendName.text = friend.name
-
-                        sendInviteBtn.setOnClickListener {
-                            CityBuzzApp.getInstance().eventViewModel.sendEventInvite(
-                                eventId = event.id,
-                                fromUserId = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value?.id ?: 0,
-                                toUserId = friend.id
-                            )
-
-                            friendsListContainer?.visibility = View.GONE
-                        }
-
-                        friendsListContainer?.addView(row)
-                    }
-
-                    friendsListContainer?.visibility = View.VISIBLE
-                }
-            },
-
+            events = emptyList(),
+            lifecycleScope = viewLifecycleOwner.lifecycleScope,
+            socialViewModel = socialViewModel,
+            eventViewModel = eventViewModel,
             onRemoveClicked = { event ->
                 eventViewModel.removeEvent(event.id)
-                CityBuzzApp.getInstance().eventViewModel.loadMyEvents()
-            },
+                eventViewModel.loadMyEvents(socialViewModel.loggedInUser.value?.id ?: 0)
+            }
         )
 
-        // 3. Set up the RecyclerView with the layout manager and the adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
 
-        // 4. Observe the logged-in user state to safely get the ID
+        // Učitaj evente korisnika kad je logovan
         socialViewModel.loggedInUser.observe(viewLifecycleOwner) { user ->
-            // This block will run when the user is loaded, and again if they log out.
             if (user != null) {
                 eventViewModel.loadMyEvents(user.id)
             } else {
@@ -121,11 +74,17 @@ class MyEventsFragment: Fragment(R.layout.fragment_my_events) {
             }
         }
 
+        // Posmatraj promene u listi mojih eventa
         eventViewModel.myEvents.observe(viewLifecycleOwner) { events ->
             adapter.updateEvents(events)
         }
+
+        // Učitaj prijatelje za invite dugme
+        val currentUserId = socialViewModel.loggedInUser.value?.id ?: 0
+        socialViewModel.loadFriends(currentUserId)
     }
 }
+
  /*
     fun updateListView(recyclerView: RecyclerView, events: List<Event>) {
         val userId = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value?.id
