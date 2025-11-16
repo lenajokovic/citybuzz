@@ -3,6 +3,7 @@ package com.proton.citybuzz.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.proton.citybuzz.CityBuzzApp
 import kotlinx.coroutines.launch
 import com.proton.citybuzz.data.model.Event
 import com.proton.citybuzz.data.model.EventPrivacy
@@ -94,7 +95,8 @@ class EventViewModel(
         )
     }
 
-    fun loadMyEvents(userId: Int) = viewModelScope.launch {
+    fun loadMyEvents(userId: Int = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value!!.id)
+     = viewModelScope.launch {
         myEvents.value = eventRepo.getMyEvents(userId)
     }
 

@@ -20,12 +20,11 @@ import kotlinx.coroutines.launch
 class EventInviteAdapter(
     private var events: List<Event>,
     private val lifecycleScope: LifecycleCoroutineScope,
-    // Pass the ViewModel to the adapter
     private val socialViewModel: SocialViewModel,
-    private val onJoinClicked: (Event) -> Unit
+    private val onJoinClicked: (Event) -> Unit,
+    private val onRemoveClicked: (Event) -> Unit
 ) : RecyclerView.Adapter<EventInviteAdapter.EventViewHolder>() {
 
-    // This class holds the views for a single list item
     inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val eventName: TextView = itemView.findViewById(R.id.event_name)
         val userName: TextView = itemView.findViewById(R.id.user_name)
@@ -34,9 +33,10 @@ class EventInviteAdapter(
         val eventDescription: TextView = itemView.findViewById(R.id.event_description)
         val eventDetailsContainer: LinearLayout = itemView.findViewById(R.id.event_details_container)
         val inviteEventButton: Button = itemView.findViewById(R.id.invite_button)
+        val removeEventButton: Button = itemView.findViewById(R.id.remove_button)
+
 
         init {
-            // Set the click listener for the whole item to expand/collapse details
             itemView.setOnClickListener {
                 val isVisible = eventDetailsContainer.isVisible
                 eventDetailsContainer.visibility = if (isVisible) View.GONE else View.VISIBLE
@@ -67,6 +67,11 @@ class EventInviteAdapter(
         // Set the click listener for the "Join Event" button
         holder.inviteEventButton.setOnClickListener {
             onJoinClicked(item)
+        }
+
+        holder.removeEventButton.isVisible = item.creatorId == socialViewModel.loggedInUser.value?.id
+        holder.removeEventButton.setOnClickListener {
+            onRemoveClicked(item)
         }
 
         // Fetch and set the event owner's name using the ViewModel
