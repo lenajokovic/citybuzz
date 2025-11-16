@@ -1,75 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="12dp"
-    android:background="@android:color/white"
-    android:layout_marginBottom="10dp"
-    android:elevation="3dp"
-    android:clipToPadding="false"
-    android:clipToOutline="false"
-    android:backgroundTint="#FFFFFF"
-    android:paddingVertical="16dp"
-    android:layout_marginHorizontal="6dp"
-    android:layout_marginTop="4dp">
-
-    <ImageView
-        android:id="@+id/ivProfile"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/default_profile"
-        android:background="@drawable/circle_mask"
-        android:clipToOutline="true"/>
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="6dp"
+    card_view:cardCornerRadius="12dp"
+    card_view:cardElevation="4dp"
+    card_view:cardBackgroundColor="#FFFFFF">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp">
+        android:orientation="horizontal"
+        android:padding="12dp">
 
-        <TextView
-            android:id="@+id/tvName"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="John Doe"/>
+        <!-- Profile Image -->
+        <ImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_profile"
+            android:background="@drawable/circle_mask"
+            android:clipToOutline="true"/>
 
-        <TextView
-            android:id="@+id/tvHeadline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Software Developer"
-            android:textColor="#777"
-            android:textSize="14sp"/>
-
+        <!-- Name, Headline, Buttons -->
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp">
+            android:layout_marginStart="12dp">
 
-            <Button
-                android:id="@+id/btnAccept"
+            <!-- Name -->
+            <TextView
+                android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Accept"
-                android:backgroundTint="#0A66C2"
-                android:textColor="#FFFFFF"/>
+                android:text="John Doe"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#000000"/>
 
-            <Button
-                android:id="@+id/btnIgnore"
-                android:layout_width="wrap_content"
+            <!-- Buttons Row -->
+            <!-- Buttons Row -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Ignore"
-                android:layout_marginStart="12dp"
-                android:backgroundTint="#EEEEEE"
-                android:textColor="#333"/>
+                android:layout_marginTop="8dp"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/btnAccept"
+                    android:padding="0dp"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="✓"
+                    android:textSize="20sp"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#0A66C2"
+                    android:gravity="center"/>
+
+                <Button
+                    android:id="@+id/btnIgnore"
+                    android:padding="0dp"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:text="✗"
+                    android:textSize="20sp"
+                    android:textColor="#333333"
+                    android:backgroundTint="#EEEEEE"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</androidx.cardview.widget.CardView>
