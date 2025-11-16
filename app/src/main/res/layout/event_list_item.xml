@@ -16,79 +16,79 @@
         android:layout_marginHorizontal="15dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="1"
             android:layout_marginHorizontal="10dp"
             android:focusable="false">
 
+        <TextView
+            android:id="@+id/event_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/title_font_size"
+            android:textStyle="bold"
+            android:text="Event Name"
+            android:focusable="false"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp"
+            android:focusable="false">
+
             <TextView
-                android:id="@+id/event_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/title_font_size"
-                android:textStyle="bold"
-                android:text="Event Name"
+                android:textSize="@dimen/subtitle_font_size"
+                android:text="by: "
                 android:focusable="false"/>
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="10dp"
-                android:focusable="false">
+                android:textSize="@dimen/subtitle_font_size"
+                android:text="Name Surname"
+                android:focusable="false"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/subtitle_font_size"
-                    android:text="by: "
-                    android:focusable="false"/>
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/user_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/subtitle_font_size"
-                    android:text="Name Surname"
-                    android:focusable="false"/>
+        <LinearLayout
+            android:id="@+id/event_details_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:focusable="false">
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/event_details_container"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/event_location"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:textSize="@dimen/text_size"
+                android:text="Location"
+                android:layout_marginBottom="10dp"
+                android:focusable="false"/>
+
+            <TextView
+                android:id="@+id/event_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size"
+                android:text="Description"
+                android:focusable="false"/>
+
+            <Button
+                android:id="@+id/join_event_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="JOIN"
+                android:layout_gravity="end"
                 android:visibility="gone"
-                android:focusable="false">
-
-                <TextView
-                    android:id="@+id/event_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size"
-                    android:text="Location"
-                    android:layout_marginBottom="10dp"
-                    android:focusable="false"/>
-
-                <TextView
-                    android:id="@+id/event_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size"
-                    android:text="Description"
-                    android:focusable="false"/>
-
-                <Button
-                    android:id="@+id/join_event_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="JOIN"
-                    android:layout_gravity="end"
-                    android:visibility="gone"
-                    android:focusable="false"/>
+                android:focusable="false"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -125,7 +125,7 @@
                 android:focusable="false"/>
 
 
-            </LinearLayout>
+        </LinearLayout>
 
         </LinearLayout>
 

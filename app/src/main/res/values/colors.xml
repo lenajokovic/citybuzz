@@ -11,7 +11,7 @@
     <color name="purple">#80558C</color>
     <color name="purple2">#CBA0AE</color>
 
-    <color name="fragment_background">@color/light_yellow</color>
+    <color name="background">@color/light_yellow</color>
     <color name="default_color_primary">@color/purple</color>
     <color name="default_color_accent">@color/oker</color>
     <color name="default_color_on_primary">@color/oker</color>

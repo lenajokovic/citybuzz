@@ -106,10 +106,12 @@ class MainActivity: AppCompatActivity() {
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         toolbar.visibility = View.VISIBLE
         toolbar.title = fragmentName
-        if(fragmentName == "Account")
+        if(fragmentName == "Account") {
             toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-        else
-            toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.fragment_background))
+        }
+        else {
+            toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.background))
+        }
 
         if (fragment !is AccountFragment) {
             lastFragment = fragment

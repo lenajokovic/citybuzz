@@ -7,12 +7,15 @@
         <item name="fontFamily">@font/momotrustsans</item>
 
         <item name="android:windowBackground">@color/light_yellow</item>
+        <item name="android:statusBarColor">@color/light_yellow</item>
+
         <item name="colorPrimary">@color/default_color_primary</item>
         <item name="colorAccent">@color/oker</item>
         <item name="colorOnPrimary">@color/white</item>
 
+
     </style>
     <style name="ToolbarTitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textSize">32sp</item> <!-- Set your desired font size -->
+        <item name="android:textSize">32sp</item>
     </style>
 </resources>

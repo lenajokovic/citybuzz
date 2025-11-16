@@ -80,8 +80,9 @@ class CreateAccountActivity : AppCompatActivity() {
             Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
             return
         }
-
-        val byteArray = getBytes(contentResolver.openInputStream(selected_image_uri!!)!!)
+        var byteArray: ByteArray = ByteArray(0)
+        if (selected_image_uri != null)
+            byteArray = getBytes(contentResolver.openInputStream(selected_image_uri!!)!!)
         CityBuzzApp.getInstance().socialViewModel.addUser(name, email, password, byteArray)
 
         Toast.makeText(this, "Account created!", Toast.LENGTH_SHORT).show()
