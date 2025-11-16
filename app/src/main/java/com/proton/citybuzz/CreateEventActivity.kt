@@ -117,13 +117,6 @@ class CreateEventActivity : AppCompatActivity() {
             idUser = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value!!.id,
         )
 
-        CityBuzzApp.getInstance().eventViewModel.addEvent("Second",
-            "Blahblah",
-            "Beograd",
-            LocalDateTime.of(2025, 10, 15, 12, 30),
-            selectedCategory,
-            CityBuzzApp.getInstance().socialViewModel.loggedInUser.value!!.id)
-
         Toast.makeText(this, "Event created!", Toast.LENGTH_SHORT).show()
     }
 }
