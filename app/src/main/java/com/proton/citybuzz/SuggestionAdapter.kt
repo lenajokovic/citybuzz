@@ -8,12 +8,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.proton.citybuzz.data.model.User
+import com.proton.citybuzz.data.model.FriendRequest
 
 class SuggestionAdapter(
     private var items: List<User>,
     private val onSendRequest: (User) -> Unit
 ) : RecyclerView.Adapter<SuggestionAdapter.ViewHolder>() {
 
+    var outgoingRequests: Set<Int> = emptySet()  // <- store current pending requests
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvName: TextView = view.findViewById(R.id.tvName)
         val btnAdd: Button = view.findViewById(R.id.btnConnect)
@@ -29,8 +31,13 @@ class SuggestionAdapter(
         val user = items[position]
 
         holder.tvName.text = user.name
+        val socialVM = CityBuzzApp.getInstance().socialViewModel
+        val isPending = outgoingRequests.any { it == user.id }
+        holder.btnAdd.text = if (isPending) "Waiting" else "Connect"
+        holder.btnAdd.isEnabled = !isPending
+
         holder.btnAdd.setOnClickListener {
-            onSendRequest(user)
+            if(!isPending) onSendRequest(user)
         }
     }
 
