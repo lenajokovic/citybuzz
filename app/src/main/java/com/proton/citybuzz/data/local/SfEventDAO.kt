@@ -30,6 +30,7 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
     // DELETE EVENT
     suspend fun deleteEvent(eventId: Int) {
         sf.executeUpdate("DELETE FROM EVENTS WHERE EVENT_ID = $eventId")
+        sf.executeUpdate("DELETE FROM EVENT_ATTENDEES WHERE EVENT_ID = $eventId")
     }
 
     //GET ALL EVENTS

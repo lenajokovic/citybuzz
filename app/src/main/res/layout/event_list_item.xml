@@ -90,23 +90,39 @@
                     android:visibility="gone"
                     android:focusable="false"/>
 
-                <Button
-                    android:id="@+id/invite_button"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="INVITE"
-                    android:layout_gravity="end"
-                    android:visibility="gone"
-                    android:focusable="false"/>
+                    android:layout_gravity="end">
+
+                    <Button
+                        android:id="@+id/remove_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:focusable="false"
+                        android:text="REMOVE"
+                        android:layout_marginEnd="10dp"
+                        android:visibility="gone"/>
+
+                    <Button
+                        android:id="@+id/invite_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:focusable="false"
+                        android:text="INVITE"
+                        android:visibility="gone"/>
+                </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/friends_list_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    android:padding="8dp"
-                    android:focusable="false"/>
+                android:id="@+id/friends_list_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="8dp"
+                android:focusable="false"/>
 
 
             </LinearLayout>
@@ -118,7 +134,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:focusable="false"
-            android:text="18h"
+            android:text="18:00"
             android:textSize="@dimen/header_font_size"
             android:layout_gravity="center"
             android:textColor="@color/default_color_primary"/>

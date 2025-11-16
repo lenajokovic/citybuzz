@@ -24,7 +24,6 @@ class SocialViewModel(
     var loggedInUser = MutableLiveData<User?>()
     val friends = MutableLiveData<List<User>>()
     val pendingRequests = MutableLiveData<List<FriendRequest>>()
-
     val outgoingRequests = MutableLiveData<Set<Int>>(emptySet())
 
     val suggestions = MutableLiveData<List<User>>()

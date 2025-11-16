@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.proton.citybuzz.data.model.EventConverters
+import com.proton.citybuzz.ui.theme.CityBuzzTheme
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -119,5 +120,6 @@ class CreateEventActivity : AppCompatActivity() {
 
         Toast.makeText(this, "Event created!", Toast.LENGTH_SHORT).show()
         finish()
+        CityBuzzApp.getInstance().eventViewModel.loadMyEvents()
     }
 }
