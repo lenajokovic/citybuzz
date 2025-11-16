@@ -1,5 +1,7 @@
 package com.proton.citybuzz.ui.viewmodel
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -29,7 +31,7 @@ class SocialViewModel(
 
     fun loadUsers() = viewModelScope.launch { users.value = userRepo.getAllUsers() }
 
-    fun addUser(name: String, email: String, password: String, profileImage: String?) = viewModelScope.launch {
+    fun addUser(name: String, email: String, password: String, profileImage: ByteArray?) = viewModelScope.launch {
         val id = (userRepo.getAllUsers().maxOfOrNull { it.id } ?: 0) + 1
         userRepo.addUser(User(id, name, email, password, profileImage))
         loadUsers()
@@ -123,5 +125,11 @@ class SocialViewModel(
 
     suspend fun searchUsers(query: String): List<User> {
         return userRepo.searchUsersByName(query)
+    }
+
+    fun getImageBitmap() : Bitmap? {
+        val byteArray = loggedInUser.value?.profileImage ?: return null
+        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray?.size ?: 0)
+
     }
 }

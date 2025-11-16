@@ -1,5 +1,6 @@
 package com.proton.citybuzz
 
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ class SuggestionAdapter(
     var outgoingRequests: Set<Int> = emptySet()  // <- store current pending requests
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvName: TextView = view.findViewById(R.id.tvName)
+        val ivProfile = view.findViewById<ImageView>(R.id.ivProfile)
         val btnAdd: Button = view.findViewById(R.id.btnConnect)
     }
 
@@ -38,6 +40,12 @@ class SuggestionAdapter(
 
         holder.btnAdd.setOnClickListener {
             if(!isPending) onSendRequest(user)
+        }
+        if (user.profileImage == null) {
+            holder.ivProfile.setImageResource(R.drawable.ic_account)
+        } else {
+            holder.ivProfile.setImageBitmap(BitmapFactory.decodeByteArray(user.profileImage, 0,
+                user.profileImage.size))
         }
     }
 

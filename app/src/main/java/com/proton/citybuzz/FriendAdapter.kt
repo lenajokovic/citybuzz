@@ -1,5 +1,6 @@
 package com.proton.citybuzz
 
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,8 +36,13 @@ class FriendAdapter(
 
         // Fetch the name from SocialViewModel asynchronously
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
-            val name = user.name
-            holder.tvName.text = name
+            holder.tvName.text = user.name
+            if (user.profileImage == null) {
+                holder.ivProfile.setImageResource(R.drawable.ic_account)
+            } else {
+                holder.ivProfile.setImageBitmap(BitmapFactory.decodeByteArray(user.profileImage, 0,
+                    user.profileImage.size))
+            }
         }
 
         holder.btnRemove.setOnClickListener {

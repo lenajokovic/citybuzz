@@ -1,5 +1,6 @@
 package com.proton.citybuzz
 
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +42,12 @@ class RequestAdapter(
         CoroutineScope(Dispatchers.Main).launch {
             val sender = getUser(request.fromUserId.toLong())
             holder.tvName.text = sender.name
+            if (sender.profileImage == null) {
+                holder.ivProfile.setImageResource(R.drawable.ic_account)
+            } else {
+                holder.ivProfile.setImageBitmap(BitmapFactory.decodeByteArray(sender.profileImage, 0,
+                    sender.profileImage.size))
+            }
         }
 
         holder.btnAccept.setOnClickListener { onAccept(request) }
