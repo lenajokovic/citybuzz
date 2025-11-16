@@ -118,5 +118,6 @@ class CreateEventActivity : AppCompatActivity() {
         )
 
         Toast.makeText(this, "Event created!", Toast.LENGTH_SHORT).show()
+        finish()
     }
 }

@@ -19,6 +19,8 @@ import kotlinx.coroutines.launch
 class MainActivity: AppCompatActivity() {
 
 
+    private lateinit var lastFragment: Fragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -47,6 +49,7 @@ class MainActivity: AppCompatActivity() {
         val notificationFragment = NotificationFragment()
         val accountFragment = AccountFragment()
         val myEventsFragment = MyEventsFragment()
+
         replaceFragment(exploreFragment, accountButton, closeButton)
 
         navigationView.setOnItemSelectedListener { item ->
@@ -83,7 +86,7 @@ class MainActivity: AppCompatActivity() {
 
 
         closeButton?.setOnClickListener {
-            replaceFragment(exploreFragment, accountButton, closeButton)
+            replaceFragment(lastFragment, accountButton, closeButton)
         }
 
     }
@@ -95,6 +98,10 @@ class MainActivity: AppCompatActivity() {
 
         accountButton.visibility = View.VISIBLE
         closeButton.visibility = View.GONE
+        
+        if (fragment !is AccountFragment) {
+            lastFragment = fragment
+        }
     }
 
 }
