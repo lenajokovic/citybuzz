@@ -17,13 +17,13 @@ import com.proton.citybuzz.data.model.Event
 import com.proton.citybuzz.ui.viewmodel.SocialViewModel
 import kotlinx.coroutines.launch
 
-class EventAdapter(
+class EventInviteAdapter(
     private var events: List<Event>,
     private val lifecycleScope: LifecycleCoroutineScope,
     // Pass the ViewModel to the adapter
     private val socialViewModel: SocialViewModel,
     private val onJoinClicked: (Event) -> Unit
-) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
+) : RecyclerView.Adapter<EventInviteAdapter.EventViewHolder>() {
 
     // This class holds the views for a single list item
     inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -33,14 +33,14 @@ class EventAdapter(
         val eventLocation: TextView = itemView.findViewById(R.id.event_location)
         val eventDescription: TextView = itemView.findViewById(R.id.event_description)
         val eventDetailsContainer: LinearLayout = itemView.findViewById(R.id.event_details_container)
-        val joinEventButton: Button = itemView.findViewById(R.id.join_event_button)
+        val inviteEventButton: Button = itemView.findViewById(R.id.invite_button)
 
         init {
             // Set the click listener for the whole item to expand/collapse details
             itemView.setOnClickListener {
                 val isVisible = eventDetailsContainer.isVisible
                 eventDetailsContainer.visibility = if (isVisible) View.GONE else View.VISIBLE
-                joinEventButton.visibility = eventDetailsContainer.visibility
+                inviteEventButton.visibility = eventDetailsContainer.visibility
             }
         }
     }
@@ -65,7 +65,7 @@ class EventAdapter(
         holder.eventDescription.text = item.description
 
         // Set the click listener for the "Join Event" button
-        holder.joinEventButton.setOnClickListener {
+        holder.inviteEventButton.setOnClickListener {
             onJoinClicked(item)
         }
 

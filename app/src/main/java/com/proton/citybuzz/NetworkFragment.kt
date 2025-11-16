@@ -77,7 +77,12 @@ class NetworkFragment : Fragment(R.layout.fragment_network) {
         searchButton.setOnClickListener {
             val query = searchInput.text.toString().trim()
             lifecycleScope.launch {
-                val results = socialVM.searchUsers(query)  // suspend function
+                if (query.isEmpty()) {
+                    searchAdapter.update(emptyList())   // CLEAR RESULTS
+                    return@launch
+                }
+
+                val results = socialVM.searchUsers(query)
                 searchAdapter.update(results)
             }
         }

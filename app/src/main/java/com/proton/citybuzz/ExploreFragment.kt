@@ -43,13 +43,13 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
         eventViewModel = CityBuzzApp.getInstance().eventViewModel
         socialViewModel = CityBuzzApp.getInstance().socialViewModel // Initialize it
         eventListContainer = view.findViewById(R.id.explore_event_container)
-        eventViewModel.loadEvents()
+        eventViewModel.loadSuggestedEvents(socialViewModel.loggedInUser.value?.id ?: 0)
         observeEvents()
     }
 
     fun observeEvents() {
         // This function remains the same
-        eventViewModel.events.observe(viewLifecycleOwner, Observer { allEvents ->
+        eventViewModel.suggestedEvents.observe(viewLifecycleOwner, Observer { allEvents ->
             eventListContainer.removeAllViews()
 
             val todayEvents = allEvents.filter { it.isToday() }

@@ -53,16 +53,54 @@ class MyEventsFragment: Fragment(R.layout.fragment_my_events) {
         val recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view) ?: return
         val eventViewModel = CityBuzzApp.getInstance().eventViewModel
         val socialViewModel = CityBuzzApp.getInstance().socialViewModel
+        val friendsListContainer = view?.findViewById<LinearLayout>(R.id.friends_list_container)
 
         val events = eventViewModel.events.value
 
-        val adapter = EventAdapter(
+        val adapter = EventInviteAdapter(
             events ?: emptyList(),
             viewLifecycleOwner.lifecycleScope,
             socialViewModel // Pass the ViewModel
         ) { event ->
             // This is the ONLY thing that should be in the callback
-            joinToEvent(event.id)
+            // toggle otvaranje liste
+            if (friendsListContainer?.visibility == View.VISIBLE) {
+                friendsListContainer.visibility = View.GONE
+            }
+
+            // učitaj prijatelje
+            lifecycleScope.launch {
+                val socialVM = CityBuzzApp.getInstance().socialViewModel
+                val friends = socialVM.friends.value ?: emptyList()
+
+                friendsListContainer?.removeAllViews()
+
+                val inflater = LayoutInflater.from(context)
+
+                // kreiranje UI za svakog prijatelja
+                friends.forEach { friend ->
+                    val row = inflater.inflate(R.layout.friend_invite_item, friendsListContainer, false)
+
+                    val friendName = row.findViewById<TextView>(R.id.friend_name)
+                    val sendInviteBtn = row.findViewById<Button>(R.id.send_invite_btn)
+
+                    friendName.text = friend.name
+
+                    sendInviteBtn.setOnClickListener {
+                        CityBuzzApp.getInstance().eventViewModel.sendEventInvite(
+                            eventId = event.id,
+                            fromUserId = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value?.id ?: 0,
+                            toUserId = friend.id
+                        )
+
+                        friendsListContainer?.visibility = View.GONE
+                    }
+
+                    friendsListContainer?.addView(row)
+                }
+
+                friendsListContainer?.visibility = View.VISIBLE
+            }
         }
 
         // 3. Set up the RecyclerView with the layout manager and the adapter
@@ -82,14 +120,6 @@ class MyEventsFragment: Fragment(R.layout.fragment_my_events) {
         eventViewModel.myEvents.observe(viewLifecycleOwner) { events ->
             adapter.updateEvents(events)
         }
-    }
-
-    fun joinToEvent(eventId: Int) {
-        val currentUserId = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value?.id
-        val eventVM = CityBuzzApp.getInstance().eventViewModel
-        eventVM.addAttendee(eventId, currentUserId ?: 0)
-        eventVM.loadSuggestedEvents(currentUserId ?: 0)
-        eventVM.loadMyEvents(currentUserId ?: 0)
     }
 }
  /*
@@ -112,8 +142,8 @@ class MyEventsFragment: Fragment(R.layout.fragment_my_events) {
 
                 inviteButton.setOnClickListener {
                     // toggle otvaranje liste
-                    if (friendsListContainer.visibility == View.VISIBLE) {
-                        friendsListContainer.visibility = View.GONE
+                    if (friendsListContainer?.visibility == View.VISIBLE) {
+                        friendsListContainer?.visibility = View.GONE
                         return@setOnClickListener
                     }
 
@@ -122,7 +152,7 @@ class MyEventsFragment: Fragment(R.layout.fragment_my_events) {
                         val socialVM = CityBuzzApp.getInstance().socialViewModel
                         val friends = socialVM.friends.value ?: emptyList()
 
-                        friendsListContainer.removeAllViews()
+                        friendsListContainer?.removeAllViews()
 
                         val inflater = LayoutInflater.from(context)
 
@@ -142,13 +172,13 @@ class MyEventsFragment: Fragment(R.layout.fragment_my_events) {
                                     toUserId = friend.id
                                 )
 
-                                friendsListContainer.visibility = View.GONE
+                                friendsListContainer?.visibility = View.GONE
                             }
 
-                            friendsListContainer.addView(row)
+                            friendsListContainer?.addView(row)
                         }
 
-                        friendsListContainer.visibility = View.VISIBLE
+                        friendsListContainer?.visibility = View.VISIBLE
                     }
                 }
 
