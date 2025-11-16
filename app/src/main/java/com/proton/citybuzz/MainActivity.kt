@@ -105,6 +105,9 @@ class MainActivity: AppCompatActivity() {
         else{
             toolbar.visibility = View.VISIBLE
             toolbar.title = fragmentName
+            
+        if (fragment !is AccountFragment) {
+            lastFragment = fragment
         }
     }
 
