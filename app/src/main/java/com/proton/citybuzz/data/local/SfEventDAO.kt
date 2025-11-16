@@ -32,7 +32,7 @@ class SfEventDao (private val sf: SnowflakeCaller = SnowflakeCaller.getInstance(
         sf.executeUpdate("DELETE FROM EVENTS WHERE EVENT_ID = $eventId")
         sf.executeUpdate("DELETE FROM EVENT_ATTENDEES WHERE EVENT_ID = $eventId")
     }
-    
+
     //GET ALL EVENTS
     suspend fun getAllEvents(): List<Event> {
         val rs = sf.executeQuery("SELECT * FROM EVENTS ORDER BY DATE")

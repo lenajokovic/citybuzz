@@ -24,7 +24,8 @@ class EventInviteAdapter(
     private val socialViewModel: SocialViewModel,
     private val eventViewModel: EventViewModel,
     private val onJoinClicked: (Event) -> Unit,
-    private val onRemoveClicked: (Event) -> Unit
+    private val onRemoveClicked: (Event) -> Unit,
+    private val onLeaveClicked: (Event) -> Unit,
 ) : RecyclerView.Adapter<EventInviteAdapter.EventViewHolder>() {
 
     inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -43,6 +44,7 @@ class EventInviteAdapter(
                 val isVisible = eventDetailsContainer.isVisible
                 eventDetailsContainer.visibility = if (isVisible) View.GONE else View.VISIBLE
                 inviteEventButton.visibility = eventDetailsContainer.visibility
+                removeEventButton.visibility = eventDetailsContainer.visibility
             }
         }
     }
@@ -55,12 +57,10 @@ class EventInviteAdapter(
 
     override fun getItemCount(): Int = events.size
 
-    // THIS IS THE CORRECTED METHOD
     @SuppressLint("DefaultLocale")
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val item = events[position]
 
-        // --- Bind all the data to the views in the ViewHolder ---
         holder.eventName.text = item.title
         holder.startTime.text = String.format("%02d:%02d", item.date.hour, item.date.minute)
         holder.eventLocation.text = item.location
@@ -71,14 +71,19 @@ class EventInviteAdapter(
             holder.eventDescription.text = "${item.description}\nAttendees: $attendeeCount"
         }
 
-        // Set the click listener for the "Join Event" button
         holder.inviteEventButton.setOnClickListener {
             onJoinClicked(item)
         }
 
-        holder.removeEventButton.isVisible = item.creatorId == socialViewModel.loggedInUser.value?.id
-        holder.removeEventButton.setOnClickListener {
-            onRemoveClicked(item)
+        if (item.creatorId == socialViewModel.loggedInUser.value?.id) {
+            holder.removeEventButton.setOnClickListener {
+                onRemoveClicked(item)
+            }
+        } else {
+            holder.removeEventButton.text = "LEAVE"
+            holder.removeEventButton.setOnClickListener {
+                onLeaveClicked(item)
+            }
         }
 
         // Fetch and set the event owner's name using the ViewModel

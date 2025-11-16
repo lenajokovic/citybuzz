@@ -100,20 +100,21 @@ class MyEventsFragment: Fragment(R.layout.fragment_my_events) {
                     friendsListContainer?.visibility = View.VISIBLE
                 }
             },
-
             onRemoveClicked = { event ->
                 eventViewModel.removeEvent(event.id)
                 CityBuzzApp.getInstance().eventViewModel.loadMyEvents()
             },
+            onLeaveClicked = { event ->
+                val userId = CityBuzzApp.getInstance().socialViewModel.loggedInUser.value?.id
+                eventViewModel.removeAttendee(event.id, userId!!)
+                CityBuzzApp.getInstance().eventViewModel.loadMyEvents()
+            }
         )
 
-        // 3. Set up the RecyclerView with the layout manager and the adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
 
-        // 4. Observe the logged-in user state to safely get the ID
         socialViewModel.loggedInUser.observe(viewLifecycleOwner) { user ->
-            // This block will run when the user is loaded, and again if they log out.
             if (user != null) {
                 eventViewModel.loadMyEvents(user.id)
             } else {
